@@ -9,4 +9,4 @@ class User(AbstractUser):
     profile = models.ImageField(upload_to='%Y%m%d/', blank=True, null=True)
 
     def __str__ (self):
-        return self.username
+        return self.nickname
