@@ -3,9 +3,7 @@ from .models import User
 from rest_framework import views
 from .serializers import *
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authtoken.models import Token
 # Create your views here.
 
 class SignupView(views.APIView):
@@ -26,12 +24,14 @@ class LoginView(views.APIView):
         return Response({'message':'로그인 실패', 'error':serializer.errors})
     
 class LogoutView(views.APIView):
-    permission_classes = [IsAuthenticated]
-
+    permission_classes = (IsAuthenticated,)
     def post(self, request):
         try:
-            token = Token.objects.get(user=request.user)
-            token.delete()
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
             return Response({"message": "로그아웃 성공"})
-        except Token.DoesNotExist:
+        except KeyError:
             return Response({"message": "로그아웃 실패", "error": "토큰이 존재하지 않습니다."})
+        except Exception as e:
+            return Response({"message": "로그아웃 실패", "error": str(e)})

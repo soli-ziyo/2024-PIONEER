@@ -44,6 +44,4 @@ class UserLoginSerializer(serializers.Serializer):
                     'username': user.username,
                     'access_token': access
                 }
-                return data
-                
-                
+                return data       
