@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import User
 from rest_framework import views
 from .serializers import *
@@ -35,3 +35,11 @@ class LogoutView(views.APIView):
             return Response({"message": "로그아웃 실패", "error": "토큰이 존재하지 않습니다."})
         except Exception as e:
             return Response({"message": "로그아웃 실패", "error": str(e)})
+
+class UserlistView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk, format=None):
+        user = get_object_or_404(User, pk=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)

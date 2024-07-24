@@ -1,12 +1,16 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from accounts.models import *
+from state.serializers import StateEditSerializer
 
 class UserSerializer(serializers.ModelSerializer):
+
+    states = StateEditSerializer(many=True, read_only=True)
+    
     class Meta:
         model = User
         fields = ['id', 'username', 'password', 
-                  'nickname', 'phonenum', 'profile']
+                  'nickname', 'phonenum', 'profile', 'states']
     
     def create(self, validated_data):
         #create 함수를 작성하여 입력받은 유저 데이터 저장 처리
