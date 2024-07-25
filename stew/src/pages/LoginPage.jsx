@@ -11,13 +11,11 @@ const LoginPage = () => {
   const [id, setID] = useState();
   const [pw, setPW] = useState();
 
-  const BASE_URL = "https://likelionbook.pythonanywhere.com/";
-
   //------------------------------------------------------------------------
   const goLogin = async () => {
     await axios({
       method: "POST",
-      url: "https://likelionbook.pythonanywhere.com/account/signin/",
+      url: "/account/login/",
       data: {
         username: id,
         password: pw,
@@ -25,13 +23,13 @@ const LoginPage = () => {
     })
       .then((response) => {
         // localStorage에 저장
-        localStorage.setItem("userName", response.data.data.nickname);
-        localStorage.setItem("token", response.data.data.access_token);
+        localStorage.setItem("userName", response.data.nickname);
+        localStorage.setItem("token", response.data.access_token);
 
-        // mypage로 이동
+        // HomePage로 이동
         navigate("/home");
 
-        console.log("로그인 성공", response.data.data);
+        console.log("로그인 성공", response.data);
       })
 
       .catch((error) => {
@@ -57,7 +55,9 @@ const LoginPage = () => {
               placeholder="비밀번호를 입력해주세요"
               onChange={(e) => setPW(e.target.value)}
             ></input>
-            <button onClick={goLogin}>로그인</button>
+            <button onClick={goLogin} style={{ marginTop: "10%" }}>
+              로그인
+            </button>
             <button
               onClick={() => navigate("/signup")}
               style={{
@@ -65,6 +65,7 @@ const LoginPage = () => {
                 background: "white",
                 border: "none",
                 fontWeight: "200",
+                marginBottom: "10%",
               }}
             >
               회원가입
@@ -95,7 +96,7 @@ const Container = styled.div`
   align-items: center;
 
   img {
-    margin-top: 10%;
+    margin-top: 30%;
     width: 40%;
     margin-bottom: 40%;
     margin-right: 50%;
@@ -108,6 +109,10 @@ const InputWrapper = styled.div`
   width: 350px;
   margin-top: 30px;
   font-family: "Pretendard";
+
+  div {
+    font-family: "Pretendard";
+  }
 
   input,
   button {
