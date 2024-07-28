@@ -59,7 +59,8 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
               backgroundColor: buttonReady ? "white" : "#F1F1F1",
               color: buttonReady ? "black" : "#8C8C8C",
             }}
-            onClick={handleNext}
+            // onClick={handleNext}
+            onClick={nextStep}
             disabled={!buttonReady}
           >
             다음
@@ -121,6 +122,7 @@ const InputWrapper = styled.div`
     border: 1px solid #e2e2e2;
     background: #ffffff;
     border-radius: 10px;
+    font-family: "Pretendard";
   }
 
   button {
@@ -130,6 +132,7 @@ const InputWrapper = styled.div`
     border: 1px solid #e2e2e2;
     font-weight: 600;
     font-size: 14px;
+    font-family: "Pretendard";
     cursor: pointer;
   }
 `;

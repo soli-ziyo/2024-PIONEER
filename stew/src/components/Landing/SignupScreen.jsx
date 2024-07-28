@@ -10,7 +10,7 @@ const SignupScreen = ({ nextStep, prevStep }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
-  const [phonenum, setPhonenum] = useState(""); // 이 값을 필요에 따라 설정해야 합니다.
+  const [phonenum, setPhonenum] = useState(""); // 이 값을 필요에 따라 설정
   const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
 
@@ -52,12 +52,6 @@ const SignupScreen = ({ nextStep, prevStep }) => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           ></input>
-          <div>닉네임</div>
-          <input
-            placeholder="닉네임을 입력해주세요"
-            onChange={(e) => setNickname(e.target.value)}
-            value={nickname}
-          ></input>
           <div
             style={{
               color: "#8C8C8C",
@@ -68,12 +62,13 @@ const SignupScreen = ({ nextStep, prevStep }) => {
             비밀번호는 8글자 이상이어야 합니다.
           </div>
           <button
-            onClick={handleSubmit}
+            // onClick={handleSubmit}
+            onClick={nextStep}
             style={{
-              backgroundColor: id && password && nickname ? "white" : "#F1F1F1",
-              color: id && password && nickname ? "black" : "#8C8C8C",
+              backgroundColor: id && password ? "white" : "#F1F1F1",
+              color: id && password ? "black" : "#8C8C8C",
             }}
-            disabled={!id || !password || !nickname}
+            disabled={!id || !password}
           >
             다음
           </button>
@@ -126,6 +121,7 @@ const InputWrapper = styled.div`
     border-style: none;
     outline: none;
     border-radius: 4px;
+    font-family: "Pretendard";
   }
 
   input {
@@ -138,6 +134,7 @@ const InputWrapper = styled.div`
 
   div {
     font-family: "Pretendard";
+    margin-bottom: 10px;
   }
 
   button {

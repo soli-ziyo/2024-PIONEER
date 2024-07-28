@@ -127,6 +127,7 @@ const InputWrapper = styled.div`
     padding-left: 7%;
     border: 1px solid #f1f1f1;
     background: #ffffff;
+    font-family: "Pretendard";
   }
 
   button {
@@ -137,5 +138,6 @@ const InputWrapper = styled.div`
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
+    font-family: "Pretendard";
   }
 `;

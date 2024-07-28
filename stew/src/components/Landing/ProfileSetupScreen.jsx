@@ -9,7 +9,6 @@ const ProfileSetupScreen = ({ prevStep }) => {
   const [profileImage, setProfileImage] = useState(null);
 
   const handleSubmit = () => {
-    // 여기에서 프로필 설정 로직을 추가할 수 있습니다.
     console.log("프로필 설정 완료");
   };
 
@@ -47,17 +46,20 @@ const ProfileSetupScreen = ({ prevStep }) => {
               onChange={handleImageUpload}
             />
           </ImageUploadWrapper>
-          <div>닉네임</div>
+          <div style={{ marginBottom: "10px" }}>닉네임</div>
           <input
             placeholder="닉네임을 입력해주세요"
             onChange={(e) => setNickname(e.target.value)}
             value={nickname}
+            style={{ fontFamily: "Pretendard" }}
           ></input>
           <div
             style={{
               color: "#8C8C8C",
               fontSize: "13px",
               marginLeft: "20px",
+              marginBottom: "50%",
+              marginTop: "5%",
             }}
           >
             닉네임은 2글자 이상 10글자 이하여야 합니다.
@@ -127,6 +129,7 @@ const InputWrapper = styled.div`
     border-style: none;
     outline: none;
     border-radius: 4px;
+    font-family: "Pretendard";
   }
 
   div {
@@ -182,6 +185,7 @@ const ImageUploadWrapper = styled.div`
 `;
 
 const PlusIcon = styled.div`
-  font-size: 50px;
-  color: #f1f1f1;
+  font-size: 60px;
+  font-weight: 100;
+  color: #222222;
 `;
