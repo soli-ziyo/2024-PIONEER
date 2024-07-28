@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
         familycode = validated_data.get('familycode')
         if not familycode:
             familycode = family_code()
-            
+
         user = User.objects.create(
             phonenum=validated_data['phonenum'], #w전달받은 데이터 그대로 저장
             username=validated_data['username'],
@@ -59,3 +59,15 @@ class UserInterestSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'nickname']
+
+class FamilySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields =['familycode']
+
+    def validate_familycode(self, value):
+        if not value or len(value) != 4:
+            raise serializers.ValidationError("4자리 코드 필요함")
+        return value
+
+        

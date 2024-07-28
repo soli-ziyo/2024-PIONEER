@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from accounts.views import FamilyListView, FamilyCopyView
+from accounts.views import FamilyListView, FamilyUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -10,5 +10,5 @@ urlpatterns = [
     path('home/', include('home.urls')),
     path('interest/', include('interest.urls')),
     path('family/<str:familycode>/', FamilyListView.as_view()),
-    path('family/copy/', FamilyCopyView.as_view()),
+    path('family/update/', FamilyUpdateView.as_view()),
 ]
