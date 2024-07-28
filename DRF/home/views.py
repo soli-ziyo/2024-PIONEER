@@ -18,32 +18,6 @@ class HomeListView(views.APIView):
         serializer = HomeSerializer(many=True)
         return Response(serializer.data)
 
-class InterestView(views.APIView):      
-    def get(self, request, pk, format=None):
-        interest=get_object_or_404(Interest, pk=pk)
-        serializer=InterestSerializer(interest)
-        return Response(serializer.data)
-
-    def put(self, request, pk, format=None):
-        interest=get_object_or_404(Interest, pk=pk)
-        serializer=InterestSerializer(interest, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'message':'interest post 성공', 'data':serializer.data})
-        return Response({'messange':'interest post 실패', 'error':serializer.errors})
-
-    def delete(self, request, pk, format=None):
-        interest=get_object_or_404(Interest, pk=pk)
-        interest.delete()
-        return Response({"message":"interest 삭제 성공"})
-
-class InterestListView(views.APIView):
-    def get(self, request, tag_id, format=None):
-        week_hashtag = get_object_or_404(WeekHashTag, id=tag_id)
-        interests = Interest.objects.filter(tag=week_hashtag)
-        serializer = InterestSerializer(interests, many=True)
-        return Response({'message': 'InterestList get 성공', 'data': serializer.data})
-
 class HashTagView(views.APIView):
     def get(self, request, format=None):
         all_hashtags = list(HashTag.objects.all())

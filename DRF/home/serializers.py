@@ -33,11 +33,3 @@ class WeekHashTagSerializer(serializers.ModelSerializer):
             hashtag, created = HashTag.objects.get_or_create(hashtag=hashtag_data['hashtag'])
             week_hashtag.hashtag.add(hashtag)
         return week_hashtag
-
-class InterestSerializer(serializers.ModelSerializer):
-    user_id = UserSerializer(source='user.id', read_only=True)
-    tag_id = WeekHashTagSerializer(source='tag.id', read_only=True)
-
-    class Meta:
-        model = Interest
-        fields = ['tag_id', 'user_id', 'description', 'img']

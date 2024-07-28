@@ -5,4 +5,3 @@ from home.models import *
 
 admin.site.register(HashTag)
 admin.site.register(WeekHashTag)
-admin.site.register(Interest)

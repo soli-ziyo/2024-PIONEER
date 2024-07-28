@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'accounts',
     'home',
     'state',
-    #'interest',
+    'interest',
 ]
 
 REST_FRAMEWORK = {
