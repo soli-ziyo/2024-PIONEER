@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from random import randint
 
 # Create your models here.
 # AbstractUser에 username(아이디), password(비밀번호) 포함

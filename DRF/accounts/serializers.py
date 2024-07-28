@@ -4,7 +4,6 @@ from accounts.models import *
 from state.serializers import StateEditSerializer
 
 class UserSerializer(serializers.ModelSerializer):
-
     states = StateEditSerializer(many=True, read_only=True)
     
     class Meta:
