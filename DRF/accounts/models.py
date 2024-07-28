@@ -9,7 +9,13 @@ class User(AbstractUser):
     nickname = models.CharField(max_length=20)
     phonenum = models.IntegerField(blank=True, null=True, unique=True)
     profile = models.ImageField(upload_to='%Y%m%d/', blank=True, null=True)
-    #familycode = models.CharField(max_length=20, blank=True, null=True)
-    
+    familycode = models.TextField(blank=True, null=True)
+    familyid = models.IntegerField(blank=True, null=True)
+
     def __str__ (self):
         return self.nickname
+
+def family_code():
+    characters= string.digits
+    family_code = ''.join(random.choice(characters) for _ in range(4))
+    return family_code

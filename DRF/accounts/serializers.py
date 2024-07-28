@@ -4,24 +4,26 @@ from accounts.models import *
 from state.serializers import StateEditSerializer
 
 class UserSerializer(serializers.ModelSerializer):
-
     states = StateEditSerializer(many=True, read_only=True)
     
     class Meta:
         model = User
         fields = ['id', 'username', 'password', 
                   'nickname', 'phonenum', 'profile', 
-                   'states']
+                   'familycode', 'states']
     
     def create(self, validated_data):
         #create 함수를 작성하여 입력받은 유저 데이터 저장 처리
-
+        familycode = validated_data.get('familycode')
+        if not familycode:
+            familycode = family_code()
+            
         user = User.objects.create(
             phonenum=validated_data['phonenum'], #w전달받은 데이터 그대로 저장
             username=validated_data['username'],
             nickname=validated_data['nickname'],
             profile=validated_data.get('profile', None),
-            familycode=validated_data.get('familycode', None),
+            familycode=familycode,
         )
         user.set_password(validated_data['password']) #암호화한 후 저장
         user.save()
@@ -52,3 +54,8 @@ class UserLoginSerializer(serializers.Serializer):
                     'access_token': access
                 }
                 return data       
+
+class UserInterestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'nickname']
