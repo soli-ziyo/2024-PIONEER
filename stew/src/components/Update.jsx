@@ -1,7 +1,3 @@
-import { useNavigate } from "react-router-dom";
-import { styled } from "styled-components";
-import axios from "axios";
-
 //알림 부분
 //변경했어요를 빼고, ~의 관심사는 ~에요 하고 글쓰기만 하기
 
