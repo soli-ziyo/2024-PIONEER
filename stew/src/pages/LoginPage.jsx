@@ -80,7 +80,7 @@ const LoginPage = () => {
 export default LoginPage;
 
 const Wrapper = styled.div`
-  height: 100%;
+  /* height: 100%; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -108,10 +108,10 @@ const InputWrapper = styled.div`
   flex-direction: column;
   width: 350px;
   margin-top: 30px;
-  font-family: "Pretendard";
+  /* font-family: "Pretendard"; */
 
   div {
-    font-family: "Pretendard";
+    /* font-family: "Pretendard"; */
   }
 
   input,

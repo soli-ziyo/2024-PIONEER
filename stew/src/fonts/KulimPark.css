@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'KulimPark';
+  font-weight: 700;
+  font-display: swap;
+  src: local('KulimPark Bold'), url('./KulimPark/KulimPark-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'KulimPark';
+  font-weight: 300;
+  font-display: swap;
+  src: local('KulimPark Light'), url('./KulimPark/KulimPark-Light.ttf') format('truetype');
+}
