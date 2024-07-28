@@ -8,7 +8,9 @@ from .serializers import *
 import random
 
 # Create your views here.
-class InterestView(views.APIView):      
+class InterestView(views.APIView):
+    permission_classes = [IsAuthenticated]
+ 
     def get(self, request, pk, format=None):
         interest=get_object_or_404(Interest, pk=pk)
         serializer=InterestSerializer(interest)
@@ -17,9 +19,9 @@ class InterestView(views.APIView):
     def post(self, request, format=None):
         serializer=InterestSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk, format=None):
         interest=get_object_or_404(Interest, pk=pk)
