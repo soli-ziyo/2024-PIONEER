@@ -15,7 +15,12 @@ class User(AbstractUser):
     def __str__ (self):
         return self.nickname
 
-def family_code():
-    characters= string.digits
-    family_code = ''.join(random.choice(characters) for _ in range(4))
-    return family_code
+def generate_familycode():
+    return ''.join(random.choices(string.digits, k=4))
+
+class Family(models.Model):
+    familycode = models.CharField(max_length=4, unique=True, default=generate_familycode)
+    users = models.ManyToManyField(User, related_name='families')
+
+    def __str__(self):
+        return f"{self.familycode} - {self.user.username}"

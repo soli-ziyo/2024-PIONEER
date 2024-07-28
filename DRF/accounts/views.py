@@ -55,23 +55,37 @@ class FamilyListView(views.APIView):
         user = get_object_or_404(User, familycode=familycode)
         serializer = UserSerializer(user)
         return Response(serializer.data)
-
-class FamilyUpdateView(APIView):
+    
+#여기서부터 안됨
+class FamilyCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.method.lower() not in ['put', 'patch']:
-            return HttpResponseNotAllowed(['PUT', 'PATCH'])
-        return super().dispatch(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         user = request.user
-        serializer = FamilySerializer(user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        familycode = request.data.get('familycode')
 
-    def patch(self, request, *args, **kwargs):
-        return self.put(request, *args, **kwargs)
+        # Check if the user is already part of a family
+        if user.families.exists():
+            return Response({"detail": "User is already in a family."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the familycode exists or create a new one
+        if Family.objects.filter(familycode=familycode).exists():
+            family = Family.objects.get(familycode=familycode)
+        else:
+            family = Family.objects.create(familycode=familycode)
+
+        # Add user to the family
+        family.users.add(user)
+
+        serializer = FamilySerializer(family)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+
+class FamilyDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        families = user.families.all()
+        serializer = FamilySerializer(families, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
