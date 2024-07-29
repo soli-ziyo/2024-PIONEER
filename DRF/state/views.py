@@ -74,9 +74,7 @@ class HomeListView(views.APIView):
         family_users = User.objects.filter(families__familycode__in=family_codes)
         
         # 각 사용자별로 가장 최근에 업데이트된 StateEdit만 가져옴
-        latest_states = StateEdit.objects.filter(
-            user=OuterRef('user')
-        ).order_by('-updated_at')
+        latest_states = StateEdit.objects.filter(user=OuterRef('user')).order_by('-updated_at')
         
         subquery = latest_states.values('id')[:1]
         
@@ -89,9 +87,7 @@ class HomeListView(views.APIView):
                 ).values('latest_id')
             )
         )
-        
         serializer = HomeSerializer(states, many=True)
-
         response_data = {
                 "message": "홈 화면 구성 성공",
                 "data": serializer.data
