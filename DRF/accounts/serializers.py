@@ -23,8 +23,20 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password']) #암호화한 후 저장
         user.save()
-        
         return user
+    
+    def update(self, instance, validated_data):
+        instance.phonenum = validated_data.get('phonenum', instance.phonenum)
+        instance.nickname = validated_data.get('nickname', instance.nickname)
+        instance.profile = validated_data.get('profile', instance.profile)
+
+        password = validated_data.get('password', None)
+        if password:
+            instance.set_password(password)
+
+        instance.save()
+        return instance
+    
 
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=64)

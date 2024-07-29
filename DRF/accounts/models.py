@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.contrib.auth.models import AbstractUser
 import random
 import string
 
@@ -15,7 +15,10 @@ class User(AbstractUser):
         return self.nickname
 
 def generate_familycode():
-    return ''.join(random.choices(string.digits, k=4)) #4자리 숫자 랜덤 코드 만들기
+    while True:
+        familycode = ''.join(random.choices(string.digits, k=4))
+        if not Family.objects.filter(familycode=familycode).exists():
+            return familycode
 
 class Family(models.Model):
     familycode = models.CharField(max_length=4, unique=True, default=generate_familycode)

@@ -5,7 +5,6 @@ from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.http import HttpResponseNotAllowed
 
 # Create your views here.
 
@@ -43,7 +42,6 @@ class FamilyListView(views.APIView):
         serializer = UserSerializer(users, many=True)  # 사용자 목록을 직렬화
         return Response(serializer.data)  # 직렬화된 사용자 데이터를 응답
     
-#여기서부터 안됨
 class FamilyCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -64,9 +62,8 @@ class FamilyCreateView(APIView):
         user.familycode = familycode
 
         serializer = FamilySerializer(family)
-        return Response({"message": "가족 추가 혹은 생성 성공", "data": serializer.data})
+        return Response({"message": "가족구성원 추가 성공", "data": serializer.data})
     
-
 class FamilyDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -79,3 +76,35 @@ class FamilyDetailView(APIView):
             return Response({"message": "포함된 가족코드 불러오기 성공", "data": serializer.data})
         else:
             return Response({"message": "실패(포함된 가족이 없음)"})
+
+
+class UserUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "프로필 업데이트 성공", "data": serializer.data})
+        return Response({"message": "프로필 업데이트 실패", "errors": serializer.errors})
+        
+class FamilyCodeGenerateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        families = user.families.all()
+        if families.exists():
+            family = families.first()
+            return Response({"message": "패밀리코드가 이미 존재합니다.", "familycode": family.familycode})
+
+        familycode = generate_familycode()
+        family = Family.objects.create(familycode=familycode)
+        family.users.add(user)
+
+        serializer = FamilySerializer(family)
+        return Response({"message": "패밀리 코드 생성 성공", "familycode": familycode, "data": serializer.data})
