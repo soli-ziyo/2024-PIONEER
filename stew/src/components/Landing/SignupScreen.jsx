@@ -9,9 +9,9 @@ import Back from "../../images/Back.svg";
 const SignupScreen = ({ nextStep, prevStep }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [phonenum, setPhonenum] = useState(""); // 이 값을 필요에 따라 설정
-  const [profile, setProfile] = useState(null);
+  // const [nickname, setNickname] = useState("");
+  // const [phonenum, setPhonenum] = useState(""); // 이 값을 필요에 따라 설정
+  // const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
@@ -19,11 +19,11 @@ const SignupScreen = ({ nextStep, prevStep }) => {
       const response = await axios.post("/accounts/signup/", {
         username: id,
         password: password,
-        nickname: nickname,
-        phonenum: phonenum,
-        profile: profile,
+        // nickname: nickname,
+        // phonenum: phonenum,
+        // profile: profile,
       });
-      console.log("회원가입 완료", response);
+      console.log("아이디, 패스워드 전송", response);
       nextStep();
     } catch (error) {
       console.log(error);
@@ -62,13 +62,12 @@ const SignupScreen = ({ nextStep, prevStep }) => {
             비밀번호는 8글자 이상이어야 합니다.
           </div>
           <button
-            // onClick={handleSubmit}
-            onClick={nextStep}
+            onClick={handleSubmit}
             style={{
-              backgroundColor: id && password ? "white" : "#F1F1F1",
-              color: id && password ? "black" : "#8C8C8C",
+              backgroundColor: id && password.length >= 8 ? "white" : "#F1F1F1",
+              color: id && password.length >= 8 ? "black" : "#8C8C8C",
             }}
-            disabled={!id || !password}
+            disabled={!id || password.length < 8}
           >
             다음
           </button>

@@ -31,7 +31,7 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
       console.log(response.data);
       nextStep();
     } catch (err) {
-      setError("인증번호 확인에 실패했습니다.");
+      setError("인증에 실패하였습니다. 인증번호를 확인해주세요.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -46,6 +46,7 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
           <Comment>인증 코드를 발송했어요.</Comment>
         </ContainerBase>
         <InputWrapper>
+          S
           <CodeInputs>
             {code.map((digit, index) => (
               <CodeInput

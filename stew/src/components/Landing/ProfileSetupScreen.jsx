@@ -4,12 +4,34 @@ import axios from "axios";
 //images
 import Back from "../../images/Back.svg";
 
-const ProfileSetupScreen = ({ prevStep }) => {
+const ProfileSetupScreen = ({ prevStep, nextStep }) => {
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState(null);
 
-  const handleSubmit = () => {
-    console.log("프로필 설정 완료");
+  const handleSubmit = async () => {
+    try {
+      const response = await axios({
+        method: "POST",
+        url: "/accounts/newprofile/",
+        params: {},
+      });
+      console.log("프로필 설정 완료");
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+
+    try {
+      const response = await axios.post("/accounts/signup/", {
+        nickname: nickname,
+        profile: profileImage,
+      });
+      console.log("닉네임, 프로필 전송", response);
+      nextStep();
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   };
 
   const handleImageUpload = (event) => {

@@ -20,6 +20,18 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
         },
       });
       console.log("본인확인 sms 전송 성공", response);
+
+      try {
+        const response = await axios.post("/accounts/signup/", {
+          phonenum: phoneNB,
+        });
+        console.log("전화번호 전송", response);
+        nextStep();
+      } catch (error) {
+        console.log(error);
+        throw new Error(error);
+      }
+
       nextStep();
     } catch (error) {
       console.log(error);
@@ -59,8 +71,8 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
               backgroundColor: buttonReady ? "white" : "#F1F1F1",
               color: buttonReady ? "black" : "#8C8C8C",
             }}
-            // onClick={handleNext}
-            onClick={nextStep}
+            onClick={handleNext}
+            // onClick={nextStep}
             disabled={!buttonReady}
           >
             다음
@@ -74,12 +86,11 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
 export default PhoneInputScreen;
 
 const Wrapper = styled.div`
-  height: 100%;
+  /* height: 100%; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
 `;
 
 const ContainerBase = styled.div`
