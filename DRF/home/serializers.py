@@ -1,16 +1,17 @@
 from rest_framework import serializers
 from .models import *
 from state.serializers import StateEditSerializer
-from accounts.serializers import UserSerializer
+from accounts.serializers import UserSerializer, FamilySerializer
 
 class HomeSerializer(serializers.ModelSerializer):
     states = StateEditSerializer(many=True, read_only=True)
     nickname = UserSerializer(source='user.nickname', read_only=True)
     user_id = UserSerializer(source='user.id', read_only=True)
+    familycode = FamilySerializer(source='user.families.first.familycode', read_only=True)
     
     class Meta:
         model = Home
-        fields = ['states', 'nickname', 'user_id']
+        fields = ['states', 'nickname', 'user_id', 'familycode']
 
 class HashTagSerializer(serializers.ModelSerializer):
     class Meta:

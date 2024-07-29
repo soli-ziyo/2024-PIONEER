@@ -7,6 +7,7 @@ from django.db.models import OuterRef, Subquery
 from django.http import Http404
 from .models import *
 from .serializers import *
+from accounts.models import User
 
 # Create your views here.
 class StateList(views.APIView):
@@ -63,11 +64,16 @@ class StateDetail(views.APIView):
     #put == 업데이트
     #delete == 삭제
 
+# Create your views here.
 class HomeListView(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-        # 각 사용자별로 가장 최근에 업데이트된 관심사만 가져오게 하기...
+        user = request.user
+        family_codes = user.families.values_list('familycode', flat=True)
+        family_users = User.objects.filter(families__familycode__in=family_codes)
+        
+        # 각 사용자별로 가장 최근에 업데이트된 StateEdit만 가져옴
         latest_states = StateEdit.objects.filter(
             user=OuterRef('user')
         ).order_by('-updated_at')
@@ -75,8 +81,19 @@ class HomeListView(views.APIView):
         subquery = latest_states.values('id')[:1]
         
         states = StateEdit.objects.filter(
-            id__in=Subquery(subquery)
+            id__in=Subquery(
+                StateEdit.objects.filter(
+                    user__in=family_users
+                ).values('id').annotate(
+                    latest_id=Subquery(subquery)
+                ).values('latest_id')
+            )
         )
         
-        serializer = StateEditSerializer(states, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = HomeSerializer(states, many=True)
+
+        response_data = {
+                "message": "홈 화면 구성 성공",
+                "data": serializer.data
+            }
+        return Response(response_data)

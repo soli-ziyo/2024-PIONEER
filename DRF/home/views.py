@@ -6,17 +6,12 @@ from rest_framework.permissions import IsAuthenticated
 from .models import *
 from .serializers import *
 import random
+from django.db.models import OuterRef, Subquery
+from accounts.models import Family
 
 # Create your views here.
+    
 
-class HomeListView(views.APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, format=None):
-        #모든 StateEdit 객체를 가져와서 json 형태로 응답
-        state = Home.objects.all()
-        serializer = HomeSerializer(many=True)
-        return Response(serializer.data)
 
 class HashTagView(views.APIView):
     def get(self, request, format=None):

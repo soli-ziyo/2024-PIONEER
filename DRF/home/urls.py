@@ -2,6 +2,7 @@ from django.urls import path
 from state.views import *
 from home.views import *
 from django.conf import settings
+from state.views import HomeListView
 
 app_name = 'home'
 
