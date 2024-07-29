@@ -25,20 +25,6 @@ class LoginView(views.APIView):
         if serializer.is_valid():
             return Response({'message':'로그인 성공', 'data':serializer.validated_data})
         return Response({'message':'로그인 실패', 'error':serializer.errors})
-'''  
-class LogoutView(views.APIView):
-    permission_classes = (IsAuthenticated,)
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({"message": "로그아웃 성공"})
-        except KeyError:
-            return Response({"message": "로그아웃 실패", "error": "토큰이 존재하지 않습니다."})
-        except Exception as e:
-            return Response({"message": "로그아웃 실패", "error": str(e)})
-''' 
 
 class UserlistView(views.APIView):
     permission_classes = [IsAuthenticated]
@@ -52,9 +38,10 @@ class FamilyListView(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, familycode, format=None):
-        user = get_object_or_404(User, familycode=familycode)
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+        family = get_object_or_404(Family, familycode=familycode)  # familycode로 Family 객체를 찾음
+        users = family.users.all()  # 해당 Family에 속한 모든 사용자를 가져옴
+        serializer = UserSerializer(users, many=True)  # 사용자 목록을 직렬화
+        return Response(serializer.data)  # 직렬화된 사용자 데이터를 응답
     
 #여기서부터 안됨
 class FamilyCreateView(APIView):
@@ -64,21 +51,20 @@ class FamilyCreateView(APIView):
         user = request.user
         familycode = request.data.get('familycode')
 
-        # Check if the user is already part of a family
         if user.families.exists():
-            return Response({"detail": "User is already in a family."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "이미 가족에 속해있습니다."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if the familycode exists or create a new one
-        if Family.objects.filter(familycode=familycode).exists():
-            family = Family.objects.get(familycode=familycode)
+        if Family.objects.filter(familycode=familycode).exists():  #입력된 패밀리코드가 이미 존재한다면 
+            family = Family.objects.get(familycode=familycode) # 동일 패밀리코드 구성원을 가져옴 (get)
         else:
-            family = Family.objects.create(familycode=familycode)
+            family = Family.objects.create(familycode=familycode) #패밀리를 새로 구성함
 
         # Add user to the family
-        family.users.add(user)
+        family.users.add(user) #패밀리에 속하게 함
+        user.familycode = familycode
 
         serializer = FamilySerializer(family)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({"message": "가족 추가 혹은 생성 성공", "data": serializer.data})
     
 
 class FamilyDetailView(APIView):
@@ -87,5 +73,9 @@ class FamilyDetailView(APIView):
     def get(self, request, *args, **kwargs):
         user = request.user
         families = user.families.all()
-        serializer = FamilySerializer(families, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if families.exists():
+            family = families.first() 
+            serializer = FamilySerializer(family) #여러개의 가족으로 이루어지므로 many=True
+            return Response({"message": "포함된 가족코드 불러오기 성공", "data": serializer.data})
+        else:
+            return Response({"message": "실패(포함된 가족이 없음)"})
