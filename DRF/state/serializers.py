@@ -10,6 +10,10 @@ class StateEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = StateEdit
         fields= ['state_id','content', 'emoji', 'user_id', 'nickname', 'profile']
+    
+    def validate(self, data):
+        if 'content' not in data or data['content'] is None:
+            raise serializers.ValidationError({"content": "상태 메세지가 비어있음"})
 
 class HomeSerializer(serializers.ModelSerializer):
     nickname = serializers.CharField(source='user.nickname', read_only=True)

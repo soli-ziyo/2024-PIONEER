@@ -86,7 +86,7 @@ class UserUpdateView(APIView):
 
     def put(self, request, *args, **kwargs):
         user = self.get_object()
-        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer = UserUpdateSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "프로필 업데이트 성공", "data": serializer.data})
@@ -107,4 +107,4 @@ class FamilyCodeGenerateView(APIView):
         family.users.add(user)
 
         serializer = FamilySerializer(family)
-        return Response({"message": "패밀리 코드 생성 성공", "familycode": familycode, "data": serializer.data})
+        return Response({"message": "패밀리 코드 생성 성공", "data": serializer.data})

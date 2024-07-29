@@ -73,4 +73,11 @@ class FamilySerializer(serializers.ModelSerializer):
         model = Family
         fields = ['familycode', 'users']
 
+class UserUpdateSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User
+        fields = ['phonenum', 'password', 'nickname', 'profile']
+    
+
         
