@@ -131,7 +131,7 @@ const InputWrapper = styled.div`
     margin-bottom: 80%;
     padding-left: 7%;
     border: 1px solid #e2e2e2;
-    background: #ffffff;
+    background: #f9f9f9;
     border-radius: 10px;
     font-family: "Pretendard";
   }

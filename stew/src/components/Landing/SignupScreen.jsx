@@ -63,6 +63,7 @@ const SignupScreen = ({ nextStep, prevStep }) => {
           </div>
           <button
             onClick={handleSubmit}
+            // onClick={nextStep}
             style={{
               backgroundColor: id && password.length >= 8 ? "white" : "#F1F1F1",
               color: id && password.length >= 8 ? "black" : "#8C8C8C",
@@ -127,7 +128,7 @@ const InputWrapper = styled.div`
     margin-bottom: 5%;
     padding-left: 7%;
     border: 1px solid #e2e2e2;
-    background: #ffffff;
+    background: #f9f9f9;
     border-radius: 10px;
   }
 

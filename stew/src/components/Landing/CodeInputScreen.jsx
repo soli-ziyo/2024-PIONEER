@@ -46,7 +46,6 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
           <Comment>인증 코드를 발송했어요.</Comment>
         </ContainerBase>
         <InputWrapper>
-          S
           <CodeInputs>
             {code.map((digit, index) => (
               <CodeInput
@@ -64,8 +63,8 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
           )}
           {error && <ErrorMessage>{error}</ErrorMessage>}
           <Button
-            // onClick={handleNext}
-            onClick={nextStep}
+            onClick={handleNext}
+            // onClick={nextStep}
             disabled={code.some((digit) => digit === "")}
           >
             다음
@@ -124,7 +123,7 @@ const CodeInput = styled.input`
   width: 65px;
   height: 65px;
   border: 1px solid #e2e2e2;
-  background: #ffffff;
+  background: #f9f9f9;
   border-radius: 10px;
   text-align: center;
   font-size: 18px;

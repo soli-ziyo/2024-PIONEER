@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 //images
 import Back from "../../images/Back.svg";
 
 const ProfileSetupScreen = ({ prevStep, nextStep }) => {
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
@@ -27,7 +30,7 @@ const ProfileSetupScreen = ({ prevStep, nextStep }) => {
         profile: profileImage,
       });
       console.log("닉네임, 프로필 전송", response);
-      nextStep();
+      navigate("/home");
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -161,7 +164,7 @@ const InputWrapper = styled.div`
   input {
     padding-left: 7%;
     border: 1px solid #f1f1f1;
-    background: #ffffff;
+    background: #f9f9f9;
     border-radius: 10px;
   }
 
@@ -194,7 +197,7 @@ const ImageUploadWrapper = styled.div`
     justify-content: center;
     width: 100px;
     height: 100px;
-    border: 1px solid #f1f1f1;
+    border: 3px solid #f1f1f1;
     border-radius: 50%;
     cursor: pointer;
   }
