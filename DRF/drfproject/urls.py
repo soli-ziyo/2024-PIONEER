@@ -3,6 +3,7 @@ from django.urls import path, include
 
 from accounts.views import FamilyListView, FamilyCreateView, FamilyDetailView, UserUpdateView, FamilyCodeGenerateView
 from interest.views import ReportView, ReportDetailView, CalendarView
+from alarm.views import AlarmView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -20,4 +21,5 @@ urlpatterns = [
     path('report/family/', ReportView.as_view(), name='report_view'),
     path('report/<int:tag_id>/', ReportDetailView.as_view(), name='hashtag_interest_view'),
     path('report/calendar/<str:familycode>/', CalendarView.as_view(), name='calendar'),
+    path('settings/alarm/', AlarmView.as_view()),
 ] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

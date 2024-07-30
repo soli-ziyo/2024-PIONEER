@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'home',
     'state',
     'interest',
+    'alarm',
 ]
 
 REST_FRAMEWORK = {
