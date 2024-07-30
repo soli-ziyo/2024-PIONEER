@@ -2,8 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from accounts.views import FamilyListView, FamilyCreateView, FamilyDetailView, UserUpdateView, FamilyCodeGenerateView
-from interest.views import ReportView, ReportDetailView
-
+from interest.views import ReportView, ReportDetailView, CalendarView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -20,4 +19,5 @@ urlpatterns = [
     path('settings/profile/', UserUpdateView.as_view(), name='profile_settings'),
     path('report/family/', ReportView.as_view(), name='report_view'),
     path('report/<int:tag_id>/', ReportDetailView.as_view(), name='hashtag_interest_view'),
+    path('report/calendar/<str:familycode>/', CalendarView.as_view(), name='calendar'),
 ] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

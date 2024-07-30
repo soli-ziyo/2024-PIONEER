@@ -6,6 +6,10 @@ from rest_framework.permissions import IsAuthenticated
 from .models import *
 from accounts.models import *
 from .serializers import *
+from datetime import datetime, timedelta
+from django.utils.timezone import now
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 
 # Create your views here.
 class InterestView(views.APIView):
@@ -131,3 +135,42 @@ class ReportDetailView(views.APIView):
             "data": serializer.data
         }
         return Response(response_data, status=status.HTTP_200_OK)
+    
+class CalendarView(views.APIView):
+    def get(self, request, familycode):
+        # 해당 familycode를 가진 유저들 필터링
+        try:
+            family = Family.objects.get(familycode=familycode)
+        except Family.DoesNotExist:
+            return Response({"message": "해당 familycode를 가진 가족이 없습니다."}, status=404)
+
+        users = family.users.all()
+        total_users = users.count()
+
+        # 현재 날짜
+        today = datetime.today()
+        start_date = today - timedelta(days=30)
+
+        # 날짜별 글을 올린 유저 수 계산
+        interest_data = Interest.objects.filter(
+            user__in=users,
+            created_at__gte=start_date
+        ).extra({'date': 'DATE(created_at)'}).values('date').annotate(user_count=Count('user', distinct=True))
+
+        # 퍼센트 계산 및 데이터 포맷팅
+        formatted_data = []
+        for item in interest_data:
+            # 문자열을 날짜 형식으로 변환
+            date_str = item['date']
+            date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+            percentage = round((item['user_count'] / total_users) * 100) if total_users > 0 else 0
+            formatted_data.append({
+                "date": date_obj.strftime('%Y-%m-%d'),
+                "user_count": item['user_count'],
+                "percentage": percentage
+            })
+
+        return Response({
+            "message": "달력 데이터를 성공적으로 불러왔습니다.",
+            "data": formatted_data
+        })
