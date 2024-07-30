@@ -18,13 +18,12 @@ class HashTagSerializer(serializers.ModelSerializer):
         fields = ['hashtag']
 
 class WeekHashTagSerializer(serializers.ModelSerializer):
-    hashtag = HashTagSerializer(source='hashtag.hashtag', read_only=True)
-    #user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user')
-    user_id = UserSerializer(source='user.id', read_only=True)
+    hashtag = HashTagSerializer(many=True, read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = WeekHashTag
-        fields = ['user_id', 'hashtag', 'created_at']
+        fields = ['username', 'hashtag', 'created_at']
 
     def create(self, validated_data):
         hashtags_data = validated_data.pop('hashtag')

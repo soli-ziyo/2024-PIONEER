@@ -3,20 +3,39 @@ from rest_framework import views, generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import OuterRef, Subquery
 from .models import *
 from .serializers import *
 import random
 
 # Create your views here.
-
 class HomeListView(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-        #모든 StateEdit 객체를 가져와서 json 형태로 응답
-        state = Home.objects.all()
-        serializer = HomeSerializer(many=True)
-        return Response(serializer.data)
+        user = request.user
+        family_codes = user.families.values_list('familycode', flat=True)
+        family_users = User.objects.filter(families__familycode__in=family_codes)
+        
+        # 각 사용자별로 가장 최근에 업데이트된 StateEdit만 가져옴
+        latest_states = StateEdit.objects.filter(
+            user=OuterRef('user')
+        ).order_by('-updated_at')
+        
+        subquery = latest_states.values('id')[:1]
+        
+        states = StateEdit.objects.filter(
+            id__in=Subquery(
+                StateEdit.objects.filter(
+                    user__in=family_users
+                ).values('id').annotate(
+                    latest_id=Subquery(subquery)
+                ).values('latest_id')
+            )
+        )
+        
+        serializer = StateEditSerializer(states, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class HashTagView(views.APIView):
     def get(self, request, format=None):
@@ -27,24 +46,23 @@ class HashTagView(views.APIView):
 
     def put(self, request, format=None):
         hashtag_data = request.data.get('hashtag')
-        user_id = request.data.get('user_id')
+        username = request.data.get('username')
+        
         if not hashtag_data:
             return Response({'message': 'hashtag post 실패', 'error': 'No hashtag data provided'}, status=status.HTTP_400_BAD_REQUEST)
-        if not user_id:
-            return Response({'message': 'hashtag post 실패', 'error': 'No user ID provided'}, status=status.HTTP_400_BAD_REQUEST)
+        if not username:
+            return Response({'message': 'hashtag post 실패', 'error': 'No username provided'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # HashTag 객체 생성 또는 가져오기
         hashtag, created = HashTag.objects.get_or_create(hashtag=hashtag_data)
 
-        # 사용자 객체 가져오기
         try:
-            user = User.objects.get(username=user_id)
+            user = User.objects.get(username=username)
         except User.DoesNotExist:
             return Response({'message': 'hashtag post 실패', 'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        # WeekHashTag 객체 생성
         week_hashtag = WeekHashTag.objects.create(user=user)
         week_hashtag.hashtag.add(hashtag)
 
         serializer = WeekHashTagSerializer(week_hashtag)
         return Response({'message': 'hashtag post 성공', 'data': serializer.data})
+

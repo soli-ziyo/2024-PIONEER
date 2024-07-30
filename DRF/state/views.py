@@ -3,7 +3,6 @@ from rest_framework import views
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import OuterRef, Subquery
 from django.http import Http404
 from .models import *
 from .serializers import *
@@ -62,21 +61,3 @@ class StateDetail(views.APIView):
     #get == 반환
     #put == 업데이트
     #delete == 삭제
-
-class HomeListView(views.APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, format=None):
-        # 각 사용자별로 가장 최근에 업데이트된 관심사만 가져오게 하기...
-        latest_states = StateEdit.objects.filter(
-            user=OuterRef('user')
-        ).order_by('-updated_at')
-        
-        subquery = latest_states.values('id')[:1]
-        
-        states = StateEdit.objects.filter(
-            id__in=Subquery(subquery)
-        )
-        
-        serializer = StateEditSerializer(states, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)

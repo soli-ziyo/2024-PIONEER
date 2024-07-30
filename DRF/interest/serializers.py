@@ -8,7 +8,8 @@ class InterestSerializer(serializers.ModelSerializer):
     #user_id = UserSerializer(source='user.id', read_only=True)
     #tag_id = WeekHashTagSerializer(source='tag.id', read_only=True)
 
-    user = UserInterestSerializer(read_only=True)
+    user = UserProfileSerializer(read_only=True)
+    tag = WeekHashTagSerializer(read_only=True)
 
     class Meta:
         model = Interest

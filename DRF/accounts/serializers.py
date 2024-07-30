@@ -68,6 +68,11 @@ class UserInterestSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'nickname']
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'profile']
+
 class FamilySerializer(serializers.ModelSerializer):
     class Meta:
         model = Family
