@@ -8,9 +8,20 @@ class InterestSerializer(serializers.ModelSerializer):
     #user_id = UserSerializer(source='user.id', read_only=True)
     #tag_id = WeekHashTagSerializer(source='tag.id', read_only=True)
 
-    user = UserInterestSerializer(read_only=True)
+    user = UserProfileSerializer(read_only=True)
+    tag = WeekHashTagSerializer(read_only=True)
 
     class Meta:
         model = Interest
         #fields = ['tag_id', 'user_id', 'nickname', 'description', 'img']
-        fields = ['tag', 'user', 'description', 'img', 'created_at']
+        fields = ['tag', 'user', 'description', 'img', 'emoji', 'created_at']
+
+class UserInterestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['nickname', 'profile']  # 필요한 필드만 포함
+
+class HashtagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeekHashTag
+        fields = ['hashtag']  # 해시태그 모델의 필드를 정의

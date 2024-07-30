@@ -19,8 +19,7 @@ class HashTagSerializer(serializers.ModelSerializer):
         fields = ['hashtag']
 
 class WeekHashTagSerializer(serializers.ModelSerializer):
-    hashtag = HashTagSerializer(source='hashtag.hashtag', read_only=True)
-    #user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), source='user')
+    hashtag = HashTagSerializer(source='hashtag.hashtag', many=True, read_only=True)
     user_id = UserSerializer(source='user.id', read_only=True)
 
     class Meta:
