@@ -81,13 +81,10 @@ class FamilySerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['nickname', 'profile']
+        fields = ['nickname', 'profile', 'phonenum']
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
         fields = ['phonenum', 'password', 'nickname', 'profile']
-    
-
-        

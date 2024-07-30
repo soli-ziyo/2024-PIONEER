@@ -19,7 +19,7 @@ class HashTagView(views.APIView):
 
     def put(self, request, format=None):
         hashtag_data = request.data.get('hashtag')
-        nickname = request.data.get('nickname')
+        nickname = request.user.nickname
         
         if not hashtag_data:
             return Response({'message': 'hashtag post 실패', 'error': 'No hashtag data provided'}, status=status.HTTP_400_BAD_REQUEST)
