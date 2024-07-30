@@ -4,8 +4,11 @@ from django.urls import path, include
 from accounts.views import FamilyListView, FamilyCreateView, FamilyDetailView, UserUpdateView, FamilyCodeGenerateView
 from interest.views import ReportView, ReportDetailView
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls), #보안을 위해 어드민 주소를 바꿈
     path('accounts/', include('accounts.urls')),
     path('state/', include('state.urls')),
     path('home/', include('home.urls')),
@@ -17,4 +20,4 @@ urlpatterns = [
     path('settings/profile/', UserUpdateView.as_view(), name='profile_settings'),
     path('report/family/', ReportView.as_view(), name='report_view'),
     path('report/<int:tag_id>/', ReportDetailView.as_view(), name='hashtag_interest_view'),
-]
+] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

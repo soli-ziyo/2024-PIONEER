@@ -3,6 +3,7 @@ from .models import *
 from state.serializers import StateEditSerializer
 from accounts.serializers import UserSerializer, FamilySerializer
 
+'''
 class HomeSerializer(serializers.ModelSerializer):
     states = StateEditSerializer(many=True, read_only=True)
     nickname = UserSerializer(source='user.nickname', read_only=True)
@@ -12,6 +13,7 @@ class HomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Home
         fields = ['states', 'nickname', 'user_id', 'familycode']
+'''
 
 class HashTagSerializer(serializers.ModelSerializer):
     hashtag_id = serializers.IntegerField(source='id', read_only=True)
