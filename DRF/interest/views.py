@@ -11,18 +11,21 @@ import random
 # Create your views here.
 class InterestView(views.APIView):
     permission_classes = [IsAuthenticated]
- 
+
+    def post(self, request, format=None):
+        serializer=InterestSerializer(data=request.data)
+        if serializer.is_valid():
+            tag_id = request.data.get('tag')
+            week_hashtag = get_object_or_404(WeekHashTag, id=tag_id)
+            serializer.save(user=request.user, tag=week_hashtag)
+            return Response({'message':'interest post 성공', 'data':serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({'messange':'interest post 실패', 'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+'''
     def get(self, request, pk, format=None):
         interest=get_object_or_404(Interest, pk=pk)
         serializer=InterestSerializer(interest)
         return Response(serializer.data)
-    
-    def post(self, request, format=None):
-        serializer=InterestSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response({'message':'interest post 성공', 'data':serializer.data}, status=status.HTTP_201_CREATED)
-        return Response({'messange':'interest post 실패', 'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk, format=None):
         interest=get_object_or_404(Interest, pk=pk)
@@ -36,6 +39,7 @@ class InterestView(views.APIView):
         interest=get_object_or_404(Interest, pk=pk)
         interest.delete()
         return Response({"message":"interest 삭제 성공"})
+'''
     
 class InterestListView(views.APIView):
     def get(self, request, user_id, format=None):
