@@ -46,17 +46,17 @@ class HashTagView(views.APIView):
 
     def put(self, request, format=None):
         hashtag_data = request.data.get('hashtag')
-        username = request.data.get('username')
+        nickname = request.data.get('nickname')
         
         if not hashtag_data:
             return Response({'message': 'hashtag post 실패', 'error': 'No hashtag data provided'}, status=status.HTTP_400_BAD_REQUEST)
-        if not username:
-            return Response({'message': 'hashtag post 실패', 'error': 'No username provided'}, status=status.HTTP_400_BAD_REQUEST)
+        if not nickname:
+            return Response({'message': 'hashtag post 실패', 'error': 'No nickname provided'}, status=status.HTTP_400_BAD_REQUEST)
 
         hashtag, created = HashTag.objects.get_or_create(hashtag=hashtag_data)
 
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(nickname=nickname)
         except User.DoesNotExist:
             return Response({'message': 'hashtag post 실패', 'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 

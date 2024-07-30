@@ -14,4 +14,4 @@ class InterestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interest
         #fields = ['tag_id', 'user_id', 'nickname', 'description', 'img']
-        fields = ['tag', 'user', 'description', 'img', 'created_at']
+        fields = ['tag', 'user', 'description', 'img', 'emoji', 'created_at']

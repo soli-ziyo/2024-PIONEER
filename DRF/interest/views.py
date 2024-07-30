@@ -59,3 +59,32 @@ class InterestListView(views.APIView):
                 'interests': interest_serializer.data
                 }
         })
+
+class InterestEmojiView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, interest_id, format=None):
+        user = request.user
+        emoji = request.data.get('emoji')
+
+        if not emoji:
+            return Response({
+                'message': '이모지 업데이트 실패', 
+                'error': 'No emoji provided'
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        interest = get_object_or_404(Interest, id=interest_id)
+
+        if interest.tag.user != user:
+            return Response({
+                'message': '이모지 업데이트 실패', 
+                'error': 'Permission denied'
+                }, status=status.HTTP_403_FORBIDDEN)
+
+        interest.emoji = emoji
+        interest.save()
+
+        serializer = InterestSerializer(interest)
+        return Response({
+            'message': '이모지 업데이트 성공', 
+            'data': serializer.data})

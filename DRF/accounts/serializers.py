@@ -71,7 +71,7 @@ class UserInterestSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'profile']
+        fields = ['nickname', 'profile']
 
 class FamilySerializer(serializers.ModelSerializer):
     class Meta:
