@@ -163,7 +163,7 @@ class CalendarView(views.APIView):
             # 문자열을 날짜 형식으로 변환
             date_str = item['date']
             date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
-            percentage = round((item['user_count'] / total_users) * 100) if total_users > 0 else 0
+            percentage = int(round((item['user_count'] / total_users) * 100)) if total_users > 0 else 0
             formatted_data.append({
                 "date": date_obj.strftime('%Y-%m-%d'),
                 "user_count": item['user_count'],
