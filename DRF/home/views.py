@@ -7,8 +7,6 @@ from django.db.models import OuterRef, Subquery
 from .models import *
 from .serializers import *
 import random
-from django.db.models import OuterRef, Subquery
-from accounts.models import Family
 
 # Create your views here.
 

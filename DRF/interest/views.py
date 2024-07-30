@@ -6,7 +6,6 @@ from rest_framework.permissions import IsAuthenticated
 from .models import *
 from accounts.models import *
 from .serializers import *
-import random
 
 # Create your views here.
 class InterestView(views.APIView):
