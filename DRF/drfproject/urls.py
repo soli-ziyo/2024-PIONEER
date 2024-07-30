@@ -8,7 +8,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls), #보안을 위해 어드민 주소를 바꿈
+    path('myadmin/', admin.site.urls), #보안을 위해 어드민 주소를 바꿈
     path('accounts/', include('accounts.urls')),
     path('state/', include('state.urls')),
     path('home/', include('home.urls')),

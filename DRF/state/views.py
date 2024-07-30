@@ -9,6 +9,7 @@ from .serializers import *
 from accounts.models import User
 from django.db.models import OuterRef, Subquery
 from accounts.models import Family
+from accounts.serializers import UserProfileSerializer
 
 # Create your views here.
 class StateList(views.APIView):
@@ -67,7 +68,16 @@ class HomeListView(views.APIView):
     def get(self, request, format=None):
         user = request.user
         family_codes = user.families.values_list('familycode', flat=True)
-        family_users = User.objects.filter(families__familycode__in=family_codes)
+        
+        if not family_codes:
+            latest_state = StateEdit.objects.filter(user=user).order_by('-updated_at').first()
+            if latest_state:
+                serializer = StateEditSerializer(latest_state)
+            else:
+                serializer = UserProfileSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            family_users = User.objects.filter(families__familycode__in=family_codes) | User.objects.filter(id=user.id)
         
         # 각 사용자별로 가장 최근에 업데이트된 StateEdit만 가져옴
         latest_states = StateEdit.objects.filter(

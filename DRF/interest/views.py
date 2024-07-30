@@ -45,13 +45,19 @@ class InterestListView(views.APIView):
         user = get_object_or_404(User, id=user_id)
         user_families = Family.objects.filter(users=user)
         familycodes = user_families.values_list('familycode', flat=True)
-        family_users = User.objects.filter(families__familycode__in=familycodes).distinct()
+        
+        if familycodes:
+            family_users = User.objects.filter(families__familycode__in=familycodes).distinct()
+        else:
+            family_users = User.objects.filter(id=user.id)  # 패밀리 코드가 없을 때 현재 사용자만 반환
+        
         user_serializer = UserProfileSerializer(family_users, many=True)
 
         latest_week_hashtags = WeekHashTag.objects.filter(user=user).order_by('-created_at').first()
         
         if not latest_week_hashtags:
             return Response({'message': 'No hashtags found for this user'}, status=status.HTTP_404_NOT_FOUND)
+        
         interests = Interest.objects.filter(tag=latest_week_hashtags).select_related('user')
         interest_serializer = InterestSerializer(interests, many=True)
 
@@ -60,7 +66,7 @@ class InterestListView(views.APIView):
             'data': {
                 'family_users': user_serializer.data,
                 'interests': interest_serializer.data
-                }
+            }
         })
 
 class InterestEmojiView(views.APIView):
@@ -100,19 +106,17 @@ class ReportView(views.APIView):
         user = request.user
         family_codes = user.families.values_list('familycode', flat=True)
         family_users = User.objects.filter(families__familycode__in=family_codes)
-
         # 요청 보낸 사용자의 해시태그 가져오기
         user_hashtags = WeekHashTag.objects.filter(tag_interests__user=user).distinct()
-        hashtag_serializer = WeekHashTagSerializer(user_hashtags, many=True)
-
+        hashtag_serializer = ReportHashTagSerializer(user_hashtags, many=True)
         # 응답 데이터 생성
         response_data = {
             "message": "가족 레포트 불러오기 성공",
             "family": [{"nickname": u.nickname, "profile": u.profile.url if u.profile else None} for u in family_users],
             "user_hashtags": hashtag_serializer.data
         }
-
         return Response(response_data, status=status.HTTP_200_OK)
+
 
 class ReportDetailView(views.APIView):
     permission_classes = [IsAuthenticated]
@@ -122,10 +126,8 @@ class ReportDetailView(views.APIView):
         week_hashtag = get_object_or_404(WeekHashTag, id=tag_id)
         interests = Interest.objects.filter(tag=week_hashtag, user=request.user).select_related('user')
         serializer = InterestSerializer(interests, many=True)
-        
         response_data = {
             "message": "관심사 태그에 포함된 사용자의 글 불러오기 성공",
             "data": serializer.data
         }
-        
         return Response(response_data, status=status.HTTP_200_OK)
