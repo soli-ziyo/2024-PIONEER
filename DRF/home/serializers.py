@@ -14,17 +14,19 @@ class HomeSerializer(serializers.ModelSerializer):
         fields = ['states', 'nickname', 'user_id', 'familycode']
 
 class HashTagSerializer(serializers.ModelSerializer):
+    hashtag_id = serializers.IntegerField(source='id', read_only=True)
+
     class Meta:
         model = HashTag
-        fields = ['hashtag']
+        fields = ['hashtag_id','hashtag']
 
 class WeekHashTagSerializer(serializers.ModelSerializer):
-    hashtag = HashTagSerializer(source='hashtag.hashtag', many=True, read_only=True)
-    user_id = UserSerializer(source='user.id', read_only=True)
+    hashtag = HashTagSerializer(many=True, read_only=True)
+    nickname = serializers.CharField(source='user.nickname', read_only=True)
 
     class Meta:
         model = WeekHashTag
-        fields = ['user_id', 'hashtag', 'created_at']
+        fields = ['id', 'nickname', 'hashtag', 'created_at']
 
     def create(self, validated_data):
         hashtags_data = validated_data.pop('hashtag')

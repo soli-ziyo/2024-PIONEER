@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from accounts.views import FamilyListView, FamilyCreateView, FamilyDetailView, UserUpdateView, FamilyCodeGenerateView
-from interest.views import ReportView, HashtagInterestView
+from interest.views import ReportView, ReportDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,5 +16,5 @@ urlpatterns = [
     path('family/<str:familycode>/', FamilyListView.as_view(), name='user-list-by-familycode'),
     path('settings/profile/', UserUpdateView.as_view(), name='profile_settings'),
     path('report/family/', ReportView.as_view(), name='report_view'),
-    path('report/<int:tag_id>/', HashtagInterestView.as_view(), name='hashtag_interest_view'),
+    path('report/<int:tag_id>/', ReportDetailView.as_view(), name='hashtag_interest_view'),
 ]

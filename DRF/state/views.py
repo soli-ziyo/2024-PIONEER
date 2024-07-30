@@ -3,11 +3,12 @@ from rest_framework import views
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import OuterRef, Subquery
 from django.http import Http404
 from .models import *
 from .serializers import *
 from accounts.models import User
+from django.db.models import OuterRef, Subquery
+from accounts.models import Family
 
 # Create your views here.
 class StateList(views.APIView):
@@ -60,11 +61,6 @@ class StateDetail(views.APIView):
         state .delete()
         return Response({"message":"상태 삭제 성공"})
     
-    #get == 반환
-    #put == 업데이트
-    #delete == 삭제
-
-# Create your views here.
 class HomeListView(views.APIView):
     permission_classes = [IsAuthenticated]
 
@@ -74,7 +70,9 @@ class HomeListView(views.APIView):
         family_users = User.objects.filter(families__familycode__in=family_codes)
         
         # 각 사용자별로 가장 최근에 업데이트된 StateEdit만 가져옴
-        latest_states = StateEdit.objects.filter(user=OuterRef('user')).order_by('-updated_at')
+        latest_states = StateEdit.objects.filter(
+            user=OuterRef('user')
+        ).order_by('-updated_at')
         
         subquery = latest_states.values('id')[:1]
         
@@ -87,9 +85,7 @@ class HomeListView(views.APIView):
                 ).values('latest_id')
             )
         )
-        serializer = HomeSerializer(states, many=True)
-        response_data = {
-                "message": "홈 화면 구성 성공",
-                "data": serializer.data
-            }
-        return Response(response_data)
+        
+        serializer = StateEditSerializer(states, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    

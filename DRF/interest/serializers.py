@@ -16,12 +16,15 @@ class InterestSerializer(serializers.ModelSerializer):
         #fields = ['tag_id', 'user_id', 'nickname', 'description', 'img']
         fields = ['tag', 'user', 'description', 'img', 'emoji', 'created_at']
 
+
 class UserInterestSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['nickname', 'profile']  # 필요한 필드만 포함
 
+'''
 class HashtagSerializer(serializers.ModelSerializer):
     class Meta:
         model = WeekHashTag
         fields = ['hashtag']  # 해시태그 모델의 필드를 정의
+'''

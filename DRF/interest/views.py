@@ -115,7 +115,7 @@ class ReportView(views.APIView):
 
         return Response(response_data, status=status.HTTP_200_OK)
 
-class HashtagInterestView(views.APIView):
+class ReportDetailView(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, tag_id, format=None):
