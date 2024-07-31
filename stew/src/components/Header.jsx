@@ -19,6 +19,7 @@ const HeaderWrapper = styled.header`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-bottom: 20px;
 `;
 
 const MenuIcon = styled.div`

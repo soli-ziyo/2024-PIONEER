@@ -45,15 +45,20 @@ const HamburgerMenu = ({ toggleMenu }) => {
 export default HamburgerMenu;
 
 const MenuWrapper = styled.div`
-  position: absolute;
+  z-index: 20;
+  position: fixed; 
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0; 
+  bottom: 0; 
+  width:390px;
   height: 100%;
   background-color: #F9F9F9;
   padding: 20px;
   box-sizing: border-box;
+  margin: 0 auto; 
 `;
+
 
 const CloseButton = styled.div`
   cursor: pointer;
@@ -76,11 +81,16 @@ const StyledLink = styled(Link)`
   font-weight: 300;
   padding-bottom: 15px;
   border-bottom: 2px solid #e2e2e2;
-  margin-left: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
   font-family: 'KulimPark';
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  &:hover {
+    color: #FF5A00;
+  }
 `
 
 const MenuLink = styled.div`
@@ -90,11 +100,16 @@ const MenuLink = styled.div`
   font-weight: 300;
   padding-bottom: 15px;
   border-bottom: 2px solid #e2e2e2;
-  margin-left: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
   font-family: 'KulimPark';
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  &:hover {
+    color: #FF5A00;
+  }
 
   &::after {
     content: "";
@@ -103,13 +118,13 @@ const MenuLink = styled.div`
     background-image: url(${props => props.isOpen ? Minus : Plus});
     background-size: cover;
     background-repeat: no-repeat;
-    margin-left: 10px;
+    margin-right: 10px;
     cursor: pointer;
   }
 `;
 
 const SubMenu = styled.div`
-  margin-left: 50px;
+  margin-left: 10px;
   display: flex;
   flex-direction: column;
 `;

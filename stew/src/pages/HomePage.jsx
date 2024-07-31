@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useProfilesStore } from '../stores/ProfileStore.js';
 import FamilyProfile from "../components/FamilyProfile.jsx";
 import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import Logo from "../images/Logo.svg";
+import HomeNotice from "../components/HomeNotice.jsx";
+
+import axios from 'axios';
 
 const HomePage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { profiles, fetchProfiles } = useProfilesStore();
 
-  const { profiles } = useProfilesStore();
+  useEffect(() => {
+    fetchProfiles();
+  }, [fetchProfiles]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -23,6 +29,7 @@ const HomePage = () => {
           <FamilyProfile key={index} profile={profile} index={index} />
         ))}
       </Content>
+      <HomeNotice />
       {menuOpen && <HamburgerMenu toggleMenu={toggleMenu} />}
       <Footer><img src={Logo} alt='Logo' /></Footer>
     </Wrapper>
@@ -36,7 +43,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 390px;
-  height: 100vh;
+  height: 100%;;
   margin: 0 auto;
   box-sizing: border-box;
 `;
@@ -44,12 +51,12 @@ const Wrapper = styled.div`
 const Content = styled.div`
   flex: 1;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   overflow-y: auto;
-  padding: 20px;
   box-sizing: border-box;
+  &::-webkit-scrollbar {
+    display: none; /* 스크롤 숨기기 */
+  }
 `;
 
 const Footer = styled.div`

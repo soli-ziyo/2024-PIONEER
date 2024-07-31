@@ -4,13 +4,14 @@ import { reset } from "styled-reset";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import './fonts/Pretendard.css'
 
-//components
 
-//pages
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import ProfilePage from "./pages/ProfilePage";
+import HomePage from "./pages/HomePage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import SignupPage from "./pages/SignupPage.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
+import ChangeInterest from "./pages/ChangeInterest.jsx";
+import InterestPage from "./pages/InterestPage.jsx";
+import PostPage from "./pages/PostPage.jsx";
 
 import { createGlobalStyle } from "styled-components";
 
@@ -22,8 +23,11 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/home" element={<HomePage />}/>
+          <Route path="/home/hashtag" element={<ChangeInterest />}/>
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/interest/list/:user_id" element={<InterestPage />} />
+          <Route path="/interest/new" element={<PostPage />} />
         </Routes>
       </Router>
     </>
