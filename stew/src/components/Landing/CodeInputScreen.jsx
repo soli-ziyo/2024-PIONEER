@@ -9,6 +9,7 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
   const [code, setCode] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const baseurl = " https://minsol.pythonanywhere.com/";
 
   const handleChange = (e, index) => {
     const newCode = [...code];
@@ -24,7 +25,7 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
   const handleNext = async () => {
     setLoading(true);
     try {
-      const response = await axios.post("/accounts/certify/confirm/", {
+      const response = await axios.post(`${baseurl}accounts/certify/confirm/`, {
         phone: phone,
         certificationNumber: code.join(""),
       });

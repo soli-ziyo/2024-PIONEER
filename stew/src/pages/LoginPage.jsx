@@ -11,11 +11,12 @@ const LoginPage = () => {
   const [id, setID] = useState();
   const [pw, setPW] = useState();
 
+  const baseurl = " https://minsol.pythonanywhere.com/";
   //------------------------------------------------------------------------
   const goLogin = async () => {
     await axios({
       method: "POST",
-      url: "/account/login/",
+      url: `${baseurl}account/login/`,
       data: {
         username: id,
         password: pw,
@@ -23,8 +24,10 @@ const LoginPage = () => {
     })
       .then((response) => {
         // localStorage에 저장
-        localStorage.setItem("userName", response.data.nickname);
-        localStorage.setItem("token", response.data.access_token);
+        const { username } = response.data;
+        const { accessToken } = response.data;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("username", username);
 
         // HomePage로 이동
         navigate("/home");

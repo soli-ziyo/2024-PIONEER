@@ -9,6 +9,7 @@ import Back from "../../images/Back.svg";
 const SignupScreen = ({ nextStep, prevStep }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const baseurl = " https://minsol.pythonanywhere.com/";
   // const [nickname, setNickname] = useState("");
   // const [phonenum, setPhonenum] = useState(""); // 이 값을 필요에 따라 설정
   // const [profile, setProfile] = useState(null);
@@ -16,7 +17,7 @@ const SignupScreen = ({ nextStep, prevStep }) => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("/accounts/signup/", {
+      const response = await axios.post(`${baseurl}accounts/signup/`, {
         username: id,
         password: password,
         // nickname: nickname,

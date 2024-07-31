@@ -9,12 +9,13 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
   const [phoneNB, setPhoneNB] = useState("");
   const [buttonReady, setButtonReady] = useState(false);
   const navigate = useNavigate();
+  const baseurl = " https://minsol.pythonanywhere.com/";
 
   const phonenum = async () => {
     try {
       const response = await axios({
         method: "GET",
-        url: "/accounts/certify/send/",
+        url: `${baseurl}accounts/certify/send/`,
         params: {
           phone: phoneNB,
         },
@@ -22,7 +23,7 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
       console.log("본인확인 sms 전송 성공", response);
 
       try {
-        const response = await axios.post("/accounts/signup/", {
+        const response = await axios.post(`${baseurl}accounts/signup/`, {
           phonenum: phoneNB,
         });
         console.log("전화번호 전송", response);

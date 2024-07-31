@@ -10,12 +10,13 @@ const ProfileSetupScreen = ({ prevStep, nextStep }) => {
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const navigate = useNavigate();
+  const baseurl = " https://minsol.pythonanywhere.com/";
 
   const handleSubmit = async () => {
     try {
       const response = await axios({
         method: "POST",
-        url: "/accounts/newprofile/",
+        url: `${baseurl}accounts/newprofile/`,
         params: {},
       });
       console.log("프로필 설정 완료");
@@ -25,7 +26,7 @@ const ProfileSetupScreen = ({ prevStep, nextStep }) => {
     }
 
     try {
-      const response = await axios.post("/accounts/signup/", {
+      const response = await axios.post(`${baseurl}accounts/signup/`, {
         nickname: nickname,
         profile: profileImage,
       });
