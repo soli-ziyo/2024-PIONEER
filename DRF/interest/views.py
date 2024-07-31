@@ -6,10 +6,10 @@ from rest_framework.permissions import IsAuthenticated
 from .models import *
 from accounts.models import *
 from .serializers import *
+from accounts.serializers import UserProfileSerializer
 from datetime import datetime, timedelta
-from django.utils.timezone import now
+from django.utils import timezone
 from django.db.models import Count
-from django.db.models.functions import TruncDate
 
 # Create your views here.
 class InterestView(views.APIView):
@@ -135,36 +135,84 @@ class ReportDetailView(views.APIView):
             "data": serializer.data
         }
         return Response(response_data, status=status.HTTP_200_OK)
-    
+
+def get_total_interest(request):
+    today = datetime.now()
+    year = today.year
+    month = today.month
+
+    start_date = timezone.make_aware(datetime(year, month, 1))
+    if month == 12:
+        end_date = timezone.make_aware(datetime(year + 1, 1, 1))
+    else:
+        end_date = timezone.make_aware(datetime(year, month + 1, 1))
+        
+    total_interest = Interest.objects.filter(
+        created_at__gte=start_date,
+        created_at__lt=end_date
+    )
+
+    return total_interest
+
 class CalendarView(views.APIView):
     def get(self, request, familycode):
-        # 해당 familycode를 가진 유저들 필터링
         try:
             family = Family.objects.get(familycode=familycode)
         except Family.DoesNotExist:
+            family = request.user
             return Response({"message": "해당 familycode를 가진 가족이 없습니다."}, status=404)
 
         users = family.users.all()
         total_users = users.count()
 
-        # 현재 날짜
+        # 월별 게시글 개수
         today = datetime.today()
         start_date = today - timedelta(days=30)
 
-        # 날짜별 글을 올린 유저 수 계산
+        interests=[]
+        total_interest = get_total_interest(request=request)
+        total_interests = 0
+
+        # 유저가 월별 올린 게시글 수
+        interest_perUser = []
+        for user in users:
+            user_interests = total_interest.filter(user=user).count()
+            total_interests += user_interests
+            interest_perUser.append({
+                "user":UserProfileSerializer(user).data,
+                "user_interests":user_interests
+        })
+            
+        if total_users == 0:
+            stew_temp = 0
+        else:
+            stew_temp = int(total_interests / total_users)
+
+        if stew_temp < 25:
+            stew = "차가운 스튜"
+        elif stew_temp < 50:
+            stew = "미지근한 스튜"
+        elif stew_temp < 75:
+            stew = "따뜻한 스튜"
+        else:
+            stew = "뜨거운 스튜"
+
+        interests.append({ "총 게시물 수": total_interests })
+        interests.append({ "stew_temp": stew_temp })
+        interests.append({ "stew": stew })
+
+        # 날짜별 글을 올린 유저 수
         interest_data = Interest.objects.filter(
             user__in=users,
             created_at__gte=start_date
         ).extra({'date': 'DATE(created_at)'}).values('date').annotate(user_count=Count('user', distinct=True))
 
-        # 퍼센트 계산 및 데이터 포맷팅
-        formatted_data = []
+        calendar = []
         for item in interest_data:
-            # 문자열을 날짜 형식으로 변환
             date_str = item['date']
             date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
-            percentage = int(round((item['user_count'] / total_users) * 100)) if total_users > 0 else 0
-            formatted_data.append({
+            percentage = round((item['user_count'] / total_users) * 100) if total_users > 0 else 0
+            calendar.append({
                 "date": date_obj.strftime('%Y-%m-%d'),
                 "user_count": item['user_count'],
                 "percentage": percentage
@@ -172,5 +220,7 @@ class CalendarView(views.APIView):
 
         return Response({
             "message": "달력 데이터를 성공적으로 불러왔습니다.",
-            "data": formatted_data
+            "interests": interests,
+            "calendar": calendar,
+            "interest_perUser": interest_perUser
         })
