@@ -3,34 +3,38 @@ import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-//images
+// images
 import Back from "../../images/Back.svg";
 
-const ProfileSetupScreen = ({ prevStep, nextStep }) => {
+const ProfileSetupScreen = ({ id, password, phone, prevStep, nextStep }) => {
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const navigate = useNavigate();
-  const baseurl = " https://minsol.pythonanywhere.com/";
+  const baseurl = "https://minsol.pythonanywhere.com/";
 
   const handleSubmit = async () => {
     try {
-      const response = await axios({
-        method: "POST",
-        url: `${baseurl}accounts/newprofile/`,
-        params: {},
-      });
-      console.log("프로필 설정 완료");
-    } catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
+      const formData = new FormData();
+      formData.append("username", id);
+      formData.append("password", password);
+      formData.append("nickname", nickname);
+      //formData.append("phonenum", phone);
+      if (profileImage) {
+        formData.append("profile", profileImage);
+      }
 
-    try {
-      const response = await axios.post(`${baseurl}accounts/signup/`, {
-        nickname: nickname,
-        profile: profileImage,
-      });
-      console.log("닉네임, 프로필 전송", response);
+      const response = await axios.post(
+        `${baseurl}accounts/signup/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("회원가입 성공");
+      console.log(response.data);
       navigate("/home");
     } catch (error) {
       console.log(error);
@@ -41,7 +45,7 @@ const ProfileSetupScreen = ({ prevStep, nextStep }) => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setProfileImage(URL.createObjectURL(file));
+      setProfileImage(file);
     }
   };
 
@@ -56,7 +60,7 @@ const ProfileSetupScreen = ({ prevStep, nextStep }) => {
             <label htmlFor="image-upload" className="image-upload-label">
               {profileImage ? (
                 <img
-                  src={profileImage}
+                  src={URL.createObjectURL(profileImage)}
                   alt="Profile"
                   className="profile-image"
                 />
@@ -120,7 +124,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  max-width: 390px;
 `;
 
 const ContainerBase = styled.div`

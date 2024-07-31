@@ -9,27 +9,12 @@ import Back from "../../images/Back.svg";
 const SignupScreen = ({ nextStep, prevStep }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const baseurl = " https://minsol.pythonanywhere.com/";
-  // const [nickname, setNickname] = useState("");
-  // const [phonenum, setPhonenum] = useState(""); // 이 값을 필요에 따라 설정
-  // const [profile, setProfile] = useState(null);
+  const baseurl = "https://minsol.pythonanywhere.com/";
+
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    try {
-      const response = await axios.post(`${baseurl}accounts/signup/`, {
-        username: id,
-        password: password,
-        // nickname: nickname,
-        // phonenum: phonenum,
-        // profile: profile,
-      });
-      console.log("아이디, 패스워드 전송", response);
-      nextStep();
-    } catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
+    nextStep(id, password);
   };
 
   return (
@@ -82,12 +67,12 @@ const SignupScreen = ({ nextStep, prevStep }) => {
 export default SignupScreen;
 
 const Wrapper = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  max-width: 390px;
+  height: 100%;
 `;
 
 const ContainerBase = styled.div`

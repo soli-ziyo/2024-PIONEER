@@ -2,8 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { reset } from "styled-reset";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import './fonts/Pretendard.css'
-
+import "./fonts/Pretendard.css";
 
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -12,22 +11,24 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import ChangeInterest from "./pages/ChangeInterest.jsx";
 import InterestPage from "./pages/InterestPage.jsx";
 import PostPage from "./pages/PostPage.jsx";
+import ReportPage from "./pages/ReportPage.jsx";
 
 import { createGlobalStyle } from "styled-components";
 
 function App() {
   return (
     <>
-      <GlobalStyle/>
+      <GlobalStyle />
       <Router>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/home" element={<HomePage />}/>
-          <Route path="/home/hashtag" element={<ChangeInterest />}/>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/home/hashtag" element={<ChangeInterest />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/interest/list/:user_id" element={<InterestPage />} />
           <Route path="/interest/new" element={<PostPage />} />
+          <Route path="/report/stats" element={<ReportPage />} />
         </Routes>
       </Router>
     </>
@@ -50,4 +51,4 @@ const GlobalStyle = createGlobalStyle`
     background-color: #F9F9F9;
     box-sizing: border-box;
   }
-`
+`;

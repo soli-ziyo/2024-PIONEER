@@ -11,12 +11,12 @@ const LoginPage = () => {
   const [id, setID] = useState();
   const [pw, setPW] = useState();
 
-  const baseurl = " https://minsol.pythonanywhere.com/";
+  const baseurl = "https://minsol.pythonanywhere.com/";
   //------------------------------------------------------------------------
   const goLogin = async () => {
     await axios({
       method: "POST",
-      url: `${baseurl}account/login/`,
+      url: `${baseurl}accounts/login/`,
       data: {
         username: id,
         password: pw,
@@ -25,8 +25,8 @@ const LoginPage = () => {
       .then((response) => {
         // localStorage에 저장
         const { username } = response.data;
-        const { accessToken } = response.data;
-        localStorage.setItem("accessToken", accessToken);
+        const { access_token } = response.data;
+        localStorage.setItem("accessToken", access_token);
         localStorage.setItem("username", username);
 
         // HomePage로 이동
@@ -34,7 +34,6 @@ const LoginPage = () => {
 
         console.log("로그인 성공", response.data);
       })
-
       .catch((error) => {
         console.log(error);
         throw new Error(error);
@@ -68,7 +67,6 @@ const LoginPage = () => {
                 background: "none",
                 border: "none",
                 fontWeight: "200",
-                marginBottom: "10%",
               }}
             >
               회원가입
@@ -85,8 +83,9 @@ export default LoginPage;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  max-width: 390px;
+  height: 100%;
+  box-sizing: border-box;
 `;
 
 const Container = styled.div`
@@ -98,7 +97,7 @@ const Container = styled.div`
 
   img {
     margin-top: 20%;
-    margin-bottom: 37%;
+    margin-bottom: 40%;
     margin-right: 40%;
   }
 `;

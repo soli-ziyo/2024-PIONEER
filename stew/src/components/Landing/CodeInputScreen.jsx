@@ -9,7 +9,7 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
   const [code, setCode] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const baseurl = " https://minsol.pythonanywhere.com/";
+  const baseurl = "https://minsol.pythonanywhere.com/";
 
   const handleChange = (e, index) => {
     const newCode = [...code];
@@ -25,11 +25,14 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
   const handleNext = async () => {
     setLoading(true);
     try {
-      const response = await axios.post(`${baseurl}accounts/certify/confirm/`, {
-        phone: phone,
-        certificationNumber: code.join(""),
-      });
-      console.log(response.data);
+      const response = await axios.post(
+        `${baseurl}accounts/phonenum/getcode/`,
+        {
+          phone: phone,
+          certificationNumber: code.join(""), //문자열 결합
+        }
+      );
+      console.log("sms 인증에 성공하였습니다.");
       nextStep();
     } catch (err) {
       setError("인증에 실패하였습니다. 인증번호를 확인해주세요.");
@@ -60,12 +63,21 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
             ))}
           </CodeInputs>
           {loading && (
-            <p style="fontFamily: Pretendard">인증번호를 확인 중입니다...</p>
+            <p
+              style={{
+                fontFamily: "Pretendard",
+                fontSize: "14px",
+                marginBottom: "-10%",
+                color: "red",
+              }}
+            >
+              인증번호를 확인 중입니다...
+            </p>
           )}
           {error && <ErrorMessage>{error}</ErrorMessage>}
           <Button
-            onClick={handleNext}
-            // onClick={nextStep}
+            //onClick={handleNext}
+            onClick={nextStep}
             disabled={code.some((digit) => digit === "")}
           >
             다음
@@ -79,12 +91,12 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
 export default CodeInputScreen;
 
 const Wrapper = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  max-width: 390px;
+  height: 100%;
 `;
 
 const ContainerBase = styled.div`
@@ -117,7 +129,7 @@ const InputWrapper = styled.div`
 const CodeInputs = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 const CodeInput = styled.input`

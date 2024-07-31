@@ -9,30 +9,18 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
   const [phoneNB, setPhoneNB] = useState("");
   const [buttonReady, setButtonReady] = useState(false);
   const navigate = useNavigate();
-  const baseurl = " https://minsol.pythonanywhere.com/";
+  const baseurl = "https://minsol.pythonanywhere.com/";
 
   const phonenum = async () => {
     try {
       const response = await axios({
         method: "GET",
-        url: `${baseurl}accounts/certify/send/`,
+        url: `${baseurl}accounts/phonenum/sendcode/`,
         params: {
-          phone: phoneNB,
+          phonenum: phoneNB,
         },
       });
       console.log("본인확인 sms 전송 성공", response);
-
-      try {
-        const response = await axios.post(`${baseurl}accounts/signup/`, {
-          phonenum: phoneNB,
-        });
-        console.log("전화번호 전송", response);
-        nextStep();
-      } catch (error) {
-        console.log(error);
-        throw new Error(error);
-      }
-
       nextStep();
     } catch (error) {
       console.log(error);
@@ -51,7 +39,7 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
 
   const handleNext = () => {
     setPhone(phoneNB);
-    phonenum();
+    phonenum().then(() => nextStep());
   };
 
   return (
@@ -72,8 +60,8 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
               backgroundColor: buttonReady ? "white" : "#F1F1F1",
               color: buttonReady ? "black" : "#8C8C8C",
             }}
-            onClick={handleNext}
-            // onClick={nextStep}
+            //onClick={handleNext}
+            onClick={nextStep}
             disabled={!buttonReady}
           >
             다음
@@ -92,6 +80,8 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  max-width: 390px;
+  height: 100%;
 `;
 
 const ContainerBase = styled.div`

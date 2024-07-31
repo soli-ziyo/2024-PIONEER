@@ -8,6 +8,8 @@ import ProfileSetupScreen from "../components/Landing/ProfileSetupScreen";
 const SignupPage = () => {
   const [step, setStep] = useState(1);
   const [phone, setPhone] = useState("");
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
@@ -24,9 +26,25 @@ const SignupPage = () => {
         />
       );
     case 3:
-      return <SignupScreen nextStep={nextStep} prevStep={prevStep} />;
+      return (
+        <SignupScreen
+          nextStep={(id, password) => {
+            setId(id);
+            setPassword(password);
+            nextStep();
+          }}
+          prevStep={prevStep}
+        />
+      );
     case 4:
-      return <ProfileSetupScreen prevStep={prevStep} />;
+      return (
+        <ProfileSetupScreen
+          id={id}
+          password={password}
+          phone={phone}
+          prevStep={prevStep}
+        />
+      );
     default:
       return null;
   }
