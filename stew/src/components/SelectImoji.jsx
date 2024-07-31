@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import ImojiDash from '../images/Imoji_dash.svg'; // Imoji_dash 이미지를 불러옴
+import ImojiDash from '../images/Imoji_dash2.svg'; // Imoji_dash 이미지를 불러옴
 
 const SelectImoji = ({ onClose, onSelect }) => {
   const [selectedEmoji, setSelectedEmoji] = useState(null);
@@ -21,7 +21,11 @@ const SelectImoji = ({ onClose, onSelect }) => {
     <Overlay>
       <EmojiContainer>
         <SelectedEmojiContainer>
-          <EmojiImage src={ImojiDash} alt="emoji-dash" />
+          {selectedEmoji ? (
+            <EmojiDisplay>{selectedEmoji}</EmojiDisplay>
+          ) : (
+            <EmojiImage src={ImojiDash} alt="emoji-dash" />
+          )}
           <EmojiText>반응을 선택해 주세요.</EmojiText>
         </SelectedEmojiContainer>
         <EmojiGrid>
@@ -52,76 +56,104 @@ const Overlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  z-index: 1000;
+  z-index: 10;
 `;
 
 const EmojiContainer = styled.div`
-  background: #fff;
+  background: #F9F9F9;;
   padding: 20px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
-  height: 80vh; 
+  max-width: 390px;
+  height: 91svh; 
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
 `;
 
 const SelectedEmojiContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
 `;
 
 const EmojiImage = styled.img`
+  margin-top: 40px;
   width: 58px;
   height: 58px;
 `;
 
+const EmojiDisplay = styled.div`
+  margin-top: 40px;
+  font-size: 58px;
+`;
+
 const EmojiText = styled.div`
-  margin-top: 10px;
+  margin-top: 26px;
+  color: #000;
   font-size: 16px;
-  color: #888;
+  font-weight: 500;
 `;
 
 const EmojiGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  aspect-ratio: 1;
+  gap: auto;
+  width: 95%;
+  margin: 20px;
 `;
 
 const EmojiButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 45px;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 30px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 12px;
 `;
 
 const CloseButton = styled.button`
-  background: none;
+  display: flex;
+  width: 122px;
+  height: 54px;
+  padding: 16px 45px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 32px;
+  background: var(--Backgrounds-Primary, #FFF);
   border: none;
+
+  color: var(--Labels-Primary, #000);
+  font-family: Pretendard;
   font-size: 18px;
-  cursor: pointer;
-  color: #888;
+  font-weight: 500;
 `;
 
 const CompleteButton = styled.button`
-  background: #FF6600;
+  display: flex;
+  width: 122px;
+  height: 54px;
+  padding: 16px 45px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 32px;
+  background: #FF5A00;
   border: none;
-  padding: 10px 20px;
+
+  color: var(--Labels-Primary, #FFF);
+  font-family: Pretendard;
   font-size: 18px;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-`;
+  font-weight: 500;
+  `;

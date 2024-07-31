@@ -20,28 +20,32 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
 `;
 
 const Label = styled.div`
-  background-color: #FF6600;
+  background-color: #FF5A00;
   color: #fff;
+  font-family: Pretendard;
   font-size: 14px;
+  font-style: normal;
   font-weight: 600;
-  width: 120px;
-  height: 30px;
+  line-height: 140%; 
+  padding: 5px 14px;
   border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 `;
 
 const Week = styled.div`
   color: #8C8C8C;
+  text-align: center;
+  font-family: Pretendard;
   font-size: 12px;
+  font-style: normal;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 `;
 
 const Hashtag = styled.div`

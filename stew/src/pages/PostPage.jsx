@@ -4,9 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import StateInterest from '../components/StateInterest';
 
+import Close from '../images/Close.svg'
+import Plus from '../images/Plus_og.svg'
+
 const PostPage = () => {
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
   const navigate = useNavigate();
 
   const handleDescriptionChange = (e) => {
@@ -14,7 +18,9 @@ const PostPage = () => {
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    setImage(file);
+    setPreview(URL.createObjectURL(file)); 
   };
 
   const handleSubmit = async (e) => {
@@ -52,13 +58,15 @@ const PostPage = () => {
   return (
     <Wrapper>
       <Header>
-        <CloseButton onClick={() => navigate(-1)}>X</CloseButton>
+        <CloseButton onClick={() => navigate('/home')}><img src={Close} alt='Close' /></CloseButton>
         <Title>게시물 작성</Title>
       </Header>
       <StateInterest user="엄마" hashtag="산책" />
       <Form onSubmit={handleSubmit}>
         <ImageUpload>
-          <Label htmlFor="image">+</Label>
+          <Label htmlFor="image" preview={preview}>
+            <img src={Plus} alt='Plus Image' />
+          </Label>
           <Input
             id="image"
             type="file"
@@ -80,24 +88,35 @@ const PostPage = () => {
 export default PostPage;
 
 const Wrapper = styled.div`
-  padding: 20px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Header = styled.div`
-  display: flex;
+  display: center;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
+  width: 100%;
+  margin-bottom: 30px;
 `;
 
 const CloseButton = styled.div`
-  font-size: 24px;
   cursor: pointer;
+  img {
+    width: 19px;
+    height: 19px;
+  }
+  margin: 3px 0 0 3px;
 `;
 
-const Title = styled.h2`
-  font-size: 18px;
+const Title = styled.h1`
+  color: #000;
+  text-align: center;
+  font-size: 20px;
   font-weight: 600;
+  letter-spacing: -0.5px;
 `;
 
 const Form = styled.form`
@@ -107,21 +126,27 @@ const Form = styled.form`
 `;
 
 const ImageUpload = styled.div`
-  margin-bottom: 20px;
+  margin-top: 45px;
+  margin-bottom: 45px;
 `;
 
 const Label = styled.label`
-  display: block;
-  width: 100px;
-  height: 100px;
-  border: 2px dashed #FF6600;
-  border-radius: 10px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  font-size: 36px;
-  color: #FF6600;
+  align-items: center; 
+  width: 67px;
+  height: 67px;
+  border-radius: 4px;
+  border: 1px dashed #FF5A00;
   cursor: pointer;
+  background-image: ${({ preview }) => preview ? `url(${preview})` : 'none'};
+  background-size: cover;
+  background-position: center;
+
+  img{
+    width: 27px;
+    height: 27px;
+  }
 `;
 
 const Input = styled.input`
@@ -130,26 +155,57 @@ const Input = styled.input`
 
 const TextInput = styled.textarea`
   width: 100%;
-  height: 100px;
+  height: 120px;
+  border-radius: 21px;
   border: 1px solid #E2E2E2;
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 14px;
+  padding: 14px 16px;
+  font-size: 16px;
   resize: none;
   margin-bottom: 20px;
+  font-family: Pretendard;
+  font-weight: 300;
+  box-sizing: border-box;
+
+  &::placeholder{
+    font-family: Pretendard;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  &:focus{
+    outline: none;
+    border: 1px solid #222;
+  }
 `;
 
 const SubmitButton = styled.button`
-  width: 100px;
-  height: 40px;
-  background-color: #FF6600;
-  color: white;
-  font-size: 14px;
-  border: none;
-  border-radius: 10px;
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 122px;
+  height: 54px;
+  padding: 14px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  border-radius: 32px;
+  font-family: Pretendard;
+  font-size: 18px;
+  font-weight: 500;
+
+  border-radius: 32px;
+  border: 1px solid #E2E2E2;
+  background: #FFF;
+  color: #000;
+
   cursor: pointer;
+  
   &:disabled {
-    background-color: #E2E2E2;
+    border: 1px solid #E2E2E2;
+    background: #F1F1F1;
+    color: #8C8C8C;
     cursor: not-allowed;
   }
 `;

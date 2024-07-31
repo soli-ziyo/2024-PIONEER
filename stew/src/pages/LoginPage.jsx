@@ -11,12 +11,12 @@ const LoginPage = () => {
   const [id, setID] = useState();
   const [pw, setPW] = useState();
 
-  const baseurl = " https://minsol.pythonanywhere.com/";
+  const baseurl = "https://minsol.pythonanywhere.com/";
   //------------------------------------------------------------------------
   const goLogin = async () => {
     await axios({
       method: "POST",
-      url: `${baseurl}account/login/`,
+      url: `${baseurl}accounts/login/`,
       data: {
         username: id,
         password: pw,
@@ -24,8 +24,7 @@ const LoginPage = () => {
     })
       .then((response) => {
         // localStorage에 저장
-        const { username } = response.data;
-        const { accessToken } = response.data;
+        const { access_token: accessToken, username } = response.data.data;
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("username", username);
 
@@ -34,7 +33,6 @@ const LoginPage = () => {
 
         console.log("로그인 성공", response.data);
       })
-
       .catch((error) => {
         console.log(error);
         throw new Error(error);
@@ -98,7 +96,7 @@ const Container = styled.div`
 
   img {
     margin-top: 20%;
-    margin-bottom: 37%;
+    margin-bottom: 50%;
     margin-right: 40%;
   }
 `;

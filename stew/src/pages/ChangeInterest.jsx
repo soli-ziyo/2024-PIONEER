@@ -16,12 +16,15 @@ const ChangeInterest = () => {
 
   useEffect(() => {
     const fetchSuggestedInterests = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+
       try {
-        const response = await axios.get(`${baseurl}/home/hashtag`, {
+        const response = await axios.get(`${baseurl}/home/hashtag/`, {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            'Authorization': `Bearer ${accessToken}`
           }
         });
+        console.log('Fetched suggested interests:', response.data.data);
         setSuggestedInterests(response.data.data);
       } catch (error) {
         console.error('추천 관심사 가져오기 실패:', error);
@@ -64,14 +67,13 @@ const ChangeInterest = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${baseurl}/home/interest`, 
+      const response = await axios.put(`${baseurl}/home/hashtag/`, 
       {
         hashtag: interest
       }, 
       {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+          'Authorization': `${localStorage.getItem('accessToken')}`
         }
       });
 

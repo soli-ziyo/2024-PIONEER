@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link,  useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useProfilesStore } from "../stores/ProfileStore.js";
 import styled from 'styled-components';
 import StateInterest from '../components/StateInterest';
 import Post from '../components/Post';
 import axios from 'axios';
+import Back from '../images/Back.svg';
+import FloatingBtn from '../images/FloatingBtn.svg';
 
-
-//임시 데이터임
+// 임시 데이터임
 const mockPosts = [
   {
     id: 1,
@@ -17,7 +18,6 @@ const mockPosts = [
     user: { id: 1, nickname: '엄마', phone: '010-1234-5678', image: require('../images/mom.png') },
     emoji: ''
   },
-
   {
     id: 2,
     description: '마트에서 이런 것도 파네~ 과일 사서 먹어~',
@@ -28,7 +28,7 @@ const mockPosts = [
   },
 ];
 
-const mockCurrentUser = { user_id: 3, nickname: '나', phone: '010-0000-0000', image: require('../images/me.jpg') };
+const mockCurrentUser = { user_id: 3, nickname: '나', phone: '010-0000-0000', profile: require('../images/me.jpg') };
 
 const InterestPage = () => {
   const { user_id } = useParams();
@@ -37,39 +37,8 @@ const InterestPage = () => {
   const [posts, setPosts] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
 
-  
   useEffect(() => {
     fetchProfiles();
-
-    // API 호출 부분 주석 처리하고 임시 데이터 사용
-    // const fetchData = async () => {
-    //   const token = localStorage.getItem('accessToken');
-    //   try {
-    //     // 관심사 글 목록 가져오기
-    //     const postsResponse = await axios({
-    //       method: 'GET',
-    //       url: `http://localhost:5000/interest/list/${userid}`,
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     });
-    //     setPosts(postsResponse.data.data);
-
-    //     // 현재 사용자 정보 가져오기
-    //     const currentUserResponse = await axios({
-    //       method: 'GET',
-    //       url: `http://localhost:5000/user/current`,
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     });
-    //     setCurrentUser(currentUserResponse.data);
-    //   } catch (error) {
-    //     console.error('Failed to fetch data:', error);
-    //   }
-    // };
-
-    // fetchData();
 
     // 임시 데이터 사용
     setPosts(mockPosts);
@@ -94,25 +63,29 @@ const InterestPage = () => {
     navigate(`/interest/list/${user_id}`);
   };
 
+  // currentUser를 가장 앞에 오게 프로필 순서 변경
+  const sortedProfiles = [currentUser, ...profiles.filter(member => member.user_id !== currentUser.user_id)];
+
   return (
     <Wrapper>
+      <BackButton onClick={() => navigate('/home')}><img src={Back} alt="Back"/></BackButton> 
       <ProfileContainer>
-        {profiles.map(member => (
-            <ProfileItem key={member.user_id}>
-              <ProfileImageButton to={`/interest/list/${member.user_id}`} active={member.user_id === parseInt(user_id)}>
+        {sortedProfiles.map(member => (
+          <ProfileItem key={member.user_id}>
+            <ProfileImageButton to={`/interest/list/${member.user_id}`} active={member.user_id === parseInt(user_id)}>
               <img src={member.profile} alt={member.nickname} />
             </ProfileImageButton>
-              <ProfileName>{member.user_id === currentUser.id ? '나' : member.nickname}</ProfileName>
-            </ProfileItem>
-          ))}
+            <ProfileName>{member.user_id === currentUser.user_id ? '나' : member.nickname}</ProfileName>
+          </ProfileItem>
+        ))}
       </ProfileContainer>
-      <StateInterest user={profile.nickname} hashtag={profile.hashtag} />
       <PostsContainer>
+        <StateInterest user={profile.nickname} hashtag={profile.hashtag} /> 
         {posts.map(post => (
-          <Post key={post.id} post={post} currentUser={currentUser} onCall={handleCall} onMessage={handleMessage}  isCurrentUserPage={parseInt(user_id) === currentUser.user_id} />
+          <Post key={post.id} post={post} currentUser={currentUser} onCall={handleCall} onMessage={handleMessage} isCurrentUserPage={parseInt(user_id) === currentUser.user_id} />
         ))}
       </PostsContainer>
-      {parseInt(user_id) !== currentUser.user_id && <FloatingButton to="/interest/new">+</FloatingButton>}
+      {parseInt(user_id) !== currentUser.user_id && <FloatingButton to="/interest/new"><img src={FloatingBtn} alt="게시글 작성"/></FloatingButton>}
     </Wrapper>
   );
 };
@@ -120,22 +93,34 @@ const InterestPage = () => {
 export default InterestPage;
 
 const Wrapper = styled.div`
-  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+const BackButton = styled.button`
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 27px;
+  height: 21px;
+  padding: 0px;
 `;
 
 const ProfileContainer = styled.div`
   display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+  margin-top: 30px;
+  padding-bottom: 11px;
+  border-bottom: 0.5px solid #e2e2e2;
 `;
 
 const ProfileItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 10px;
   border-radius: 50%;
-  padding: 5px;
+  margin-right: 12px;
 `;
 
 const ProfileImageButton = styled(Link)`
@@ -159,26 +144,25 @@ const ProfileImageButton = styled(Link)`
 `;
 
 const ProfileName = styled.div`
-  margin-top: 5px;
+  margin-top: 12px;
   font-size: 12px;
+  font-weight: 400;
 `;
 
 const PostsContainer = styled.div`
-  margin-top: 20px;
+  flex: 1;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  padding-top: 20px;
 `;
 
 const FloatingButton = styled(Link)`
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  width: 56px;
-  height: 56px;
-  background-color: #FF6600;
-  color: white;
-  font-size: 24px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
+  position: absolute;
+  right: 0px;
+  bottom: 15px;
+  width: 59px;
+  height: 59px;
+  z-index: 9;
 `;
