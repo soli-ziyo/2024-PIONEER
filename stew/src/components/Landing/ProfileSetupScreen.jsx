@@ -1,16 +1,41 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 //images
 import Back from "../../images/Back.svg";
 
-const ProfileSetupScreen = ({ prevStep }) => {
+const ProfileSetupScreen = ({ prevStep, nextStep }) => {
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+  const navigate = useNavigate();
+  const baseurl = " https://minsol.pythonanywhere.com/";
 
-  const handleSubmit = () => {
-    // 여기에서 프로필 설정 로직을 추가할 수 있습니다.
-    console.log("프로필 설정 완료");
+  const handleSubmit = async () => {
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `${baseurl}accounts/newprofile/`,
+        params: {},
+      });
+      console.log("프로필 설정 완료");
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+
+    try {
+      const response = await axios.post(`${baseurl}accounts/signup/`, {
+        nickname: nickname,
+        profile: profileImage,
+      });
+      console.log("닉네임, 프로필 전송", response);
+      navigate("/home");
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   };
 
   const handleImageUpload = (event) => {
@@ -47,17 +72,20 @@ const ProfileSetupScreen = ({ prevStep }) => {
               onChange={handleImageUpload}
             />
           </ImageUploadWrapper>
-          <div>닉네임</div>
+          <div style={{ marginBottom: "10px" }}>닉네임</div>
           <input
             placeholder="닉네임을 입력해주세요"
             onChange={(e) => setNickname(e.target.value)}
             value={nickname}
+            style={{ fontFamily: "Pretendard" }}
           ></input>
           <div
             style={{
               color: "#8C8C8C",
               fontSize: "13px",
               marginLeft: "20px",
+              marginBottom: "50%",
+              marginTop: "5%",
             }}
           >
             닉네임은 2글자 이상 10글자 이하여야 합니다.
@@ -127,6 +155,7 @@ const InputWrapper = styled.div`
     border-style: none;
     outline: none;
     border-radius: 4px;
+    font-family: "Pretendard";
   }
 
   div {
@@ -136,7 +165,7 @@ const InputWrapper = styled.div`
   input {
     padding-left: 7%;
     border: 1px solid #f1f1f1;
-    background: #ffffff;
+    background: #f9f9f9;
     border-radius: 10px;
   }
 
@@ -169,7 +198,7 @@ const ImageUploadWrapper = styled.div`
     justify-content: center;
     width: 100px;
     height: 100px;
-    border: 1px solid #f1f1f1;
+    border: 3px solid #f1f1f1;
     border-radius: 50%;
     cursor: pointer;
   }
@@ -182,6 +211,7 @@ const ImageUploadWrapper = styled.div`
 `;
 
 const PlusIcon = styled.div`
-  font-size: 50px;
-  color: #f1f1f1;
+  font-size: 60px;
+  font-weight: 100;
+  color: #222222;
 `;

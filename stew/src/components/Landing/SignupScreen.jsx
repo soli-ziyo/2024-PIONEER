@@ -9,21 +9,22 @@ import Back from "../../images/Back.svg";
 const SignupScreen = ({ nextStep, prevStep }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [phonenum, setPhonenum] = useState(""); // 이 값을 필요에 따라 설정해야 합니다.
-  const [profile, setProfile] = useState(null);
+  const baseurl = " https://minsol.pythonanywhere.com/";
+  // const [nickname, setNickname] = useState("");
+  // const [phonenum, setPhonenum] = useState(""); // 이 값을 필요에 따라 설정
+  // const [profile, setProfile] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("/accounts/signup/", {
+      const response = await axios.post(`${baseurl}accounts/signup/`, {
         username: id,
         password: password,
-        nickname: nickname,
-        phonenum: phonenum,
-        profile: profile,
+        // nickname: nickname,
+        // phonenum: phonenum,
+        // profile: profile,
       });
-      console.log("회원가입 완료", response);
+      console.log("아이디, 패스워드 전송", response);
       nextStep();
     } catch (error) {
       console.log(error);
@@ -52,12 +53,6 @@ const SignupScreen = ({ nextStep, prevStep }) => {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           ></input>
-          <div>닉네임</div>
-          <input
-            placeholder="닉네임을 입력해주세요"
-            onChange={(e) => setNickname(e.target.value)}
-            value={nickname}
-          ></input>
           <div
             style={{
               color: "#8C8C8C",
@@ -69,11 +64,12 @@ const SignupScreen = ({ nextStep, prevStep }) => {
           </div>
           <button
             onClick={handleSubmit}
+            // onClick={nextStep}
             style={{
-              backgroundColor: id && password && nickname ? "white" : "#F1F1F1",
-              color: id && password && nickname ? "black" : "#8C8C8C",
+              backgroundColor: id && password.length >= 8 ? "white" : "#F1F1F1",
+              color: id && password.length >= 8 ? "black" : "#8C8C8C",
             }}
-            disabled={!id || !password || !nickname}
+            disabled={!id || password.length < 8}
           >
             다음
           </button>
@@ -126,18 +122,20 @@ const InputWrapper = styled.div`
     border-style: none;
     outline: none;
     border-radius: 4px;
+    font-family: "Pretendard";
   }
 
   input {
     margin-bottom: 5%;
     padding-left: 7%;
     border: 1px solid #e2e2e2;
-    background: #ffffff;
+    background: #f9f9f9;
     border-radius: 10px;
   }
 
   div {
     font-family: "Pretendard";
+    margin-bottom: 10px;
   }
 
   button {

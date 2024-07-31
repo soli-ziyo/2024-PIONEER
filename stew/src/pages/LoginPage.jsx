@@ -11,11 +11,12 @@ const LoginPage = () => {
   const [id, setID] = useState();
   const [pw, setPW] = useState();
 
+  const baseurl = " https://minsol.pythonanywhere.com/";
   //------------------------------------------------------------------------
   const goLogin = async () => {
     await axios({
       method: "POST",
-      url: "/account/login/",
+      url: `${baseurl}account/login/`,
       data: {
         username: id,
         password: pw,
@@ -23,8 +24,10 @@ const LoginPage = () => {
     })
       .then((response) => {
         // localStorage에 저장
-        localStorage.setItem("userName", response.data.nickname);
-        localStorage.setItem("token", response.data.access_token);
+        const { username } = response.data;
+        const { accessToken } = response.data;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("username", username);
 
         // HomePage로 이동
         navigate("/home");
@@ -62,7 +65,7 @@ const LoginPage = () => {
               onClick={() => navigate("/signup")}
               style={{
                 color: "#8C8C8C",
-                background: "white",
+                background: "none",
                 border: "none",
                 fontWeight: "200",
                 marginBottom: "10%",
@@ -80,12 +83,10 @@ const LoginPage = () => {
 export default LoginPage;
 
 const Wrapper = styled.div`
-  /* height: 100%; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid red;
 `;
 
 const Container = styled.div`
@@ -96,10 +97,9 @@ const Container = styled.div`
   align-items: center;
 
   img {
-    margin-top: 30%;
-    width: 40%;
-    margin-bottom: 40%;
-    margin-right: 50%;
+    margin-top: 20%;
+    margin-bottom: 37%;
+    margin-right: 40%;
   }
 `;
 
@@ -112,6 +112,7 @@ const InputWrapper = styled.div`
 
   div {
     /* font-family: "Pretendard"; */
+    font-size: 14px;
   }
 
   input,
@@ -124,9 +125,12 @@ const InputWrapper = styled.div`
 
   input {
     margin-bottom: 15px;
+    margin-top: 12px;
     padding-left: 7%;
-    border: 1px solid #f1f1f1;
-    background: #ffffff;
+    font-family: "Pretendard";
+    border: 1px solid #e2e2e2;
+    background: #f9f9f9;
+    border-radius: 10px;
   }
 
   button {
@@ -137,5 +141,6 @@ const InputWrapper = styled.div`
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
+    font-family: "Pretendard";
   }
 `;

@@ -2,25 +2,37 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-//images
+// images
 import Back from "../../images/Back.svg";
 
 const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const baseurl = " https://minsol.pythonanywhere.com/";
+
+  const handleChange = (e, index) => {
+    const newCode = [...code];
+    newCode[index] = e.target.value;
+    setCode(newCode);
+
+    // Automatically focus next input if the current one is filled
+    if (e.target.value && index < 3) {
+      document.getElementById(`code-input-${index + 1}`).focus();
+    }
+  };
 
   const handleNext = async () => {
     setLoading(true);
     try {
-      const response = await axios.post("/accounts/certify/confirm/", {
+      const response = await axios.post(`${baseurl}accounts/certify/confirm/`, {
         phone: phone,
-        certificationNumber: code,
+        certificationNumber: code.join(""),
       });
       console.log(response.data);
       nextStep();
     } catch (err) {
-      setError("인증번호 확인에 실패했습니다.");
+      setError("인증에 실패하였습니다. 인증번호를 확인해주세요.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -35,24 +47,30 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
           <Comment>인증 코드를 발송했어요.</Comment>
         </ContainerBase>
         <InputWrapper>
-          <input
-            placeholder="인증 코드를 입력해주세요"
-            onChange={(e) => setCode(e.target.value)}
-            value={code}
-          ></input>
-          <button
-            style={{
-              backgroundColor: code.length === 4 ? "white" : "#F1F1F1",
-              color: code.length === 4 ? "black" : "#8C8C8C",
-            }}
+          <CodeInputs>
+            {code.map((digit, index) => (
+              <CodeInput
+                key={index}
+                id={`code-input-${index}`}
+                type="text"
+                maxLength="1"
+                value={digit}
+                onChange={(e) => handleChange(e, index)}
+              />
+            ))}
+          </CodeInputs>
+          {loading && (
+            <p style="fontFamily: Pretendard">인증번호를 확인 중입니다...</p>
+          )}
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          <Button
             onClick={handleNext}
-            disabled={code.length !== 4}
+            // onClick={nextStep}
+            disabled={code.some((digit) => digit === "")}
           >
             다음
-          </button>
+          </Button>
         </InputWrapper>
-        {loading && <p>인증번호를 확인 중입니다...</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
       </Container>
     </Wrapper>
   );
@@ -94,36 +112,51 @@ const InputWrapper = styled.div`
   flex-direction: column;
   width: 350px;
   margin-top: 30px;
+`;
 
-  input,
-  button {
-    height: 45px;
-    border-style: none;
-    outline: none;
-    border-radius: 4px;
-  }
+const CodeInputs = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+`;
 
-  input {
-    margin-bottom: 80%;
-    padding-left: 7%;
-    border: 1px solid #e2e2e2;
-    background: #ffffff;
-    border-radius: 10px;
-  }
+const CodeInput = styled.input`
+  width: 65px;
+  height: 65px;
+  border: 1px solid #e2e2e2;
+  background: #f9f9f9;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 18px;
+  outline: none;
+  font-family: "Pretendard";
+`;
 
-  button {
-    margin-bottom: 10%;
-    background: #f1f1f1;
-    color: #8c8c8c;
-    border: 1px solid #e2e2e2;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-  }
+const Button = styled.button`
+  height: 45px;
+  border-style: none;
+  outline: none;
+  border-radius: 4px;
+  background: ${(props) => (props.disabled ? "#F1F1F1" : "white")};
+  color: ${(props) => (props.disabled ? "#8C8C8C" : "black")};
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border: 1px solid #e2e2e2;
+  margin-bottom: 10%;
+  margin-top: 75%;
+  font-family: "Pretendard";
 `;
 
 const Comment = styled.div`
   font-size: 28px;
   margin-bottom: 20px;
   font-family: "Pretendard";
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  font-family: "Pretendard";
+  font-size: 14px;
+  margin-bottom: -10%;
 `;

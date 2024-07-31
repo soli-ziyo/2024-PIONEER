@@ -9,17 +9,30 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
   const [phoneNB, setPhoneNB] = useState("");
   const [buttonReady, setButtonReady] = useState(false);
   const navigate = useNavigate();
+  const baseurl = " https://minsol.pythonanywhere.com/";
 
   const phonenum = async () => {
     try {
       const response = await axios({
         method: "GET",
-        url: "/accounts/certify/send/",
+        url: `${baseurl}accounts/certify/send/`,
         params: {
           phone: phoneNB,
         },
       });
       console.log("본인확인 sms 전송 성공", response);
+
+      try {
+        const response = await axios.post(`${baseurl}accounts/signup/`, {
+          phonenum: phoneNB,
+        });
+        console.log("전화번호 전송", response);
+        nextStep();
+      } catch (error) {
+        console.log(error);
+        throw new Error(error);
+      }
+
       nextStep();
     } catch (error) {
       console.log(error);
@@ -60,6 +73,7 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
               color: buttonReady ? "black" : "#8C8C8C",
             }}
             onClick={handleNext}
+            // onClick={nextStep}
             disabled={!buttonReady}
           >
             다음
@@ -73,12 +87,11 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
 export default PhoneInputScreen;
 
 const Wrapper = styled.div`
-  height: 100%;
+  /* height: 100%; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
 `;
 
 const ContainerBase = styled.div`
@@ -119,8 +132,9 @@ const InputWrapper = styled.div`
     margin-bottom: 80%;
     padding-left: 7%;
     border: 1px solid #e2e2e2;
-    background: #ffffff;
+    background: #f9f9f9;
     border-radius: 10px;
+    font-family: "Pretendard";
   }
 
   button {
@@ -130,6 +144,7 @@ const InputWrapper = styled.div`
     border: 1px solid #e2e2e2;
     font-weight: 600;
     font-size: 14px;
+    font-family: "Pretendard";
     cursor: pointer;
   }
 `;
