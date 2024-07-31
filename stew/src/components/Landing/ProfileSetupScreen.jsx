@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 // images
 import Back from "../../images/Back.svg";
 
-const ProfileSetupScreen = ({ id, password, phone, prevStep, nextStep }) => {
+const ProfileSetupScreen = ({ id, password, prevStep, nextStep }) => {
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const ProfileSetupScreen = ({ id, password, phone, prevStep, nextStep }) => {
       formData.append("username", id);
       formData.append("password", password);
       formData.append("nickname", nickname);
-      //formData.append("phonenum", phone);
+
       if (profileImage) {
         formData.append("profile", profileImage);
       }
@@ -35,7 +35,7 @@ const ProfileSetupScreen = ({ id, password, phone, prevStep, nextStep }) => {
 
       console.log("회원가입 성공");
       console.log(response.data);
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       console.log(error);
       throw new Error(error);
