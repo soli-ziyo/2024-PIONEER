@@ -38,4 +38,3 @@ class HashTagView(views.APIView):
 
         serializer = WeekHashTagSerializer(week_hashtag)
         return Response({'message': 'hashtag post 성공', 'data': serializer.data})
-

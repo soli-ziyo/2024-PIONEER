@@ -27,4 +27,31 @@ class HashtagSerializer(serializers.ModelSerializer):
     class Meta:
         model = WeekHashTag
         fields = ['hashtag']  # 해시태그 모델의 필드를 정의
+
+class CalendarSerializer(serializers.ModelSerializer):
+    date = serializers.DateField(source='created_at', read_only=True)
+    family_count = serializers.SerializerMethodField()
+    percentage = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Interest
+        fields = ['date', 'family_count', 'percentage']
+
+    def get_family_count(self, obj):
+        date = obj.created_at.date()
+        unique_users = Interest.objects.filter(created_at__date=date).values('user').distinct()
+        return unique_users.count()
+
+    def get_percentage(self, obj):
+        date = obj.created_at.date()
+        try:
+            family = Family.objects.get(familycode=self.context['familycode'])
+            total_users = family.users.count()
+        except Family.DoesNotExist:
+            total_users = 0
+
+        family_count = self.get_family_count(obj)
+        percentage = (family_count / total_users * 100) if total_users > 0 else 0
+
+        return int(round(percentage))
 '''

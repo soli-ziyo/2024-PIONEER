@@ -26,7 +26,6 @@ class HashTagSerializer(serializers.ModelSerializer):
 class WeekHashTagSerializer(serializers.ModelSerializer):
     hashtag = HashTagSerializer(many=True, read_only=True)
     nickname = serializers.CharField(source='user.nickname', read_only=True)
-    post_count = serializers.SerializerMethodField()
 
     class Meta:
         model = WeekHashTag
