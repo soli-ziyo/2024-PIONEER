@@ -1,38 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
-
-const familyMembersCount = 4; // 예시: 실제 데이터로 설정해야 함
+import { DateStore } from "../stores/DateStore"; // Zustand store import
 
 const CalendarComponent = ({ accessToken }) => {
-  const [activityData, setActivityData] = useState({});
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const {
+    activityData,
+    currentDate,
+    setCurrentDate,
+    fetchData,
+    familyMembersCount,
+  } = DateStore();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`/accounts/13/`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
-
-        const tempActivityData = {};
-        response.data.states.forEach((state) => {
-          const date = new Date(state.created_at).getDate();
-          tempActivityData[date] = (tempActivityData[date] || 0) + 1;
-        });
-        setActivityData(tempActivityData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [accessToken]);
+    fetchData(accessToken);
+  }, [accessToken, fetchData]);
 
   const getColorForDay = (day) => {
     const activityCount = activityData[day] || 0;
-    const opacity = (activityCount / familyMembersCount) * 100;
-    return `rgba(255, 125, 0, ${opacity / 100})`;
+    const maxActivityCount = familyMembersCount; // 최대 활동 수를 가족 구성원 수로 설정
+    const opacity = Math.min(activityCount / maxActivityCount, 1); // 최대 1로 제한
+    const backgroundColor = `rgba(255, 91, 2, ${opacity})`; // 색상 조정
+    return backgroundColor;
   };
 
   const getDaysInMonth = (year, month) => {
@@ -70,11 +58,16 @@ const CalendarComponent = ({ accessToken }) => {
     days.push(<EmptyDay key={`empty-${i}`} />);
   }
 
+  // 7월에만 데이터가 표시되도록
+  const isJuly = month === 6; // 월은 0부터 시작하므로 6이 7월
+
   for (let i = 1; i <= daysInMonth; i++) {
+    const activityCount = isJuly ? activityData[i] || 0 : 0;
+    const backgroundColor = isJuly ? getColorForDay(i) : "transparent";
     days.push(
-      <Day key={i} color={getColorForDay(i)}>
+      <Day key={i} color={backgroundColor}>
         {i}
-        {activityData[i] === familyMembersCount && <Heart>🧡</Heart>}
+        {isJuly && activityCount === familyMembersCount && <Heart>🧡</Heart>}
       </Day>
     );
   }
