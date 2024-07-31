@@ -168,6 +168,7 @@ const Day = styled.div`
   background-color: ${(props) => props.color};
   color: black;
   font-weight: 400;
+  position: relative; /* 상대적 위치 설정 */
 `;
 
 const EmptyDay = styled.div`
@@ -187,6 +188,10 @@ const WeekDay = styled.div`
 `;
 
 const Heart = styled.div`
-  font-size: 12px;
-  margin-top: 5px;
+  position: absolute; /* 절대 위치 지정 */
+  left: 50%; /* 가운데 정렬 */
+  top: 50%; /* 가운데 정렬 */
+  transform: translate(10%, 10%); /* 오른쪽 아래로 이동 */
+  font-size: 20px; /* 하트 크기 조정 */
+  margin-top: 0px; /* 추가적인 아래 위치 조정 */
 `;
