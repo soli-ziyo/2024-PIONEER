@@ -12,6 +12,7 @@ import ChangeInterest from "./pages/ChangeInterest.jsx";
 import InterestPage from "./pages/InterestPage.jsx";
 import PostPage from "./pages/PostPage.jsx";
 import ReportPage from "./pages/ReportPage.jsx";
+import ChangeState from "./pages/ChangeState.jsx";
 
 import { createGlobalStyle } from "styled-components";
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/home/hashtag" element={<ChangeInterest />} />
+          <Route path="/home/edit" element={<ChangeState />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/interest/list/:user_id" element={<InterestPage />} />
           <Route path="/interest/new" element={<PostPage />} />
@@ -42,7 +44,6 @@ const GlobalStyle = createGlobalStyle`
   #root{
     max-width: 390px;
     margin: 0 auto;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;

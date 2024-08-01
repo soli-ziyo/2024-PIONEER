@@ -7,13 +7,12 @@ import me from "../images/me.jpg";
 import mom from "../images/mom.png";
 
 const data = [
-  { name: "나", image: me, posts: 6 },
-  { name: "아빠", image: dad, posts: 3 },
-  { name: "엄마", image: mom, posts: 2 },
+  { name: "나", image: me, posts: 10 },
+  { name: "아빠", image: dad, posts: 30 },
+  { name: "엄마", image: mom, posts: 20 },
 ];
 
-const MAX_POSTS = 31; // 최대 포스트 수
-const MAX_BAR_HEIGHT = 400; // 최대 막대 높이
+const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
 
 const Chart = ({ accessToken }) => {
   const { fetchData } = DateStore();
@@ -44,6 +43,9 @@ const Chart = ({ accessToken }) => {
   const year = chartDate.getFullYear();
   const month = chartDate.getMonth();
 
+  // 데이터 중 최대 포스트 수 찾기
+  const maxPosts = Math.max(...data.map((member) => member.posts));
+
   return (
     <ChartContainer>
       <MonthYear>
@@ -53,19 +55,18 @@ const Chart = ({ accessToken }) => {
       </MonthYear>
       <Bars>
         {data.map((member, index) => {
-          const height = (member.posts / MAX_POSTS) * MAX_BAR_HEIGHT; // 막대 높이 계산
+          const height = (member.posts / maxPosts) * MAX_BAR_HEIGHT; // 최대값을 기준으로 상대적 높이 계산
+          const opacity = member.posts / maxPosts; // 투명도 반전 계산
           return (
             <Bar key={index}>
+              <PostCount>{member.posts}</PostCount>
               <BarFill
                 style={{
                   height: `${height}px`,
-                  backgroundColor: `rgba(255, 165, 0, ${
-                    member.posts / MAX_POSTS
-                  })`,
+                  backgroundColor: `rgba(255, 91, 2, ${opacity})`,
                 }}
               />
               <ProfileImage src={member.image} alt={member.name} />
-              <PostCount>{member.posts}</PostCount>
             </Bar>
           );
         })}
@@ -108,17 +109,18 @@ const MonthYear = styled.div`
   display: flex;
   align-items: center;
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 400;
   margin-bottom: 10px;
   color: #222222;
 `;
 
 const Bars = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   width: 100%;
   height: 200px; // 전체 차트 높이
   position: relative; // Relative로 설정하여 Bar의 절대 위치를 기준으로 함
+  margin-top: 80px;
 `;
 
 const Bar = styled.div`
@@ -128,26 +130,29 @@ const Bar = styled.div`
   justify-content: flex-end;
   width: 60px;
   position: relative;
+  margin-right: 5px;
+  margin-left: 5px;
 `;
 
 const BarFill = styled.div`
-  width: 100%;
+  width: 50%;
   position: absolute;
-  bottom: 40px; // 막대의 하단에서 시작
+  bottom: 10px; // 막대의 하단에서 시작
+  border-radius: 20px;
 `;
 
 const ProfileImage = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 59px;
+  height: 59px;
   border-radius: 50%;
   position: absolute;
-  bottom: 15px; // 이미지 위치 조정
+  bottom: 0px; // 이미지 위치 조정
 `;
 
 const PostCount = styled.div`
   font-size: 14px;
   font-weight: bold;
-  margin-top: 5px;
+  margin-bottom: 5px;
   position: absolute;
-  bottom: 90px; // 막대의 꼭대기 위에 위치
+  top: -60px;
 `;

@@ -64,7 +64,7 @@ const ReportPage = ({ accessToken }) => {
 
       <ParticipationSection>
         <ParticipationTitle>참여 현황</ParticipationTitle>
-        <Chart>{/* 여기에 차트 컴포넌트 추가 */}</Chart>
+        <Chart></Chart>
       </ParticipationSection>
     </Wrapper>
   );

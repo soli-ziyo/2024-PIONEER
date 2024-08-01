@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import StateInterest from '../components/StateInterest';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import StateInterest from "../components/StateInterest";
 
-import Close from '../images/Close.svg'
-import Plus from '../images/Plus_og.svg'
+import Close from "../images/Close.svg";
+import Plus from "../images/Plus_og.svg";
 
 const PostPage = () => {
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const navigate = useNavigate();
@@ -20,52 +20,54 @@ const PostPage = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
-    setPreview(URL.createObjectURL(file)); 
+    setPreview(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('description', description);
-    formData.append('image', image);
+    formData.append("description", description);
+    formData.append("image", image);
 
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
 
     try {
       const response = await axios({
-        method: 'POST',
-        url: 'http://localhost:5000/interest/new/',
+        method: "POST",
+        url: "http://localhost:5000/interest/new/",
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
         data: formData,
       });
 
       if (response.status === 200) {
         const result = response.data;
-        console.log('게시물 작성 성공:', result);
+        console.log("게시물 작성 성공:", result);
         navigate(`/interest/list/${result.data.user.id}`);
       } else {
-        console.error('게시물 작성 실패');
+        console.error("게시물 작성 실패");
       }
     } catch (error) {
-      console.error('에러 발생:', error);
+      console.error("에러 발생:", error);
     }
   };
 
   return (
     <Wrapper>
       <Header>
-        <CloseButton onClick={() => navigate('/home')}><img src={Close} alt='Close' /></CloseButton>
+        <CloseButton onClick={() => navigate(-1)}>
+          <img src={Close} alt="Close" />
+        </CloseButton>
         <Title>게시물 작성</Title>
       </Header>
       <StateInterest user="엄마" hashtag="산책" />
       <Form onSubmit={handleSubmit}>
         <ImageUpload>
           <Label htmlFor="image" preview={preview}>
-            <img src={Plus} alt='Plus Image' />
+            <img src={Plus} alt="Plus Image" />
           </Label>
           <Input
             id="image"
@@ -79,7 +81,9 @@ const PostPage = () => {
           value={description}
           onChange={handleDescriptionChange}
         />
-        <SubmitButton type="submit" disabled={!description && !image}>완료</SubmitButton>
+        <SubmitButton type="submit" disabled={!description && !image}>
+          완료
+        </SubmitButton>
       </Form>
     </Wrapper>
   );
@@ -133,17 +137,17 @@ const ImageUpload = styled.div`
 const Label = styled.label`
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   width: 67px;
   height: 67px;
   border-radius: 4px;
-  border: 1px dashed #FF5A00;
+  border: 1px dashed #ff5a00;
   cursor: pointer;
-  background-image: ${({ preview }) => preview ? `url(${preview})` : 'none'};
+  background-image: ${({ preview }) => (preview ? `url(${preview})` : "none")};
   background-size: cover;
   background-position: center;
 
-  img{
+  img {
     width: 27px;
     height: 27px;
   }
@@ -157,7 +161,7 @@ const TextInput = styled.textarea`
   width: 100%;
   height: 120px;
   border-radius: 21px;
-  border: 1px solid #E2E2E2;
+  border: 1px solid #e2e2e2;
   padding: 14px 16px;
   font-size: 16px;
   resize: none;
@@ -166,13 +170,13 @@ const TextInput = styled.textarea`
   font-weight: 300;
   box-sizing: border-box;
 
-  &::placeholder{
+  &::placeholder {
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 400;
   }
 
-  &:focus{
+  &:focus {
     outline: none;
     border: 1px solid #222;
   }
@@ -196,16 +200,16 @@ const SubmitButton = styled.button`
   font-weight: 500;
 
   border-radius: 32px;
-  border: 1px solid #E2E2E2;
-  background: #FFF;
+  border: 1px solid #e2e2e2;
+  background: #fff;
   color: #000;
 
   cursor: pointer;
-  
+
   &:disabled {
-    border: 1px solid #E2E2E2;
-    background: #F1F1F1;
-    color: #8C8C8C;
+    border: 1px solid #e2e2e2;
+    background: #f1f1f1;
+    color: #8c8c8c;
     cursor: not-allowed;
   }
 `;
