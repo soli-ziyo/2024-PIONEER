@@ -4,44 +4,39 @@ import axios from "axios";
 export const DateStore = create((set) => ({
   activityData: {},
   currentDate: new Date(),
-  familyMembersCount: 4,
+  totalPosts: 0,
+  temperature: 0,
+  status: "차가운 stew",
 
   setActivityData: (data) => set({ activityData: data }),
   setCurrentDate: (date) => set({ currentDate: date }),
 
-  fetchData: async (accessToken) => {
+  fetchData: async (accessToken, familycode) => {
     try {
-      // 수정된 더미 데이터
-      const dummyData = {
-        states: [
-          { created_at: "2024-07-01T10:00:00Z" }, // 1일
-          { created_at: "2024-07-03T11:00:00Z" }, // 3일
-          { created_at: "2024-07-03T14:00:00Z" }, // 3일
-          { created_at: "2024-07-03T16:00:00Z" }, // 3일
-          { created_at: "2024-07-05T10:00:00Z" }, // 5일 - 3명 작성
-          { created_at: "2024-07-05T11:00:00Z" }, // 5일 - 3명 작성
-          { created_at: "2024-07-05T12:00:00Z" }, // 5일 - 3명 작성
-          { created_at: "2024-07-08T10:00:00Z" }, // 8일 - 4명 작성
-          { created_at: "2024-07-08T11:00:00Z" }, // 8일 - 4명 작성
-          { created_at: "2024-07-08T12:00:00Z" }, // 8일 - 4명 작성
-          { created_at: "2024-07-08T13:00:00Z" }, // 8일 - 4명 작성
-          { created_at: "2024-07-20T10:00:00Z" },
-          { created_at: "2024-07-20T11:00:00Z" },
-          { created_at: "2024-07-20T09:00:00Z" },
-          { created_at: "2024-07-20T08:00:00Z" }, // 20일 - 1명 작성
-        ],
-      };
+      const response = await axios.get(`/report/calendar/${familycode}/`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
 
-      // 실제 API 호출 대신 더미 데이터 사용
-      // const response = await axios.get(`/accounts/13/`, {
-      //   headers: { Authorization: `Bearer ${accessToken}` },
-      // });
-      const response = { data: dummyData };
+      const data = response.data;
 
+      // Set total posts
+      const totalPosts = data.interests.find(
+        (interest) => interest["총 게시물 수"]
+      )["총 게시물 수"];
+      set({ totalPosts });
+
+      // Set temperature and status
+      const temperature = data.interests.find((interest) => interest.stew_temp)[
+        "stew_temp"
+      ];
+      const status = data.interests.find((interest) => interest.stew).stew;
+      set({ temperature, status });
+
+      // Set activity data
       const tempActivityData = {};
-      response.data.states.forEach((state) => {
-        const date = new Date(state.created_at).getDate();
-        tempActivityData[date] = (tempActivityData[date] || 0) + 1;
+      data.calendar.forEach((entry) => {
+        const date = new Date(entry.date).getDate();
+        tempActivityData[date] = entry.user_count;
       });
       set({ activityData: tempActivityData });
     } catch (error) {

@@ -1,26 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DateStore } from "../stores/DateStore"; // Zustand store import
+import axios from "axios"; // Axios import 추가
 
-const CalendarComponent = ({ accessToken }) => {
-  const {
-    activityData,
-    currentDate,
-    setCurrentDate,
-    fetchData,
-    familyMembersCount,
-  } = DateStore();
+const CalendarComponent = ({ accessToken, familycode }) => {
+  const { activityData, currentDate, setCurrentDate, fetchData } = DateStore();
+
+  const [calendarData, setCalendarData] = useState([]);
 
   useEffect(() => {
-    fetchData(accessToken);
-  }, [accessToken, fetchData]);
+    const fetchCalendarData = async () => {
+      try {
+        // API 호출로 달력 데이터 가져오기
+        const response = await axios.get(`/report/calendar/${familycode}/`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        setCalendarData(response.data.calendar || []);
+        // fetchData를 사용하여 상태 업데이트 (기존 구현 유지)
+        fetchData(accessToken, familycode);
+      } catch (error) {
+        console.error("Error fetching calendar data:", error);
+      }
+    };
+
+    fetchCalendarData();
+  }, [accessToken, familycode, fetchData]);
 
   const getColorForDay = (day) => {
-    const activityCount = activityData[day] || 0;
-    const maxActivityCount = familyMembersCount; // 최대 활동 수를 가족 구성원 수로 설정
-    const opacity = Math.min(activityCount / maxActivityCount, 1); // 최대 1로 제한
-    const backgroundColor = `rgba(255, 91, 2, ${opacity})`; // 색상 조정
-    return backgroundColor;
+    const data = calendarData.find(
+      (item) => new Date(item.date).getDate() === day
+    );
+    const percentage = data ? data.percentage : 0;
+    const opacity = Math.min(percentage / 100, 1); // 퍼센티지 기반 투명도 설정
+    return `rgba(255, 91, 2, ${opacity})`; // 색상 조정
   };
 
   const getDaysInMonth = (year, month) => {
@@ -60,12 +72,15 @@ const CalendarComponent = ({ accessToken }) => {
   }
 
   for (let i = 1; i <= daysInMonth; i++) {
-    const activityCount = activityData[i] || 0;
     const backgroundColor = getColorForDay(i);
+    const data = calendarData.find(
+      (item) => new Date(item.date).getDate() === i
+    );
+    const percentage = data ? data.percentage : 0;
     days.push(
       <Day key={i} color={backgroundColor}>
         {i}
-        {activityCount === familyMembersCount && <Heart>🧡</Heart>}
+        {percentage === 100 && <Heart>🧡</Heart>}{" "}
       </Day>
     );
   }
@@ -128,7 +143,6 @@ const MonthYear = styled.div`
 const Arrow = styled.div`
   cursor: ${(props) => (props.disabled ? "default" : "pointer")};
   margin: 0 40px;
-  background-color: ${(props) => (props.disabled ? "#E2E2E2" : "transparent")};
   border: 2px solid #e2e2e2;
   border-radius: 50%;
   font-weight: 400;

@@ -1,27 +1,37 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { DateStore } from "../stores/DateStore"; // Zustand store import
-
-import dad from "../images/dad.png";
-import me from "../images/me.jpg";
-import mom from "../images/mom.png";
-
-const data = [
-  { name: "나", image: me, posts: 10 },
-  { name: "아빠", image: dad, posts: 16 },
-  { name: "엄마", image: mom, posts: 3 },
-];
+import axios from "axios"; // axios를 사용하여 API 요청을 처리
 
 const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
 const MIN_BAR_HEIGHT = 50; // 최소 막대 높이
 
-const Chart = ({ accessToken }) => {
-  const { fetchData } = DateStore();
+const Chart = ({ accessToken, familycode }) => {
   const [chartDate, setChartDate] = useState(new Date());
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchData(accessToken);
-  }, [accessToken, fetchData]);
+    const fetchChartData = async () => {
+      try {
+        const response = await axios.get(`/report/calendar/${familycode}/`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        const { interest_perUser } = response.data;
+
+        // 데이터 가공
+        const formattedData = interest_perUser.map((user) => ({
+          name: user.user.nickname,
+          image: user.user.profile || "/default-profile.jpg", // 기본 이미지 설정
+          posts: user.user_interests,
+        }));
+
+        setData(formattedData);
+      } catch (error) {
+        console.error("데이터를 불러오는 데 실패했습니다.", error);
+      }
+    };
+
+    fetchChartData();
+  }, [accessToken, familycode]);
 
   const handlePrevMonth = () => {
     const newDate = new Date(
@@ -45,7 +55,7 @@ const Chart = ({ accessToken }) => {
   const month = chartDate.getMonth();
 
   // 데이터 중 최대 포스트 수 찾기
-  const maxPosts = Math.max(...data.map((member) => member.posts));
+  const maxPosts = Math.max(...data.map((member) => member.posts), 1); // 최소값 1로 설정하여 나누기 0 방지
 
   return (
     <ChartContainer>

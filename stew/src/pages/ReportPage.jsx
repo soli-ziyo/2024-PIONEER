@@ -1,45 +1,21 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useProfilesStore } from "../stores/ProfileStore.js";
+import { DateStore } from "../stores/DateStore"; // Zustand store import
 import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import CalendarComponent from "../components/CalendarComponent";
 import Chart from "../components/Chart";
-import { DateStore } from "../stores/DateStore"; // Zustand store import
 
 import Close from "../images/Close.svg";
 
-const ReportPage = ({ accessToken }) => {
+const ReportPage = ({ accessToken, familycode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [noticeVisible, setNoticeVisible] = useState(false); // Notice 상태 추가
-  const [totalPosts, setTotalPosts] = useState(0); // 총 게시물 수 상태 추가
-  const [temperature, setTemperature] = useState(0); // 온도 상태 추가
-  const [status, setStatus] = useState("차가운 stew"); // 상태 상태 추가
-
-  const { familyMembersCount } = DateStore(); // 가족 구성원 수 가져오기
+  const { totalPosts, temperature, status, fetchData } = DateStore(); // Zustand 상태 가져오기
 
   useEffect(() => {
-    // 게시물 데이터를 fetchData 또는 다른 로직으로 가져온다고 가정합니다.
-    // 여기서는 임시로 게시물 수를 설정합니다.
-    const postsData = [20, 30, 70]; // 예시 데이터
-    const total = postsData.reduce((acc, curr) => acc + curr, 0);
-    setTotalPosts(total);
-
-    if (familyMembersCount > 0) {
-      const newTemperature = Math.floor(total / familyMembersCount);
-      setTemperature(newTemperature);
-
-      if (newTemperature <= 25) {
-        setStatus("차가운 stew");
-      } else if (newTemperature <= 50) {
-        setStatus("미지근한 stew");
-      } else if (newTemperature <= 75) {
-        setStatus("따뜻한 stew");
-      } else {
-        setStatus("뜨거운 stew");
-      }
-    }
-  }, [familyMembersCount]);
+    fetchData(accessToken, familycode);
+  }, [accessToken, familycode, fetchData]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -66,7 +42,7 @@ const ReportPage = ({ accessToken }) => {
               <Status>{status}</Status>
               <NoticeWrapper2>
                 <Notice onClick={toggleNotice}>?</Notice>
-                {noticeVisible && ( // noticeVisible이 true일 때만 표시
+                {noticeVisible && (
                   <NoticeExplain>
                     <NoticeWrapper>
                       <NoticeTitle>우리 가족의 온도</NoticeTitle>
@@ -95,7 +71,7 @@ const ReportPage = ({ accessToken }) => {
 
         <ParticipationSection>
           <ParticipationTitle>참여 현황</ParticipationTitle>
-          <Chart></Chart>
+          <Chart accessToken={accessToken}></Chart>
         </ParticipationSection>
       </ContentWrapper>
     </Wrapper>
@@ -211,7 +187,8 @@ const NoticeExplain = styled.div`
   width: 138px;
   margin-left: 10px;
   position: absolute;
-  top: 155px;
+  top: 175px;
+  z-index: 1000;
 `;
 
 const NoticeTitle = styled.div`
