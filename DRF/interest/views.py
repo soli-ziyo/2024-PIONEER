@@ -63,6 +63,10 @@ class InterestListView(views.APIView):
             return Response({'message': 'No hashtags found for this user'}, status=status.HTTP_404_NOT_FOUND)
         
         interests = Interest.objects.filter(tag=latest_week_hashtags).select_related('user')
+
+        if not interests:
+            return Response({'message': 'No hashtags found for this interests'})
+
         interest_serializer = InterestSerializer(interests, many=True)
 
         return Response({

@@ -29,7 +29,7 @@ class WeekHashTagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WeekHashTag
-        fields = ['id', 'nickname', 'hashtag', 'created_at']
+        fields = ['id', 'nickname', 'hashtag', 'weekOfMonth', 'created_at']
 
     def create(self, validated_data):
         hashtags_data = validated_data.pop('hashtag')
