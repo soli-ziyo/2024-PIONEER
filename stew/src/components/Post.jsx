@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+
 import SelectImoji from './SelectImoji';
 import ImojiDash from '../images/Imoji_dash.svg'; 
+import Call from '../images/Call.svg';
+import Message from '../images/Message.svg';
 
 const Post = ({ post, currentUser, onCall, onMessage, isCurrentUserPage }) => {
   const timeSince = (date) => {
@@ -54,19 +57,19 @@ const Post = ({ post, currentUser, onCall, onMessage, isCurrentUserPage }) => {
                 )}
               </EmojiButton>
             ) : (
-              <EmojiDisplay>{selectedEmoji}</EmojiDisplay>
+              selectedEmoji && <EmojiDisplay>{selectedEmoji}</EmojiDisplay>
             )}
           </PostTime>
         </PostUser>
         <PostDescription>{post.description}</PostDescription>
-        {!isCurrentUserPage && (
-          <ContactButtons>
-            <ContactButton onClick={() => onCall(post.user.phone)}>📞</ContactButton>
-            <ContactButton onClick={() => onMessage(post.user.phone)}>💬</ContactButton>
-          </ContactButtons>
-        )}
       </PostContent>
       {showEmojiSelector && <SelectImoji onClose={() => setShowEmojiSelector(false)} onSelect={handleSelectEmoji} />}
+      {!isCurrentUserPage && (
+          <ContactButtons>
+            <ContactButton onClick={() => onCall(post.user.phone)}><img src={Call} alt='Call'/></ContactButton>
+            <ContactButton onClick={() => onMessage(post.user.phone)}><img src={Message} alt='Message'/></ContactButton>
+          </ContactButtons>
+        )}
     </PostContainer>
   );
 };
@@ -75,18 +78,18 @@ export default Post;
 
 const PostContainer = styled.div`
   margin-bottom: 20px;
-  border: 1px solid #E2E2E2;
-  border-radius: 10px;
   overflow: hidden;
 `;
 
 const PostImage = styled.img`
   width: 100%;
-  height: auto;
+  border-radius: 21px;
 `;
 
 const PostContent = styled.div`
-  padding: 10px;
+  padding: 11px;
+  border-radius: 21px;
+  border: 0.5px solid #E2E2E2;
 `;
 
 const PostUser = styled.div`
@@ -98,43 +101,55 @@ const UserProfile = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 14px;
 `;
 
 const UserName = styled.div`
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 500;
   margin-right: auto;
 `;
 
 const PostTime = styled.div`
-  font-size: 12px;
-  color: #888;
   display: flex;
   align-items: center;
-  gap: 5px;
+  color: #8C8C8C;
+  margin-right: 5px;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 400;
 `;
 
 const PostDescription = styled.div`
-  margin: 10px 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 120%; 
+  margin-left: 16%;
+  margin-bottom: 13px;
 `;
 
 const ContactButtons = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin: 3px 5px;
+  gap: 3px;
 `;
 
 const ContactButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-  margin-left: 10px;
+  width: 67px;
+  height: 48px;
 `;
 
 const EmojiButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 24px;
   height: 24px;
 
@@ -145,6 +160,11 @@ const EmojiButton = styled.button`
 `;
 
 const EmojiDisplay = styled.div`
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 24px;
 `;
 

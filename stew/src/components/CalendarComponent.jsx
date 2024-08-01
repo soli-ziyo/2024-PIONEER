@@ -133,8 +133,13 @@ const Arrow = styled.div`
   background-color: ${(props) => (props.disabled ? "#E2E2E2" : "transparent")};
   border: 2px solid #e2e2e2;
   border-radius: 50%;
-  padding: 2px 6.5px 3px 7px;
-  font-weight: 200;
+  font-weight: 400;
+  font-size: 14px;
+  width: 20px;
+  height: 20px;
+  align-content: center;
+  text-align: center;
+  color: #8c8c8c;
 `;
 
 const DaysWrapper = styled.div`

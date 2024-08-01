@@ -4,12 +4,24 @@ import { useProfilesStore } from "../stores/ProfileStore.js";
 import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import CalendarComponent from "../components/CalendarComponent";
+import Chart from "../components/Chart";
+
+import Close from "../images/Close.svg";
 
 const ReportPage = ({ accessToken }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [noticeVisible, setNoticeVisible] = useState(false); // Notice 상태 추가
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const toggleNotice = () => {
+    setNoticeVisible(!noticeVisible); // Notice 상태 토글
+  };
+
+  const closeNotice = () => {
+    setNoticeVisible(false); // Notice 숨기기
   };
 
   return (
@@ -20,7 +32,25 @@ const ReportPage = ({ accessToken }) => {
       <Header2>
         <Comment>
           <Title>지금 우리 가족은</Title>
-          <Status>차가운 stew</Status>
+          <CommentWrapper>
+            <Status>차가운 stew</Status>
+            <NoticeWrapper2>
+              <Notice onClick={toggleNotice}>?</Notice>
+              {noticeVisible && ( // noticeVisible이 true일 때만 표시
+                <NoticeExplain>
+                  <NoticeWrapper>
+                    <NoticeTitle>우리 가족의 온도</NoticeTitle>
+                    <NoticeX onClick={closeNotice}>
+                      <img src={Close} alt="Close" />
+                    </NoticeX>
+                  </NoticeWrapper>
+                  <NoticeContent>
+                    가족 구성원의 수만큼 게시물이 늘어나면 stew가 1˚ 따뜻해져요.
+                  </NoticeContent>
+                </NoticeExplain>
+              )}
+            </NoticeWrapper2>
+          </CommentWrapper>
         </Comment>
         <Temperature>3°</Temperature>
       </Header2>
@@ -65,6 +95,13 @@ const Header2 = styled.div`
   margin-top: 20px;
 `;
 
+const CommentWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: bottom;
+  margin-top: 10px;
+`;
+
 const Title = styled.h1`
   font-size: 20px;
 `;
@@ -88,10 +125,69 @@ const CalendarSection = styled.section`
 
 const CalendarTitle = styled.h3`
   margin-bottom: 10px;
+  font-weight: bold;
 `;
 
 const Calendar = styled.div`
   padding-top: 15px;
+`;
+
+const NoticeWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+  justify-content: space-between;
+  width: 95%;
+
+  img {
+    width: 10px;
+  }
+`;
+
+const NoticeWrapper2 = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Notice = styled.div`
+  color: #8c8c8c;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: white;
+  margin: 9px;
+  border-radius: 100%;
+  border: 1px solid #e2e2e2;
+  text-align: center;
+  width: 25px;
+  height: 25px;
+  align-content: center;
+`;
+
+const NoticeExplain = styled.div`
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #e2e2e2;
+  width: 138px;
+  margin-left: 10px;
+  position: absolute;
+  top: 155px;
+`;
+
+const NoticeTitle = styled.div`
+  font-weight: bold;
+  font-size: 12px;
+  color: #222222;
+`;
+
+const NoticeX = styled.div``;
+
+const NoticeContent = styled.div`
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 15px;
+  color: #222222;
 `;
 
 const ParticipationSection = styled.section`
@@ -100,11 +196,5 @@ const ParticipationSection = styled.section`
 
 const ParticipationTitle = styled.h3`
   margin-bottom: 10px;
-`;
-
-const Chart = styled.div`
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
 `;
