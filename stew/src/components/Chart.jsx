@@ -64,34 +64,36 @@ const Chart = ({ accessToken, familycode }) => {
         {year}.{String(month + 1).padStart(2, "0")}
         <Arrow onClick={handleNextMonth}>{">"}</Arrow>
       </MonthYear>
-      <Bars>
-        {data.map((member, index) => {
-          const height = Math.max(
-            (member.posts / maxPosts) * MAX_BAR_HEIGHT,
-            MIN_BAR_HEIGHT
-          ); // 최소 높이 적용
-          const opacity = member.posts / maxPosts;
-          return (
-            <Bar key={index}>
-              <PostCount
-                style={{
-                  bottom: `${height + 10}px`,
-                  color: member.posts === maxPosts ? "#FF5A00" : "#000",
-                }}
-              >
-                {member.posts}
-              </PostCount>
-              <BarFill
-                style={{
-                  height: `${height}px`,
-                  backgroundColor: `rgba(255, 91, 2, ${opacity})`,
-                }}
-              />
-              <ProfileImage src={member.image} alt={member.name} />
-            </Bar>
-          );
-        })}
-      </Bars>
+      <BarContainer>
+        <Bars>
+          {data.map((member, index) => {
+            const height = Math.max(
+              (member.posts / maxPosts) * MAX_BAR_HEIGHT,
+              MIN_BAR_HEIGHT
+            ); // 최소 높이 적용
+            const opacity = member.posts / maxPosts;
+            return (
+              <Bar key={index}>
+                <PostCount
+                  style={{
+                    bottom: `${height + 10}px`,
+                    color: member.posts === maxPosts ? "#FF5A00" : "#000",
+                  }}
+                >
+                  {member.posts}
+                </PostCount>
+                <BarFill
+                  style={{
+                    height: `${height}px`,
+                    backgroundColor: `rgba(255, 91, 2, ${opacity})`,
+                  }}
+                />
+                <ProfileImage src={member.image} alt={member.name} />
+              </Bar>
+            );
+          })}
+        </Bars>
+      </BarContainer>
     </ChartContainer>
   );
 };
@@ -109,6 +111,20 @@ const ChartContainer = styled.div`
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: relative; // Relative로 설정하여 자식 요소의 절대 위치를 기준으로 함
   overflow: hidden; // 내부 요소가 컨테이너 밖으로 벗어나지 않도록 설정
+`;
+
+const BarContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  flex: 1;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Arrow = styled.div`

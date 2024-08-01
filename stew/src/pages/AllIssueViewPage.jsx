@@ -51,19 +51,29 @@ const AllIssueViewPage = () => {
   const { profiles, fetchProfiles } = useProfilesStore();
   const [posts, setPosts] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchProfiles();
+    const fetchData = async () => {
+      await fetchProfiles();
 
-    // 임시 데이터 사용
-    setPosts(mockPosts);
-    setCurrentUser(mockCurrentUser);
+      // 임시 데이터 사용
+      setPosts(mockPosts);
+      setCurrentUser(mockCurrentUser);
+      setLoading(false);
+    };
+
+    fetchData();
   }, [user_id, fetchProfiles]);
 
   const profile = profiles.find((p) => p.user_id === parseInt(user_id));
 
-  if (!profile) {
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (!profile) {
+    return <div>No profile found</div>;
   }
 
   const handleCall = (phone) => {
