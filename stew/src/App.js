@@ -43,6 +43,7 @@ const GlobalStyle = createGlobalStyle`
   ${reset}
   #root{
     max-width: 390px;
+    height: 100vh;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
