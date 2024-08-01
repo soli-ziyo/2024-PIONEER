@@ -17,6 +17,8 @@ const ChangeInterest = () => {
   useEffect(() => {
     const fetchSuggestedInterests = async () => {
       const accessToken = localStorage.getItem('accessToken');
+      console.log("AccessToken from localStorage:", accessToken);
+
 
       try {
         const response = await axios.get(`${baseurl}/home/hashtag/`, {
@@ -26,6 +28,7 @@ const ChangeInterest = () => {
         });
         console.log('Fetched suggested interests:', response.data.data);
         setSuggestedInterests(response.data.data);
+        
       } catch (error) {
         console.error('추천 관심사 가져오기 실패:', error);
         setSuggestedInterests([
@@ -69,7 +72,8 @@ const ChangeInterest = () => {
     try {
       const response = await axios.put(`${baseurl}/home/hashtag/`, 
       {
-        hashtag: interest
+        hashtag: interest,
+        nickname: interest
       }, 
       {
         headers: {

@@ -68,7 +68,7 @@ const ProfileImage = styled.img`
 
 const ProfileMent = styled.div`
   z-index: 4;
-  max-width: 150px;
+  max-width: 130px;
   padding: 10px 14px;
   border: 1px solid orange;
   border-radius: 21px;
@@ -77,14 +77,13 @@ const ProfileMent = styled.div`
   background-color: #fff;
   word-wrap: break-word;
   text-align: center;
-  white-space: nowrap; /* 한 줄로 유지 */
   align-self: ${props => props.position === 'left' ? 'flex-start' : 'flex-end'};
-  cursor: pointer; /* 클릭 가능한 요소임을 나타냄 */
+  cursor: pointer; 
 `;
 
 const ProfileInfo = styled.div`
   position: relative;
-  top: -20px; /* ProfileInfo와 겹치도록 위로 이동 */
+  top: -20px;
   transform: ${props => props.position === 'left' ? 'translateX(50%)' : 'translateX(-50%)'};
   z-index: 1;
 `
@@ -107,6 +106,8 @@ const EmojiWrapper = styled.div`
 
 
 const ProfileName = styled.div`
+  text-align: center;
+  width: 102px;
   position: absolute;
   bottom: -30px;
   left: 50%;

@@ -1,22 +1,34 @@
 import create from 'zustand';
 import axios from 'axios';
 
+const baseurl = 'https://minsol.pythonanywhere.com';
+
 export const useProfilesStore = create((set) => ({
   profiles: [],
   fetchProfiles: async () => {
     try {
       const response = await axios({
         method: "GET",
-        url: "https://example.com/api/profiles/",
+        url: `${baseurl}/home/main/`, // 올바른 API 엔드포인트 사용
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       });
-      set({ profiles: response.data.data });
+
+      // 응답을 처리하여 프로필 이미지를 올바르게 매핑
+      const profiles = response.data.map((profile) => ({
+        user_id: profile.user_id,
+        nickname: profile.nickname,
+        profile: profile.profile ? `${baseurl}${profile.profile}` : require('../images/me.jpg'),
+        content: profile.content || "",
+        emoji: profile.emoji || ""
+      }));
+
+      set({ profiles });
     } catch (error) {
       console.error("데이터 가져오기 실패:", error);
 
-      // 임시 데이터임
+      // 오프라인 또는 오류 시 임시 데이터 사용
       set({
         profiles: [
           {
