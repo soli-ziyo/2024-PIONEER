@@ -58,7 +58,7 @@ const PostPage = () => {
   return (
     <Wrapper>
       <Header>
-        <CloseButton onClick={() => navigate('/home')}><img src={Close} alt='Close' /></CloseButton>
+        <CloseButton onClick={() => navigate(-1)}><img src={Close} alt='Close' /></CloseButton>
         <Title>게시물 작성</Title>
       </Header>
       <StateInterest user="엄마" hashtag="산책" />

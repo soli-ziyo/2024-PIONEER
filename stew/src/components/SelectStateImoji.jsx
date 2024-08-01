@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import ImojiDash from '../images/Imoji_dash2.svg'; // Imoji_dash 이미지를 불러옴
 
-const SelectImoji = ({ onClose, onSelect }) => {
+const SelectStateImoji = ({ onClose, onSelect }) => {
   const [selectedEmoji, setSelectedEmoji] = useState(null);
-  const emojis = ['😍', '😂', '🤔', '😭', '😮', '🥳', '😤', '👍', '🧡'];
+  const emojis = ['😍', '😎', '😆', '😢', '🤒', '🥳', '😤', '🤯', '😪'];
 
   const handleSelect = (emoji) => {
     setSelectedEmoji(emoji);
@@ -26,7 +26,7 @@ const SelectImoji = ({ onClose, onSelect }) => {
           ) : (
             <EmojiImage src={ImojiDash} alt="emoji-dash" />
           )}
-          <EmojiText>반응을 선택해 주세요.</EmojiText>
+          <EmojiText>상태를 선택해 주세요.</EmojiText>
         </SelectedEmojiContainer>
         <EmojiGrid>
           {emojis.map((emoji, index) => (
@@ -44,7 +44,7 @@ const SelectImoji = ({ onClose, onSelect }) => {
   );
 };
 
-export default SelectImoji;
+export default SelectStateImoji;
 
 const Overlay = styled.div`
   position: fixed;

@@ -5,19 +5,32 @@ import { useNavigate } from 'react-router-dom';
 const FamilyProfile = ({ profile, index }) => {
   const position = index % 2 === 0 ? 'left' : 'right';
   const navigate = useNavigate();
+  const currentUserId = localStorage.getItem('user_id')
+  const isCurrentUser = profile.user_id.toString() === currentUserId;
 
   const handleClick = () => {
     navigate(`/interest/list/${profile.user_id}`);
   };
+
+  const handleEmojiClick = () => {
+    navigate('/home/edit');
+  };
+
+
+  const handleContentClick = () => {
+    if (isCurrentUser) {
+      navigate('/home/edit');
+    }
+  };
   
   return (
     <ProfileWrapper position={position}>
-      <ProfileMent position={position}>
+      <ProfileMent position={position} onClick={handleContentClick}>
         {profile.content}
       </ProfileMent>
       <ProfileInfo position={position}>
         <ProfileImage src={profile.profile} alt={profile.nickname} onClick={handleClick} />
-        <EmojiWrapper>
+        <EmojiWrapper onClick={handleEmojiClick}>
           {profile.emoji}
         </EmojiWrapper>
         <ProfileName>
@@ -48,11 +61,13 @@ const ProfileImage = styled.img`
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+  cursor: pointer; /* 클릭 가능한 요소임을 나타냄 */
+  z-index: 3;
 `;
 
 
 const ProfileMent = styled.div`
-  z-index: 1;
+  z-index: 4;
   max-width: 150px;
   padding: 10px 14px;
   border: 1px solid orange;
@@ -64,12 +79,14 @@ const ProfileMent = styled.div`
   text-align: center;
   white-space: nowrap; /* 한 줄로 유지 */
   align-self: ${props => props.position === 'left' ? 'flex-start' : 'flex-end'};
+  cursor: pointer; /* 클릭 가능한 요소임을 나타냄 */
 `;
 
 const ProfileInfo = styled.div`
   position: relative;
   top: -20px; /* ProfileInfo와 겹치도록 위로 이동 */
   transform: ${props => props.position === 'left' ? 'translateX(50%)' : 'translateX(-50%)'};
+  z-index: 1;
 `
 
 const EmojiWrapper = styled.div`
@@ -84,6 +101,8 @@ const EmojiWrapper = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 20px;
+  cursor: pointer; /* 클릭 가능한 요소임을 나타냄 */
+  z-index: 4;
 `;
 
 
