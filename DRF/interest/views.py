@@ -57,16 +57,11 @@ class InterestListView(views.APIView):
         
         user_serializer = UserProfileSerializer(family_users, many=True)
 
-        latest_week_hashtags = WeekHashTag.objects.filter(user=user).order_by('-created_at').first()
-        
+        latest_week_hashtags = WeekHashTag.objects.filter(user=user).order_by('-created_at', '-id').first()
         if not latest_week_hashtags:
             return Response({'message': 'No hashtags found for this user'}, status=status.HTTP_404_NOT_FOUND)
         
         interests = Interest.objects.filter(tag=latest_week_hashtags).select_related('user')
-
-        if not interests:
-            return Response({'message': 'No hashtags found for this interests'})
-
         interest_serializer = InterestSerializer(interests, many=True)
 
         return Response({
