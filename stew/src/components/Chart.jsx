@@ -8,11 +8,12 @@ import mom from "../images/mom.png";
 
 const data = [
   { name: "나", image: me, posts: 10 },
-  { name: "아빠", image: dad, posts: 30 },
-  { name: "엄마", image: mom, posts: 20 },
+  { name: "아빠", image: dad, posts: 16 },
+  { name: "엄마", image: mom, posts: 3 },
 ];
 
 const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
+const MIN_BAR_HEIGHT = 50; // 최소 막대 높이
 
 const Chart = ({ accessToken }) => {
   const { fetchData } = DateStore();
@@ -55,11 +56,21 @@ const Chart = ({ accessToken }) => {
       </MonthYear>
       <Bars>
         {data.map((member, index) => {
-          const height = (member.posts / maxPosts) * MAX_BAR_HEIGHT; // 최대값을 기준으로 상대적 높이 계산
-          const opacity = member.posts / maxPosts; // 투명도 반전 계산
+          const height = Math.max(
+            (member.posts / maxPosts) * MAX_BAR_HEIGHT,
+            MIN_BAR_HEIGHT
+          ); // 최소 높이 적용
+          const opacity = member.posts / maxPosts;
           return (
             <Bar key={index}>
-              <PostCount>{member.posts}</PostCount>
+              <PostCount
+                style={{
+                  bottom: `${height + 10}px`,
+                  color: member.posts === maxPosts ? "#FF5A00" : "#000",
+                }}
+              >
+                {member.posts}
+              </PostCount>
               <BarFill
                 style={{
                   height: `${height}px`,
@@ -154,5 +165,4 @@ const PostCount = styled.div`
   font-weight: bold;
   margin-bottom: 5px;
   position: absolute;
-  top: -60px;
 `;

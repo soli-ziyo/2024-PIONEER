@@ -35,17 +35,18 @@ const CalendarComponent = ({ accessToken }) => {
     const newDate = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() - 1,
-      2
+      1
     );
-    if (newDate >= new Date().setDate(1)) {
-      setCurrentDate(newDate);
-    }
+    setCurrentDate(newDate);
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
+    const newDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      1
     );
+    setCurrentDate(newDate);
   };
 
   const year = currentDate.getFullYear();
@@ -58,16 +59,13 @@ const CalendarComponent = ({ accessToken }) => {
     days.push(<EmptyDay key={`empty-${i}`} />);
   }
 
-  // 7월에만 데이터가 표시되도록
-  const isJuly = month === 6; // 월은 0부터 시작하므로 6이 7월
-
   for (let i = 1; i <= daysInMonth; i++) {
-    const activityCount = isJuly ? activityData[i] || 0 : 0;
-    const backgroundColor = isJuly ? getColorForDay(i) : "transparent";
+    const activityCount = activityData[i] || 0;
+    const backgroundColor = getColorForDay(i);
     days.push(
       <Day key={i} color={backgroundColor}>
         {i}
-        {isJuly && activityCount === familyMembersCount && <Heart>🧡</Heart>}
+        {activityCount === familyMembersCount && <Heart>🧡</Heart>}
       </Day>
     );
   }

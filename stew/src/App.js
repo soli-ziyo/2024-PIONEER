@@ -44,6 +44,7 @@ const GlobalStyle = createGlobalStyle`
   #root{
     max-width: 390px;
     margin: 0 auto;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
