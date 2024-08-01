@@ -9,7 +9,7 @@ from .serializers import *
 from accounts.models import User
 from django.db.models import OuterRef, Subquery
 from accounts.models import Family
-from accounts.serializers import UserProfileSerializer
+from accounts.serializers import UserHomeSerializer
 
 # Create your views here.
 class StateList(views.APIView):
@@ -78,7 +78,7 @@ class HomeListView(views.APIView):
             if latest_state:
                 serializer = StateEditSerializer(latest_state)
             else:
-                serializer = UserProfileSerializer(user)
+                serializer = UserHomeSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             family_users = User.objects.filter(families__familycode__in=family_codes) | User.objects.filter(id=user.id)

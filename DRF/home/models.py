@@ -25,6 +25,7 @@ class WeekHashTag(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='hashtags', on_delete=models.CASCADE)
     hashtag = models.ManyToManyField(HashTag, related_name='weekHashTag')
     created_at = models.DateField('date published', auto_now_add=True)
+    weekOfMonth = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return ', '.join([tag.hashtag for tag in self.hashtag.all()])
