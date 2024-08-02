@@ -29,7 +29,9 @@ const HomePage = () => {
         },
       });
 
-      if (response.status === 200) {
+      console.log(response);
+
+      if (response.data.message === "패밀리 코드 생성 성공") {
         console.log("가족 코드가 없습니다");
         console.log(response);
         setShowBeforeCodeScreen(true);

@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import create from "zustand";
+import { create } from "zustand";
 import axios from "axios";
-=======
-import {create} from 'zustand';
-import axios from 'axios';
->>>>>>> d23b158fd7935cff5f7e6ecd2a51684e46f3bd33
 
 const baseurl = "https://minsol.pythonanywhere.com";
 
@@ -14,7 +9,7 @@ export const useProfilesStore = create((set) => ({
     try {
       const response = await axios({
         method: "GET",
-        url: `${baseurl}/home/main/`, 
+        url: `${baseurl}/home/main/`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
