@@ -2,18 +2,33 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import CodeInputFamily from "./CodeInputFamily.jsx";
 
-const CodeInputNotice = ({ setHideElements }) => {
+const CodeInputNotice = ({
+  setHideElements,
+  setHideInviteNotice,
+  setHideInputNotice,
+}) => {
   const [step, setStep] = useState(1);
+  const prevStep = () => setStep(step - 1);
 
   const handleParticipateClick = () => {
     setStep(step + 1);
     if (step === 1) {
       setHideElements(true); // Header, Footer 및 기타 요소 숨기기
+      setHideInviteNotice(false);
     }
   };
 
   if (step === 2) {
-    return <CodeInputFamily />;
+    setHideElements(true); // Header, Footer 및 기타 요소 숨기기
+    setHideInviteNotice(true);
+    return (
+      <CodeInputFamily
+        prevStep={prevStep}
+        setHideElements={setHideElements}
+        setHideInputNotice={setHideInputNotice}
+        setHideInviteNotice={setHideInviteNotice}
+      />
+    );
   }
 
   return (
@@ -44,11 +59,11 @@ const Title = styled.h2`
 
 const Content = styled.p`
   margin: 7px 0 7px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
 `;
 
-const Button = styled.button`
+const Button = styled.div`
   position: absolute;
   bottom: 20px;
   right: 20px;

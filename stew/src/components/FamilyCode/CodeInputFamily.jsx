@@ -3,7 +3,13 @@ import styled from "styled-components";
 import axios from "axios";
 import Back from "../../images/Back.svg";
 
-const CodeInputFamily = ({ nextStep, prevStep, hideNotice }) => {
+const CodeInputFamily = ({
+  nextStep,
+  prevStep,
+  setHideElements,
+  setHideInviteNotice,
+  setHideInputNotice,
+}) => {
   const [code, setCode] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -28,21 +34,34 @@ const CodeInputFamily = ({ nextStep, prevStep, hideNotice }) => {
         },
         familycode: code.join(""),
       });
-      console.log(response.data);
-      nextStep();
+
+      if (response.status === 200) {
+        console.log(response.data);
+        nextStep();
+      } else if (response.status === 400) {
+        setError(console.message);
+      } else {
+        setError("등록되지 않은 코드입니다.");
+      }
     } catch (err) {
-      setError("이미 가족에 속해있습니다.");
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
+  const closeInput = () => {
+    prevStep();
+    setHideElements(false);
+    setHideInputNotice(false);
+    setHideInviteNotice(false);
+  };
+
   return (
     <Wrapper>
       <Container>
         <ContainerBase>
-          <img src={Back} alt="Back" onClick={prevStep} />
+          <img src={Back} alt="Back" onClick={closeInput} />
           <Comment>가족 코드를 입력해주세요.</Comment>
         </ContainerBase>
         <InputWrapper>
@@ -102,7 +121,7 @@ const ContainerBase = styled.div`
   img {
     width: 8%;
     margin-bottom: 58px;
-    margin-top: 40px;
+    margin-top: 0px;
     cursor: pointer; // 클릭할 수 있음을 나타내기 위해 커서 변경
   }
 `;
@@ -118,7 +137,7 @@ const Container = styled.div`
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 350px;
+  width: 100%;
   margin-top: 30px;
 `;
 

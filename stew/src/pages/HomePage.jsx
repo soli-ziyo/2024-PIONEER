@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
 import { useProfilesStore } from "../stores/ProfileStore.js";
 import FamilyProfile from "../components/FamilyProfile.jsx";
 import HamburgerMenu from "../components/HamburgerMenu";
@@ -8,47 +9,52 @@ import Logo from "../images/Logo.svg";
 import HomeNotice from "../components/HomeNotice.jsx";
 import axios from "axios";
 
-//가족코드
+// 가족 코드
 import CodeInputNotice from "../components/FamilyCode/CodeInputNotice.jsx";
 import CodeInviteNotice from "../components/FamilyCode/CodeInviteNotice.jsx";
 
+const currentUserId = parseInt(localStorage.getItem("user_id"));
+const baseurl = "https://minsol.pythonanywhere.com/";
+
 const HomePage = () => {
+  const { user_id } = useParams();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showBeforeCodeScreen, setShowBeforeCodeScreen] = useState(false);
   const [hideElements, setHideElements] = useState(false); // 새 상태 추가
+  const [hideInviteNotice, setHideInviteNotice] = useState(false); // 새 상태 추가
+  const [hideInputNotice, setHideInputNotice] = useState(false); // 새 상태 추가
+
   const { profiles, fetchProfiles } = useProfilesStore();
 
-  const checkFamilyCode = async () => {
+  const checkFamilyCode = async (userId) => {
     try {
       await fetchProfiles();
-      const baseurl = "https://minsol.pythonanywhere.com/";
-
-      const response = await axios.get(`${baseurl}family/code/`, {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios.get(`${baseurl}report/family/`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
-      console.log(response);
-
-      if (response.data.message === "패밀리 코드 생성 성공") {
-        console.log("가족 코드가 없습니다");
-        console.log(response);
+      if (response.data.family.length <= 1) {
+        console.log("등록된 가족이 없습니다");
         setShowBeforeCodeScreen(true);
       } else {
-        console.log("가족 코드가 이미 존재");
-        console.log(response.data.familycode);
-        console.log(response.data.message);
+        console.log("등록된 가족이 이미 존재");
+        console.log(response);
+        setShowBeforeCodeScreen(false);
+        setHideInviteNotice(true);
+        setHideInputNotice(true);
       }
     } catch (error) {
-      console.error("가족 코드 확인 실패:", error);
+      console.error("등록된 가족 확인 실패:", error);
       setShowBeforeCodeScreen(true);
     }
   };
 
   useEffect(() => {
-    checkFamilyCode();
-  }, [fetchProfiles]);
+    checkFamilyCode(user_id);
+  }, [user_id, fetchProfiles]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -65,8 +71,20 @@ const HomePage = () => {
       </Content>
       {showBeforeCodeScreen ? (
         <>
-          <CodeInviteNotice setHideElements={setHideElements} />
-          <CodeInputNotice setHideElements={setHideElements} />
+          {!hideInviteNotice && (
+            <CodeInviteNotice
+              setHideElements={setHideElements}
+              setHideInviteNotice={setHideInviteNotice}
+              setHideInputNotice={setHideInputNotice}
+            />
+          )}
+          {!hideInputNotice && (
+            <CodeInputNotice
+              setHideElements={setHideElements}
+              setHideInviteNotice={setHideInviteNotice}
+              setHideInputNotice={setHideInputNotice}
+            />
+          )}
         </>
       ) : (
         <HomeNotice />

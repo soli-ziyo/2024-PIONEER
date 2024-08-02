@@ -3,7 +3,13 @@ import styled from "styled-components";
 import axios from "axios";
 import Close from "../../images/Close.svg";
 
-const CodeInvite = ({ nextStep, prevStep }) => {
+const CodeInvite = ({
+  nextStep,
+  prevStep,
+  setHideElements,
+  setHideInviteNotice,
+  setHideInputNotice,
+}) => {
   const [familyCode, setFamilyCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -43,11 +49,18 @@ const CodeInvite = ({ nextStep, prevStep }) => {
       .catch((err) => setError("클립보드에 복사하는 중 오류가 발생했습니다."));
   };
 
+  const closeInvite = () => {
+    prevStep();
+    setHideElements(false);
+    setHideInputNotice(false);
+    setHideInviteNotice(false);
+  };
+
   return (
     <Wrapper>
       <>
         <ContainerBase>
-          <img src={Close} alt="Close" onClick={prevStep} />
+          <img src={Close} alt="Close" onClick={closeInvite} />
           <Comment>가족 초대하기</Comment>
         </ContainerBase>
         <InputWrapper>

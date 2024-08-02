@@ -2,18 +2,34 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import CodeInvite from "./CodeInvite.jsx";
 
-const CodeInviteNotice = ({ setHideElements }) => {
+const CodeInviteNotice = ({
+  setHideElements,
+  setHideInviteNotice,
+  setHideInputNotice,
+}) => {
   const [step, setStep] = useState(1);
+  const nextStep = () => setStep(step + 1);
+  const prevStep = () => setStep(step - 1);
 
   const handleInviteClick = () => {
     setStep(step + 1);
     if (step === 1) {
-      setHideElements(true); // Header, Footer 및 기타 요소 숨기기
+      setHideElements(false); // Header, Footer 및 기타 요소 숨기기
+      setHideInputNotice(false);
     }
   };
 
   if (step === 2) {
-    return <CodeInvite />;
+    setHideElements(true); // Header, Footer 및 기타 요소 숨기기
+    setHideInputNotice(true);
+    return (
+      <CodeInvite
+        prevStep={prevStep}
+        setHideElements={setHideElements}
+        setHideInputNotice={setHideInputNotice}
+        setHideInviteNotice={setHideInviteNotice}
+      />
+    );
   }
 
   return (
@@ -44,11 +60,11 @@ const Title = styled.h2`
 
 const Content = styled.p`
   margin: 7px 0 7px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
 `;
 
-const Button = styled.button`
+const Button = styled.div`
   position: absolute;
   bottom: 20px;
   right: 20px;

@@ -39,6 +39,7 @@ const LoginPage = () => {
         password: pw,
       });
 
+      console.log(response.data);
       // localStorage에 저장
       const { username, access_token } = response.data.data;
       localStorage.setItem("accessToken", access_token);
