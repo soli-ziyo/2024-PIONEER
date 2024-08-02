@@ -13,7 +13,9 @@ const Chart = ({ accessToken, familycode }) => {
     const fetchChartData = async () => {
       try {
         const response = await axios.get(`/report/calendar/${familycode}/`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
         });
         const { interest_perUser } = response.data;
 
