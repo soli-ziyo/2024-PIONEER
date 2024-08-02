@@ -28,8 +28,7 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
       const response = await axios.post(
         `${baseurl}accounts/phonenum/getcode/`,
         {
-          phone: phone,
-          certificationNumber: code.join(""), //문자열 결합
+          code: code.join(""), //문자열 결합
         }
       );
       console.log("sms 인증에 성공하였습니다.");

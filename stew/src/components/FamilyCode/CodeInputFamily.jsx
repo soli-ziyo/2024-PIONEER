@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import Back from "../../images/Back.svg";
 
-const CodeInputFamily = ({ nextStep, prevStep }) => {
+const CodeInputFamily = ({ nextStep, prevStep, hideNotice }) => {
   const [code, setCode] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -67,7 +67,7 @@ const CodeInputFamily = ({ nextStep, prevStep }) => {
                 color: "red",
               }}
             >
-              인증번호를 확인 중입니다...
+              가족코드를 확인 중입니다...
             </p>
           )}
           {error && <ErrorMessage>{error}</ErrorMessage>}

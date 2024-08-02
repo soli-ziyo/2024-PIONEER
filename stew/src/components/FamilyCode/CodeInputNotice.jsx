@@ -1,24 +1,26 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Info from "../../images/Info.svg";
 import CodeInputFamily from "./CodeInputFamily.jsx";
 
-const CodeInputNotice = () => {
-  const [showInput, setShowInput] = useState(false);
+const CodeInputNotice = ({ setHideElements }) => {
+  const [step, setStep] = useState(1);
 
   const handleParticipateClick = () => {
-    setShowInput(true);
+    setStep(step + 1);
+    if (step === 1) {
+      setHideElements(true); // Header, Footer 및 기타 요소 숨기기
+    }
   };
+
+  if (step === 2) {
+    return <CodeInputFamily />;
+  }
 
   return (
     <NoticeContainer>
       <Title>가족코드가 있으신가요?</Title>
       <Content>가족 코드를 입력하고 stew에 참여해요.</Content>
-      {!showInput ? (
-        <Button onClick={handleParticipateClick}>참여하기</Button>
-      ) : (
-        <CodeInputFamily />
-      )}
+      <Button onClick={handleParticipateClick}>참여하기</Button>
     </NoticeContainer>
   );
 };
@@ -60,5 +62,4 @@ const Button = styled.button`
   border-radius: 20px;
   border: 1px solid #ff5a00;
   background-color: #fff;
-  cursor: pointer;
 `;
