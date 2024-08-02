@@ -2,47 +2,57 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useProfilesStore } from "../stores/ProfileStore.js";
 import styled from 'styled-components';
-import StateInterest from '../components/StateInterest';
 import Post from '../components/Post';
 import axios from 'axios';
 import Back from '../images/Back.svg';
 import FloatingBtn from '../images/FloatingBtn.svg';
+import { CurrentWeek } from '../components/CurrentWeek';
 
-// 임시 데이터임
-const mockPosts = [
-  {
-    id: 1,
-    description: '산책하다 본 고양이 ㅎㅎ',
-    img: require('../images/cat.jpg'),
-    created_at: '2024-07-28T14:24:35.191Z',
-    user: { id: 1, nickname: '엄마', phone: '010-1234-5678', image: require('../images/mom.png') },
-    emoji: ''
-  },
-  {
-    id: 2,
-    description: '마트에서 이런 것도 파네~ 과일 사서 먹어~',
-    img: require('../images/food.jpg'),
-    created_at: '2024-07-29T14:24:35.191Z',
-    user: { id: 2, nickname: '아빠', phone: '010-1111-2222', image: require('../images/dad.png') },
-    emoji: '😂'
-  },
-];
-
-const mockCurrentUser = { user_id: 3, nickname: '나', phone: '010-0000-0000', profile: require('../images/me.jpg') };
+const baseurl = 'https://minsol.pythonanywhere.com';
+const currentUserId = parseInt(localStorage.getItem('user_id'));
 
 const InterestPage = () => {
   const { user_id } = useParams();
   const navigate = useNavigate();
   const { profiles, fetchProfiles } = useProfilesStore();
   const [posts, setPosts] = useState([]);
-  const [currentUser, setCurrentUser] = useState({});
+  const [hashtag, setHashtag] = useState("");
+
+  const fetchData = async (userId) => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axios.get(`${baseurl}/interest/list/${userId}/`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+
+      if (response.status === 200) {
+        const interestsData = response.data.data.interests;
+        setPosts(interestsData.map(interest => ({
+          id: interest.tag.id,
+          description: interest.description,
+          img: interest.img,
+          created_at: interest.created_at,
+          user: {
+            id: interest.user.user_id,
+            nickname: interest.user.nickname,
+            phonenum: interest.user.phonenum,
+            profile: interest.user.profile,
+          },
+          emoji: interest.emoji
+        })));
+        const interest = interestsData.find(interest => interest.user.user_id === parseInt(userId));
+        setHashtag(interest?.tag?.hashtag || '');
+      }
+    } catch (error) {
+      console.error("API 오류:", error);
+    }
+  };
 
   useEffect(() => {
     fetchProfiles();
-
-    // 임시 데이터 사용
-    setPosts(mockPosts);
-    setCurrentUser(mockCurrentUser);
+    fetchData(user_id);
   }, [user_id, fetchProfiles]);
 
   const profile = profiles.find(p => p.user_id === parseInt(user_id));
@@ -59,12 +69,19 @@ const InterestPage = () => {
     window.location.href = `sms:${phone}`;
   };
 
-  const profileClick = (user_id) => {
-    navigate(`/interest/list/${user_id}`);
+  const handleProfileClick = (userId) => {
+    setPosts([]);  
+    setHashtag("");
+    fetchData(userId);
+    navigate(`/interest/list/${userId}`);
   };
 
-  // currentUser를 가장 앞에 오게 프로필 순서 변경
-  const sortedProfiles = [currentUser, ...profiles.filter(member => member.user_id !== currentUser.user_id)];
+  const sortedProfiles = profiles.map(profile => {
+    if (profile.user_id === currentUserId) {
+      return { ...profile, nickname: '나' };
+    }
+    return profile;
+  }).sort((a, b) => a.user_id === currentUserId ? -1 : 1);
 
   return (
     <Wrapper>
@@ -72,20 +89,24 @@ const InterestPage = () => {
       <ProfileContainer>
         {sortedProfiles.map(member => (
           <ProfileItem key={member.user_id}>
-            <ProfileImageButton to={`/interest/list/${member.user_id}`} active={member.user_id === parseInt(user_id)}>
+            <ProfileImageButton active={member.user_id === parseInt(user_id)} onClick={() => handleProfileClick(member.user_id)}>
               <img src={member.profile} alt={member.nickname} />
             </ProfileImageButton>
-            <ProfileName>{member.user_id === currentUser.user_id ? '나' : member.nickname}</ProfileName>
+            <ProfileName>{member.user_id === currentUserId ? '나' : member.nickname}</ProfileName>
           </ProfileItem>
         ))}
       </ProfileContainer>
       <PostsContainer>
-        <StateInterest user={profile.nickname} hashtag={profile.hashtag} /> 
+        <Container>
+            <Label>{parseInt(user_id) === currentUserId ? "나의 관심사" : `${profile.nickname}의 관심사`}</Label>
+            <Week>{CurrentWeek().weekOfMonth}</Week>
+            <Hashtag>{hashtag}</Hashtag>
+          </Container> 
         {posts.map(post => (
-          <Post key={post.id} post={post} currentUser={currentUser} onCall={handleCall} onMessage={handleMessage} isCurrentUserPage={parseInt(user_id) === currentUser.user_id} />
+          <Post key={post.id} post={post} currentUser={{ user_id: currentUserId }} onCall={handleCall} onMessage={handleMessage} isCurrentUserPage={parseInt(user_id) === currentUserId} />
         ))}
       </PostsContainer>
-      {parseInt(user_id) !== currentUser.user_id && <FloatingButton to="/interest/new"><img src={FloatingBtn} alt="게시글 작성"/></FloatingButton>}
+      {parseInt(user_id) !== currentUserId && <FloatingButton to="/interest/new"><img src={FloatingBtn} alt="게시글 작성"/></FloatingButton>}
     </Wrapper>
   );
 };
@@ -93,6 +114,8 @@ const InterestPage = () => {
 export default InterestPage;
 
 const Wrapper = styled.div`
+  width: 100%;
+  height: 100vh;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -121,25 +144,27 @@ const ProfileItem = styled.div`
   align-items: center;
   border-radius: 50%;
   margin-right: 12px;
+  cursor: pointer;
 `;
 
-const ProfileImageButton = styled(Link)`
+const ProfileImageButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: ${props => (props.active ? '2px solid #FF6600' : '2px solid #E2E2E2')};
+  border: ${props => (props.active ? '1px solid #FF6600' : '1px solid #E2E2E2')};
   box-sizing: border-box;
   overflow: hidden;
   
   img {
-    width: 60px;
-    height: 60px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    border: ${props => (props.active ? '2px solid #FF6600' : '2px solid #E2E2E2')};
+    border: ${props => (props.active ? '1px solid #FF6600' : '1px solid #E2E2E2')};
     box-sizing: border-box;
+    object-fit: cover;
   }
 `;
 
@@ -165,4 +190,42 @@ const FloatingButton = styled(Link)`
   width: 59px;
   height: 59px;
   z-index: 9;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Label = styled.div`
+  background-color: #FF5A00;
+  color: #fff;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%; 
+  padding: 5px 14px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+`;
+
+const Week = styled.div`
+  color: #8C8C8C;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  margin-bottom: 10px;
+`;
+
+const Hashtag = styled.div`
+  color: #FF6600;
+  font-size: 18px;
+  font-weight: 700;
 `;

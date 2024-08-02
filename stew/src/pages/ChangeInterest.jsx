@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Close from '../images/Close.svg';
 import { CurrentWeek } from '../components/CurrentWeek';
+import { useProfilesStore } from '../stores/ProfileStore.js';
 import axios from 'axios';
 
 const baseurl = 'https://minsol.pythonanywhere.com';
 
 const ChangeInterest = () => {
+  const { profiles, fetchProfiles } = useProfilesStore();
   const [interest, setInterest] = useState('');
   const [suggestedInterests, setSuggestedInterests] = useState([]);
   const inputRef = useRef(null);
@@ -17,8 +19,6 @@ const ChangeInterest = () => {
   useEffect(() => {
     const fetchSuggestedInterests = async () => {
       const accessToken = localStorage.getItem('accessToken');
-      console.log("AccessToken from localStorage:", accessToken);
-
 
       try {
         const response = await axios.get(`${baseurl}/home/hashtag/`, {
@@ -70,14 +70,14 @@ const ChangeInterest = () => {
     e.preventDefault();
 
     try {
+      const accessToken = localStorage.getItem('accessToken');
       const response = await axios.put(`${baseurl}/home/hashtag/`, 
       {
-        hashtag: interest,
-        nickname: interest
+        hashtag: interest
       }, 
       {
         headers: {
-          'Authorization': `${localStorage.getItem('accessToken')}`
+          'Authorization': `Bearer ${accessToken}`
         }
       });
 

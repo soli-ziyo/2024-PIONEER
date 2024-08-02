@@ -8,8 +8,8 @@ import Logo from "../images/Logo.svg";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [id, setID] = useState("");
-  const [pw, setPW] = useState("");
+  const [ID, setID] = useState("");
+  const [PW, setPW] = useState("");
 
   const pwInputRef = useRef(null);
   const idInputRef = useRef(null);
@@ -17,16 +17,16 @@ const LoginPage = () => {
   const baseurl = "https://minsol.pythonanywhere.com/";
   //------------------------------------------------------------------------
   const goLogin = async () => {
-    if (!id && !pw) {
+    if (!ID && !PW) {
       alert("아이디와 비밀번호를 입력해주세요.");
       return;
     }
-    if (!id) {
+    if (!ID) {
       alert("아이디를 입력해주세요.");
       idInputRef.current.focus(); // 아이디 입력란으로 포커스 이동
       return;
     }
-    if (!pw) {
+    if (!PW) {
       alert("비밀번호를 입력해주세요.");
       pwInputRef.current.focus(); // 비밀번호 입력란으로 포커스 이동
       return;
@@ -35,14 +35,20 @@ const LoginPage = () => {
     // 로그인 요청
     try {
       const response = await axios.post(`${baseurl}accounts/login/`, {
-        username: id,
-        password: pw,
+        username: ID,
+        password: PW,
       });
 
       // localStorage에 저장
-      const { username, access_token } = response.data.data;
+      const { username, access_token, id } = response.data.data;
       localStorage.setItem("accessToken", access_token);
       localStorage.setItem("username", username);
+      localStorage.setItem("user_id", id);
+      console.log("Stored values: ", {
+        accessToken: localStorage.getItem("accessToken"),
+        username: localStorage.getItem("username"),
+        user_id: localStorage.getItem("user_id"),
+      })
 
       // HomePage로 이동
       navigate("/home");
@@ -75,8 +81,8 @@ const LoginPage = () => {
             <button
               onClick={goLogin}
               style={{
-                backgroundColor: id && pw ? "white" : "#F1F1F1",
-                color: id && pw ? "black" : "#8C8C8C",
+                backgroundColor: ID && PW ? "white" : "#F1F1F1",
+                color: ID && PW ? "black" : "#8C8C8C",
                 marginTop: "10%",
               }}
             >

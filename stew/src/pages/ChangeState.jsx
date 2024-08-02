@@ -1,14 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import SelectStateImoji from "../components/SelectStateImoji";
 import axios from "axios";
 import Close from "../images/Close.svg";
 
+const baseurl = 'https://minsol.pythonanywhere.com';
+
 const ChangeState = () => {
-  const [content, setContent] = useState("오늘 저녁 메뉴: 칼국수");
-  const [profileImage, setProfileImage] = useState(require("../images/me.jpg"));
-  const [emoji, setEmoji] = useState("😲");
+  const location = useLocation();
+  const profile = location.state?.profile;
+
+  const [content, setContent] = useState(profile?.content || '');
+  const [profileImage, setProfileImage] = useState(profile?.profile || '');
+  const [imageFile, setImageFile] = useState(null);
+  const [emoji, setEmoji] = useState(profile?.emoji || '');
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
   const navigate = useNavigate();
   const inputRef = useRef(null);
@@ -29,6 +35,7 @@ const ChangeState = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setProfileImage(URL.createObjectURL(file));
+    setImageFile(file); 
   };
 
   const handleEmojiClick = () => {
@@ -42,32 +49,36 @@ const ChangeState = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
     try {
-      const formData = new FormData();
-      formData.append("content", content);
-      formData.append("emoji", emoji);
-      formData.append("profile", profileImage); // Update this line to append the file instead of URL.createObjectURL
+      const response = await axios.post(
+        `${baseurl}/state/edit/`,
 
-      const response = await axios.put(
-        "http://localhost:5000/updateState",
-        formData,
+        {
+          content: content,
+          emoji: emoji,
+          profile: imageFile
+        },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data'
           },
         }
       );
 
-      if (response.status === 200) {
-        console.log("State updated successfully");
+      if (response.status === 201 && response.data.message === "상태 저장 성공") {
+        console.log(response.data)
         navigate("/home");
       } else {
-        console.error("Failed to update state");
+        console.error("상태 저장 실패");
+        console.error(response.data.errors);
       }
     } catch (error) {
-      console.error("Error occurred:", error);
+      console.error("에러 발생", error);
+      if (error.response) {
+        console.error("에러 데이터:", error.response.data);
+      }
     }
   };
 
