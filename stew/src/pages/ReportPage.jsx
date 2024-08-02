@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useProfilesStore } from "../stores/ProfileStore.js";
+import { DateStore } from "../stores/DateStore"; // Zustand store import
 import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import CalendarComponent from "../components/CalendarComponent";
@@ -8,9 +8,14 @@ import Chart from "../components/Chart";
 
 import Close from "../images/Close.svg";
 
-const ReportPage = ({ accessToken }) => {
+const ReportPage = ({ accessToken, familycode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [noticeVisible, setNoticeVisible] = useState(false); // Notice 상태 추가
+  const { totalPosts, temperature, status, fetchData } = DateStore(); // Zustand 상태 가져오기
+
+  useEffect(() => {
+    fetchData(accessToken, familycode);
+  }, [accessToken, familycode, fetchData]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -29,43 +34,46 @@ const ReportPage = ({ accessToken }) => {
       <Header toggleMenu={toggleMenu} />
 
       {menuOpen && <HamburgerMenu toggleMenu={toggleMenu} />}
-      <Header2>
-        <Comment>
-          <Title>지금 우리 가족은</Title>
-          <CommentWrapper>
-            <Status>차가운 stew</Status>
-            <NoticeWrapper2>
-              <Notice onClick={toggleNotice}>?</Notice>
-              {noticeVisible && ( // noticeVisible이 true일 때만 표시
-                <NoticeExplain>
-                  <NoticeWrapper>
-                    <NoticeTitle>우리 가족의 온도</NoticeTitle>
-                    <NoticeX onClick={closeNotice}>
-                      <img src={Close} alt="Close" />
-                    </NoticeX>
-                  </NoticeWrapper>
-                  <NoticeContent>
-                    가족 구성원의 수만큼 게시물이 늘어나면 stew가 1˚ 따뜻해져요.
-                  </NoticeContent>
-                </NoticeExplain>
-              )}
-            </NoticeWrapper2>
-          </CommentWrapper>
-        </Comment>
-        <Temperature>3°</Temperature>
-      </Header2>
+      <ContentWrapper>
+        <Header2>
+          <Comment>
+            <Title>지금 우리 가족은</Title>
+            <CommentWrapper>
+              <Status>{status}</Status>
+              <NoticeWrapper2>
+                <Notice onClick={toggleNotice}>?</Notice>
+                {noticeVisible && (
+                  <NoticeExplain>
+                    <NoticeWrapper>
+                      <NoticeTitle>우리 가족의 온도</NoticeTitle>
+                      <NoticeX onClick={closeNotice}>
+                        <img src={Close} alt="Close" />
+                      </NoticeX>
+                    </NoticeWrapper>
+                    <NoticeContent>
+                      가족 구성원의 수만큼 게시물이 늘어나면 stew가 1˚
+                      따뜻해져요.
+                    </NoticeContent>
+                  </NoticeExplain>
+                )}
+              </NoticeWrapper2>
+            </CommentWrapper>
+          </Comment>
+          <Temperature>{temperature}°</Temperature>
+        </Header2>
 
-      <CalendarSection>
-        <CalendarTitle>가족 달력</CalendarTitle>
-        <Calendar>
-          <CalendarComponent accessToken={accessToken} />
-        </Calendar>
-      </CalendarSection>
+        <CalendarSection>
+          <CalendarTitle>가족 달력</CalendarTitle>
+          <Calendar>
+            <CalendarComponent accessToken={accessToken} />
+          </Calendar>
+        </CalendarSection>
 
-      <ParticipationSection>
-        <ParticipationTitle>참여 현황</ParticipationTitle>
-        <Chart></Chart>
-      </ParticipationSection>
+        <ParticipationSection>
+          <ParticipationTitle>참여 현황</ParticipationTitle>
+          <Chart accessToken={accessToken}></Chart>
+        </ParticipationSection>
+      </ContentWrapper>
     </Wrapper>
   );
 };
@@ -75,11 +83,17 @@ export default ReportPage;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 390px;
-  height: 100%;
-  margin: 0 auto;
   box-sizing: border-box;
+  overflow: hidden;
+`;
+
+const ContentWrapper = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  padding-top: 20px;
 `;
 
 const Comment = styled.div`
@@ -121,6 +135,7 @@ const Status = styled.span`
 
 const CalendarSection = styled.section`
   margin: 20px 0;
+  margin-bottom: 30px;
 `;
 
 const CalendarTitle = styled.h3`
@@ -172,7 +187,8 @@ const NoticeExplain = styled.div`
   width: 138px;
   margin-left: 10px;
   position: absolute;
-  top: 155px;
+  top: 175px;
+  z-index: 1000;
 `;
 
 const NoticeTitle = styled.div`
@@ -195,6 +211,6 @@ const ParticipationSection = styled.section`
 `;
 
 const ParticipationTitle = styled.h3`
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   font-weight: bold;
 `;
