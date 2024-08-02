@@ -6,8 +6,11 @@ import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import Logo from "../images/Logo.svg";
 import HomeNotice from "../components/HomeNotice.jsx";
-import BeforeCodeScreen from "../components/FamilyCode/BeforeCodeScreen.jsx";
 import axios from "axios";
+
+//가족코드
+import CodeInputNotice from "../components/FamilyCode/CodeInputNotice.jsx";
+import CodeInviteNotice from "../components/FamilyCode/CodeInviteNotice.jsx";
 
 const HomePage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -59,7 +62,10 @@ const HomePage = () => {
           ))}
       </Content>
       {showBeforeCodeScreen ? (
-        <BeforeCodeScreen setHideElements={setHideElements} />
+        <>
+          <CodeInviteNotice setHideElements={setHideElements} />
+          <CodeInputNotice setHideElements={setHideElements} />
+        </>
       ) : (
         <HomeNotice />
       )}
