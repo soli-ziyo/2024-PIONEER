@@ -13,24 +13,26 @@ const FamilyProfile = ({ profile, index }) => {
   };
 
   const handleEmojiClick = () => {
-    navigate('/home/edit');
+    if (isCurrentUser) {
+      navigate('/home/edit', { state: { profile } });
+    }
   };
 
 
   const handleContentClick = () => {
     if (isCurrentUser) {
-      navigate('/home/edit');
+      navigate('/home/edit', { state: { profile } });
     }
   };
   
   return (
     <ProfileWrapper position={position}>
-      <ProfileMent position={position} onClick={handleContentClick}>
+      <ProfileMent position={position} onClick={handleContentClick} isCurrentUser={isCurrentUser}>
         {profile.content}
       </ProfileMent>
       <ProfileInfo position={position}>
         <ProfileImage src={profile.profile} alt={profile.nickname} onClick={handleClick} />
-        <EmojiWrapper onClick={handleEmojiClick}>
+        <EmojiWrapper onClick={handleEmojiClick} isCurrentUser={isCurrentUser}>
           {profile.emoji}
         </EmojiWrapper>
         <ProfileName>
@@ -45,13 +47,13 @@ export default FamilyProfile;
 
 const ProfileWrapper = styled.div`
   position: relative;
-  margin-top: -30px; /* 요소 간의 간격을 좁혀줌 */
   display: flex;
   flex-direction: column;
   align-items: ${props => props.position === 'left' ? 'flex-start' : 'flex-end'};
-  margin-top: -50px; /* 요소 간의 간격을 좁혀줌 */
+  margin-top: -50px; 
+
   &:first-child {
-    margin-top: 30px; /* 첫 번째 요소는 기본 간격 */
+    margin-top: 30px; 
   }
 `;
 
@@ -60,9 +62,9 @@ const ProfileImage = styled.img`
   height: 102px;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
-  cursor: pointer; /* 클릭 가능한 요소임을 나타냄 */
+  cursor: pointer; 
   z-index: 3;
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
 `;
 
 
@@ -78,12 +80,12 @@ const ProfileMent = styled.div`
   word-wrap: break-word;
   text-align: center;
   align-self: ${props => props.position === 'left' ? 'flex-start' : 'flex-end'};
-  cursor: pointer; 
+  cursor: ${props => (props.isCurrentUser ? 'pointer' : 'default')}; 
 `;
 
 const ProfileInfo = styled.div`
   position: relative;
-  top: -20px;
+  top: -17px;
   transform: ${props => props.position === 'left' ? 'translateX(50%)' : 'translateX(-50%)'};
   z-index: 1;
 `
@@ -100,8 +102,9 @@ const EmojiWrapper = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  cursor: pointer; /* 클릭 가능한 요소임을 나타냄 */
+  cursor: ${props => (props.isCurrentUser ? 'pointer' : 'default')};
   z-index: 4;
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
 `;
 
 

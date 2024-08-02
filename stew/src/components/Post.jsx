@@ -44,7 +44,7 @@ const Post = ({ post, currentUser, onCall, onMessage, isCurrentUserPage }) => {
       <PostImage src={post.img} alt={post.description} />
       <PostContent>
         <PostUser>
-          <UserProfile src={post.user.image} alt={post.user.nickname} />
+          <UserProfile src={post.user.profile} alt={post.user.nickname} />
           <UserName>{post.user.nickname}</UserName>
           <PostTime>
             {timeSince(post.created_at)}
