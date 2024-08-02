@@ -25,11 +25,11 @@ SECRET_KEY = 'django-insecure-uaorw&9e@82x=&oend)h%3b2wnw96-b9u3mi0&2zx!@^5uck-(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True
-#DEBUG = False
+#DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ['minsol.pythonanywhere.com']
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['minsol.pythonanywhere.com']
 
 
 # Application definition
