@@ -96,6 +96,21 @@ class HomeListView(views.APIView):
             )
         )
         
-        serializer = StateEditSerializer(states, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
+        users = []
+        for family_user in family_users:
+            # 사용자의 최신 상태가 있는지 확인
+            state = next((s for s in states if s.user_id == family_user.id), None)
+            if state is not None:
+                users.append(state)
+            else:
+                # 최신 상태가 없으면 기본값 사용
+                default_state = StateEdit(
+                    user=family_user,
+                    content="빈 content",
+                    emoji="빈 emoji",
+                )
+                users.append(default_state)
+
+        state_serializer = StateEditSerializer(users, many=True)
+
+        return Response(state_serializer.data, status=status.HTTP_200_OK)
