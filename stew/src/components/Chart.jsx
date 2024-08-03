@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import instance from "../api/axios";
+import basicImg from "../images/Basic.png";
 
 const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
 const MIN_BAR_HEIGHT = 50; // 최소 막대 높이
@@ -24,11 +25,10 @@ const Chart = () => {
         );
         const { interest_perUser } = response.data;
 
-        // 데이터 가공
-        const formattedData = interest_perUser.map((user) => ({
-          name: user.user.nickname,
-          image: user.user.profile || "/default-profile.jpg", // 기본 이미지 설정
-          posts: user.user_interests,
+        const formattedData = interest_perUser.map((index) => ({
+          name: index.user.nickname,
+          image: index.user.profile ? `${process.env.REACT_APP_SERVER_PORT}${index.user.profile}` : basicImg,
+          posts: index.user_interests,
         }));
 
         setData(formattedData);
@@ -73,21 +73,21 @@ const Chart = () => {
       </MonthYear>
       <BarContainer>
         <Bars>
-          {data.map((member, index) => {
+          {data.map((index) => {
             const height = Math.max(
-              (member.posts / maxPosts) * MAX_BAR_HEIGHT,
+              (index.posts / maxPosts) * MAX_BAR_HEIGHT,
               MIN_BAR_HEIGHT
-            ); // 최소 높이 적용
-            const opacity = member.posts / maxPosts;
+            );
+            const opacity = index.posts / maxPosts;
             return (
               <Bar key={index}>
                 <PostCount
                   style={{
                     bottom: `${height + 10}px`,
-                    color: member.posts === maxPosts ? "#FF5A00" : "#000",
+                    color: index.posts === maxPosts ? "#FF5A00" : "#000",
                   }}
                 >
-                  {member.posts}
+                  {index.posts}
                 </PostCount>
                 <BarFill
                   style={{
@@ -95,7 +95,7 @@ const Chart = () => {
                     backgroundColor: `rgba(255, 91, 2, ${opacity})`,
                   }}
                 />
-                <ProfileImage src={member.image} alt={member.name} />
+                <ProfileImage src={index.image} alt={index.name} />
               </Bar>
             );
           })}
