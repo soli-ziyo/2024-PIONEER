@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import instance from "../api/axios";
 import basicImg from "../images/Basic.png";
-
+import {useFamilycodeStore} from "../stores/FamilycodeStore"
 const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
 const MIN_BAR_HEIGHT = 50; // 최소 막대 높이
 
 const Chart = () => {
   const [chartDate, setChartDate] = useState(new Date());
   const [data, setData] = useState([]);
+  const {familycode, fetchFamilycode } = useFamilycodeStore();
 
   useEffect(() => {
-    const fetchChartData = async () => {
+    const fetchData = async () => {
       try {
-        const familycode = localStorage.getItem("familycode");
+        await fetchFamilycode();
         const response = await instance.get(
           `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
             },
           }
         );
@@ -27,18 +27,20 @@ const Chart = () => {
 
         const formattedData = interest_perUser.map((index) => ({
           name: index.user.nickname,
-          image: index.user.profile ? `${process.env.REACT_APP_SERVER_PORT}${index.user.profile}` : basicImg,
+          image: index.user.profile
+            ? `${process.env.REACT_APP_SERVER_PORT}${index.user.profile}`
+            : basicImg,
           posts: index.user_interests,
         }));
 
         setData(formattedData);
-      } catch (error) {
-        console.error("데이터를 불러오는 데 실패했습니다.", error);
+      } catch (err) {
+        console.error(err);
       }
     };
 
-    fetchChartData();
-  }, []);
+    fetchData();
+  }, [fetchFamilycode, familycode]);
 
   const handlePrevMonth = () => {
     const newDate = new Date(

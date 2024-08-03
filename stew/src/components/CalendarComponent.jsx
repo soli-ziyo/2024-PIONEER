@@ -2,16 +2,24 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DateStore } from "../stores/DateStore";
 import instance from "../api/axios";
+import { useFamilycodeStore } from "../stores/FamilycodeStore";
 
 const CalendarComponent = () => {
   const { activityData, currentDate, setCurrentDate, fetchData } = DateStore();
-
+  const { familycode, fetchFamilycode } = useFamilycodeStore();
   const [calendarData, setCalendarData] = useState([]);
 
   useEffect(() => {
+    const fetchDataWithFamilycode = async () => {
+      await fetchFamilycode();
+    };
+    fetchDataWithFamilycode();
+  }, [fetchFamilycode]);
+
+  useEffect(() => {
     const fetchCalendarData = async () => {
-      const familycode = localStorage.getItem("familycode");
       try {
+        await fetchFamilycode();
         const response = await instance.get(
           `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
           {
@@ -21,14 +29,16 @@ const CalendarComponent = () => {
           }
         );
         setCalendarData(response.data.calendar || []);
-        fetchData();
+        if (familycode) {
+          fetchData(familycode);
+        }
       } catch (error) {
         console.error("Error fetching calendar data:", error);
       }
     };
 
     fetchCalendarData();
-  }, []);
+  }, [familycode, fetchData]);
 
   const getColorForDay = (day) => {
     const data = calendarData.find(
