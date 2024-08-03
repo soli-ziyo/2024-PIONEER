@@ -66,11 +66,11 @@ const AllIssueViewPage = () => {
     return <div>Loading...</div>;
   }
 
-  const handleCall = (콜) => {
+  const handleCall = (phone) => {
     window.location.href = `tel:${phone}`;
   };
 
-  const handleMessage = (콜) => {
+  const handleMessage = (phone) => {
     window.location.href = `sms:${phone}`;
   };
 
