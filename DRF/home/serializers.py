@@ -39,6 +39,13 @@ class WeekHashTagSerializer(serializers.ModelSerializer):
             week_hashtag.hashtag.add(hashtag)
         return week_hashtag
 
+class WeekHashTagInterestSerializer(serializers.ModelSerializer):
+    hashtag = HashTagSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = WeekHashTag
+        fields = ['id', 'hashtag']
+
 class ReportHashTagSerializer(serializers.ModelSerializer):
     hashtag = HashTagSerializer(many=True, read_only=True)
     nickname = serializers.CharField(source='user.nickname', read_only=True)
