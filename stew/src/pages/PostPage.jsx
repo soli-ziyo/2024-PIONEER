@@ -40,35 +40,41 @@ const PostPage = () => {
     // // formData.append("image", image);
     // formData.append("tag", hashtag);
 
-    const accessToken = localStorage.getItem("accessToken");
 
-    try {
-      const response = await axios.post(
-        `${baseurl}/interest/new/`,
-        {
-          tag: hashtagId,
-          description: description,
-          img: image
+  //   const formData = new FormData();
+  // formData.append("description", description);
+  // formData.append("tag", hashtagId);  
+  // // if (image) {
+  // //   formData.append("img", image);
+  // // }
+
+  const accessToken = localStorage.getItem("accessToken");
+
+  try {
+    const response = await axios.post(
+      `${baseurl}/interest/new/`,
+
+      {
+        tag: hashtagId,
+        img: image,
+        description: description
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data'
         },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "multipart/form-data"
-          }
-        }
-      );
+      })
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         const result = response.data;
         console.log("게시물 작성 성공:", result);
-        navigate(`/interest/list/${result.data.user.id}`);
+        navigate(-1);
       } else {
         console.error("게시물 작성 실패");
       }
     } catch (error) {
       console.error("에러 발생:", error);
-      console.log(hashtagId);
-      console.log(description);
     }
   };
 

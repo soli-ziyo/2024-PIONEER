@@ -134,6 +134,7 @@ const UserName = styled.div`
 const PostTime = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #8C8C8C;
   margin-right: 5px;
   gap: 8px;
@@ -177,6 +178,7 @@ const EmojiButton = styled.button`
   img {
     width: 24px;
     height: 24px;
+    margin-bottom: 7px;
   }
 `;
 
@@ -187,6 +189,7 @@ const EmojiDisplay = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 24px;
+  margin-bottom: 11px;
 `;
 
 const EmojiImg = styled.img`
