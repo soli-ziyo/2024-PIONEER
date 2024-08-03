@@ -21,10 +21,10 @@ const HomePage = () => {
   const { user_id } = useParams();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showBeforeCodeScreen, setShowBeforeCodeScreen] = useState(false);
-  const [hideElements, setHideElements] = useState(false); // 새 상태 추가
-  const [hideInviteNotice, setHideInviteNotice] = useState(false); // 새 상태 추가
-  const [hideInputNotice, setHideInputNotice] = useState(false); // 새 상태 추가
-  const [loading, setLoading] = useState(true); // 추가: 로딩 상태 추가
+  const [hideElements, setHideElements] = useState(false); 
+  const [hideInviteNotice, setHideInviteNotice] = useState(false); 
+  const [hideInputNotice, setHideInputNotice] = useState(false);
+  const [loading, setLoading] = useState(true); 
 
   const { profiles, fetchProfiles } = useProfilesStore();
 
@@ -35,9 +35,9 @@ const HomePage = () => {
       const response = await axios.get(`${baseurl}report/family/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-        },
+        }
       });
-
+      
       if (response.data.family.length <= 1) {
         console.log("등록된 가족이 없습니다");
         setShowBeforeCodeScreen(true);
