@@ -6,13 +6,14 @@ import instance from "../api/axios";
 const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
 const MIN_BAR_HEIGHT = 50; // 최소 막대 높이
 
-const Chart = ({ accessToken, familycode }) => {
+const Chart = () => {
   const [chartDate, setChartDate] = useState(new Date());
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchChartData = async () => {
       try {
+        const familycode = localStorage.getItem("familycode");
         const response = await instance.get(
           `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
           {
@@ -37,7 +38,7 @@ const Chart = ({ accessToken, familycode }) => {
     };
 
     fetchChartData();
-  }, [accessToken, familycode]);
+  }, []);
 
   const handlePrevMonth = () => {
     const newDate = new Date(

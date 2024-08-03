@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DateStore } from "../stores/DateStore";
-import axios from "axios";
 import instance from "../api/axios";
 
-const CalendarComponent = ({ accessToken, familycode }) => {
+const CalendarComponent = () => {
   const { activityData, currentDate, setCurrentDate, fetchData } = DateStore();
 
   const [calendarData, setCalendarData] = useState([]);
 
   useEffect(() => {
     const fetchCalendarData = async () => {
+      const familycode = localStorage.getItem("familycode");
       try {
         const response = await instance.get(
           `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
@@ -21,15 +21,14 @@ const CalendarComponent = ({ accessToken, familycode }) => {
           }
         );
         setCalendarData(response.data.calendar || []);
-        // fetchData를 사용하여 상태 업데이트 (기존 구현 유지)
-        fetchData(accessToken, familycode);
+        fetchData();
       } catch (error) {
         console.error("Error fetching calendar data:", error);
       }
     };
 
     fetchCalendarData();
-  }, [accessToken, familycode, fetchData]);
+  }, []);
 
   const getColorForDay = (day) => {
     const data = calendarData.find(

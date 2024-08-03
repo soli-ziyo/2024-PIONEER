@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Back from "../../images/Back.svg";
-import useFamilyStore from "../../stores/familyStore";
+// import useFamilyStore from "../../stores/familyStore";
+import instance from "../../api/axios";
 
 const CodeInputFamily = ({
   nextStep,
@@ -11,7 +12,7 @@ const CodeInputFamily = ({
   setHideInputNotice,
 }) => {
   const [code, setCode] = useState(["", "", "", ""]);
-  const { setFamilycode, submitFamilycode } = useFamilyStore();
+  // const { setFamilycode, submitFamilycode } = useFamilyStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -27,11 +28,21 @@ const CodeInputFamily = ({
 
   const handleNext = async () => {
     setLoading(true);
-    const familycode = code.join("");
-    setFamilycode(familycode); // Update familycode in Zustand store
-
+    const inputCode = code.join("");
+    // setFamilycode(familycode); // Update familycode in Zustand store
     try {
-      await submitFamilycode(familycode);
+      const response = await instance.post(
+        `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
+        {
+          familycode: inputCode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      console.log(response.data)
       // 요청이 성공한 경우
       prevStep();
       setHideElements(false);
@@ -43,7 +54,8 @@ const CodeInputFamily = ({
         setError(err.message);
       } else {
         setError("가족 코드 확인 중 오류가 발생했습니다.");
-        window.location.reload();
+        console.log(error);
+        // window.location.reload();
       }
     } finally {
       setLoading(false);
