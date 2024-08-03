@@ -13,7 +13,9 @@ const CalendarComponent = ({ accessToken, familycode }) => {
       try {
         // API 호출로 달력 데이터 가져오기
         const response = await axios.get(`/report/calendar/${familycode}/`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
         });
         setCalendarData(response.data.calendar || []);
         // fetchData를 사용하여 상태 업데이트 (기존 구현 유지)

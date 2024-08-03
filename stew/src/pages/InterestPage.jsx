@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useProfilesStore } from "../stores/ProfileStore.js";
-import styled from 'styled-components';
-import Post from '../components/Post';
-import axios from 'axios';
-import Back from '../images/Back.svg';
-import FloatingBtn from '../images/FloatingBtn.svg';
-import { CurrentWeek } from '../components/CurrentWeek';
+import styled from "styled-components";
+import Post from "../components/Post";
+import axios from "axios";
+import Back from "../images/Back.svg";
+import FloatingBtn from "../images/FloatingBtn.svg";
+import { CurrentWeek } from "../components/CurrentWeek";
 
-const baseurl = 'https://minsol.pythonanywhere.com';
-const currentUserId = parseInt(localStorage.getItem('user_id'));
+const baseurl = "https://minsol.pythonanywhere.com";
+const currentUserId = parseInt(localStorage.getItem("user_id"));
 
 const InterestPage = () => {
   const { user_id } = useParams();
@@ -20,11 +20,11 @@ const InterestPage = () => {
 
   const fetchData = async (userId) => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem("accessToken");
       const response = await axios.get(`${baseurl}/interest/list/${userId}/`, {
         headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       console.log(response);
       if (response.status === 200) {
@@ -61,7 +61,7 @@ const InterestPage = () => {
     fetchData(user_id);
   }, [user_id, fetchProfiles]);
 
-  const profile = profiles.find(p => p.user_id === parseInt(user_id));
+  const profile = profiles.find((p) => p.user_id === parseInt(user_id));
 
   if (!profile) {
     return <div>Loading...</div>;
@@ -76,29 +76,38 @@ const InterestPage = () => {
   };
 
   const handleProfileClick = (userId) => {
-    setPosts([]);  
+    setPosts([]);
     setHashtag("");
     fetchData(userId);
     navigate(`/interest/list/${userId}`);
   };
 
-  const sortedProfiles = profiles.map(profile => {
-    if (profile.user_id === currentUserId) {
-      return { ...profile, nickname: '나' };
-    }
-    return profile;
-  }).sort((a, b) => a.user_id === currentUserId ? -1 : 1);
+  const sortedProfiles = profiles
+    .map((profile) => {
+      if (profile.user_id === currentUserId) {
+        return { ...profile, nickname: "나" };
+      }
+      return profile;
+    })
+    .sort((a, b) => (a.user_id === currentUserId ? -1 : 1));
 
   return (
     <Wrapper>
-      <BackButton onClick={() => navigate('/home')}><img src={Back} alt="Back"/></BackButton> 
+      <BackButton onClick={() => navigate("/home")}>
+        <img src={Back} alt="Back" />
+      </BackButton>
       <ProfileContainer>
-        {sortedProfiles.map(member => (
+        {sortedProfiles.map((member) => (
           <ProfileItem key={member.user_id}>
-            <ProfileImageButton active={member.user_id === parseInt(user_id)} onClick={() => handleProfileClick(member.user_id)}>
+            <ProfileImageButton
+              active={member.user_id === parseInt(user_id)}
+              onClick={() => handleProfileClick(member.user_id)}
+            >
               <img src={member.profile} alt={member.nickname} />
             </ProfileImageButton>
-            <ProfileName>{member.user_id === currentUserId ? '나' : member.nickname}</ProfileName>
+            <ProfileName>
+              {member.user_id === currentUserId ? "나" : member.nickname}
+            </ProfileName>
           </ProfileItem>
         ))}
       </ProfileContainer>
@@ -112,7 +121,11 @@ const InterestPage = () => {
           <Post key={post.key} post={post} currentUser={{ user_id: currentUserId }} onCall={handleCall} onMessage={handleMessage} isCurrentUserPage={parseInt(user_id) === currentUserId} />
         ))}
       </PostsContainer>
-      {parseInt(user_id) !== currentUserId && <FloatingButton to="/interest/new"><img src={FloatingBtn} alt="게시글 작성"/></FloatingButton>}
+      {parseInt(user_id) !== currentUserId && (
+        <FloatingButton to="/interest/new">
+          <img src={FloatingBtn} alt="게시글 작성" />
+        </FloatingButton>
+      )}
     </Wrapper>
   );
 };
@@ -160,15 +173,17 @@ const ProfileImageButton = styled.div`
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: ${props => (props.active ? '1px solid #FF6600' : '1px solid #E2E2E2')};
+  border: ${(props) =>
+    props.active ? "1px solid #FF6600" : "1px solid #E2E2E2"};
   box-sizing: border-box;
   overflow: hidden;
-  
+
   img {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: ${props => (props.active ? '1px solid #FF6600' : '1px solid #E2E2E2')};
+    border: ${(props) =>
+      props.active ? "1px solid #FF6600" : "1px solid #E2E2E2"};
     box-sizing: border-box;
     object-fit: cover;
   }
@@ -205,13 +220,13 @@ const Container = styled.div`
 `;
 
 const Label = styled.div`
-  background-color: #FF5A00;
+  background-color: #ff5a00;
   color: #fff;
   font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
-  line-height: 140%; 
+  line-height: 140%;
   padding: 5px 14px;
   border-radius: 24px;
   display: flex;
@@ -221,7 +236,7 @@ const Label = styled.div`
 `;
 
 const Week = styled.div`
-  color: #8C8C8C;
+  color: #8c8c8c;
   text-align: center;
   font-family: Pretendard;
   font-size: 12px;

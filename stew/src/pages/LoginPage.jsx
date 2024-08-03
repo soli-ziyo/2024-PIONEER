@@ -39,16 +39,12 @@ const LoginPage = () => {
         password: PW,
       });
 
+      console.log(response.data);
       // localStorage에 저장
       const { username, access_token, id } = response.data.data;
       localStorage.setItem("accessToken", access_token);
       localStorage.setItem("username", username);
       localStorage.setItem("user_id", id);
-      console.log("Stored values: ", {
-        accessToken: localStorage.getItem("accessToken"),
-        username: localStorage.getItem("username"),
-        user_id: localStorage.getItem("user_id"),
-      })
 
       // HomePage로 이동
       navigate("/home");

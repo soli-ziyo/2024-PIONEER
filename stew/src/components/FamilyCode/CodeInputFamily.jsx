@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
-
-// images
 import Back from "../../images/Back.svg";
+import useFamilyStore from "../../stores/familyStore";
 
-const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
+const CodeInputFamily = ({
+  nextStep,
+  prevStep,
+  setHideElements,
+  setHideInviteNotice,
+  setHideInputNotice,
+}) => {
   const [code, setCode] = useState(["", "", "", ""]);
+  const { setFamilycode, submitFamilycode } = useFamilyStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const baseurl = "https://minsol.pythonanywhere.com/";
 
   const handleChange = (e, index) => {
     const newCode = [...code];
     newCode[index] = e.target.value;
     setCode(newCode);
 
-    // Automatically focus next input if the current one is filled
     if (e.target.value && index < 3) {
       document.getElementById(`code-input-${index + 1}`).focus();
     }
@@ -24,29 +27,42 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
 
   const handleNext = async () => {
     setLoading(true);
+    const familycode = code.join("");
+    setFamilycode(familycode); // Update familycode in Zustand store
+
     try {
-      const response = await axios.post(
-        `${baseurl}accounts/phonenum/getcode/`,
-        {
-          code: code.join(""), //문자열 결합
-        }
-      );
-      console.log("sms 인증에 성공하였습니다.");
-      nextStep();
+      await submitFamilycode(familycode);
+      // 요청이 성공한 경우
+      prevStep();
+      setHideElements(false);
+      setHideInputNotice(true);
+      setHideInviteNotice(true);
+      window.location.reload();
     } catch (err) {
-      setError("인증에 실패하였습니다. 인증번호를 확인해주세요.");
-      console.error(err);
+      if (err.message === "이미 가족에 속해있습니다.") {
+        setError(err.message);
+      } else {
+        setError("가족 코드 확인 중 오류가 발생했습니다.");
+        window.location.reload();
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  const closeInput = () => {
+    prevStep();
+    setHideElements(false);
+    setHideInputNotice(false);
+    setHideInviteNotice(false);
   };
 
   return (
     <Wrapper>
       <Container>
         <ContainerBase>
-          <img src={Back} alt="Back" onClick={prevStep} />
-          <Comment>인증 코드를 발송했어요.</Comment>
+          <img src={Back} alt="Back" onClick={closeInput} />
+          <Comment>가족 코드를 입력해주세요.</Comment>
         </ContainerBase>
         <InputWrapper>
           <CodeInputs>
@@ -62,22 +78,12 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
             ))}
           </CodeInputs>
           {loading && (
-            <p
-              style={{
-                fontFamily: "Pretendard",
-                fontSize: "14px",
-                marginBottom: "-10%",
-                color: "red",
-              }}
-            >
-              인증번호를 확인 중입니다...
-            </p>
+            <LoadingMessage>가족코드를 확인 중입니다...</LoadingMessage>
           )}
           {error && <ErrorMessage>{error}</ErrorMessage>}
           <Button
-            //onClick={handleNext}
-            onClick={nextStep}
-            disabled={code.some((digit) => digit === "")}
+            onClick={handleNext}
+            disabled={code.some((digit) => digit === "") || loading}
           >
             다음
           </Button>
@@ -87,7 +93,7 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
   );
 };
 
-export default CodeInputScreen;
+export default CodeInputFamily;
 
 const Wrapper = styled.div`
   display: flex;
@@ -101,12 +107,13 @@ const Wrapper = styled.div`
 const ContainerBase = styled.div`
   display: flex;
   flex-direction: column;
-  justify-items: left;
+  align-items: flex-start;
 
   img {
     width: 8%;
     margin-bottom: 58px;
-    margin-top: 40px;
+    margin-top: 0px;
+    cursor: pointer;
   }
 `;
 
@@ -115,13 +122,13 @@ const Container = styled.div`
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  align-items: left;
+  align-items: flex-start;
 `;
 
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 350px;
+  width: 100%;
   margin-top: 30px;
 `;
 
@@ -152,7 +159,7 @@ const Button = styled.button`
   color: ${(props) => (props.disabled ? "#8C8C8C" : "black")};
   font-weight: 600;
   font-size: 14px;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   border: 1px solid #e2e2e2;
   margin-bottom: 10%;
   margin-top: 75%;
@@ -169,5 +176,12 @@ const ErrorMessage = styled.p`
   color: red;
   font-family: "Pretendard";
   font-size: 14px;
+  margin-bottom: -10%;
+`;
+
+const LoadingMessage = styled.p`
+  font-family: "Pretendard";
+  font-size: 14px;
+  color: red;
   margin-bottom: -10%;
 `;
