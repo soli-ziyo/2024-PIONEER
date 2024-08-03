@@ -14,7 +14,6 @@ const CodeInvite = ({
   const [familyCode, setFamilyCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   useEffect(() => {
     const fetchFamilyCode = async () => {
@@ -29,6 +28,7 @@ const CodeInvite = ({
             },
           }
         );
+        localStorage.setItem("familycode", response.data.familycode);
         console.log(response.data);
         if (response.data.familycode) {
           setFamilyCode(response.data.familycode);
