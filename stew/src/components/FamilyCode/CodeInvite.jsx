@@ -51,8 +51,9 @@ const CodeInvite = ({
 
   const closeInvite = () => {
     prevStep();
+
     setHideElements(false);
-    setHideInputNotice(false);
+    setHideInputNotice(true);
     setHideInviteNotice(false);
   };
 

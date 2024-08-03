@@ -9,6 +9,8 @@ import Logo from "../images/Logo.svg";
 import HomeNotice from "../components/HomeNotice.jsx";
 import axios from "axios";
 
+//import LandingState from "../components/LandingState.jsx";
+
 // 가족 코드
 import CodeInputNotice from "../components/FamilyCode/CodeInputNotice.jsx";
 import CodeInviteNotice from "../components/FamilyCode/CodeInviteNotice.jsx";
@@ -64,10 +66,22 @@ const HomePage = () => {
     <Wrapper>
       {!hideElements && <Header toggleMenu={toggleMenu} />}
       <Content>
-        {!hideElements &&
-          profiles.map((profile, index) => (
-            <FamilyProfile key={index} profile={profile} index={index} />
-          ))}
+        {showBeforeCodeScreen ? (
+          <>
+            {" "}
+            {!hideElements &&
+              profiles.map((profile, index) => (
+                <FamilyProfile key={index} profile={profile} index={index} />
+              ))}
+          </>
+        ) : (
+          <>
+            {!hideElements &&
+              profiles.map((profile, index) => (
+                <FamilyProfile key={index} profile={profile} index={index} />
+              ))}
+          </>
+        )}
       </Content>
       {showBeforeCodeScreen ? (
         <>

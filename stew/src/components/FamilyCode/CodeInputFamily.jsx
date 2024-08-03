@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import Back from "../../images/Back.svg";
+import useFamilyStore from "../../stores/familyStore";
 
 const CodeInputFamily = ({
   nextStep,
@@ -11,9 +11,9 @@ const CodeInputFamily = ({
   setHideInputNotice,
 }) => {
   const [code, setCode] = useState(["", "", "", ""]);
+  const { setFamilycode, submitFamilycode } = useFamilyStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const baseurl = "https://minsol.pythonanywhere.com/";
 
   const handleChange = (e, index) => {
     const newCode = [...code];
@@ -27,24 +27,18 @@ const CodeInputFamily = ({
 
   const handleNext = async () => {
     setLoading(true);
-    try {
-      const response = await axios.post(`${baseurl}family/create/`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-        familycode: code.join(""),
-      });
+    const familycode = code.join("");
+    setFamilycode(familycode); // Update familycode in Zustand store
 
-      if (response.status === 200) {
-        console.log(response.data);
-        nextStep();
-      } else if (response.status === 400) {
-        setError(console.message);
-      } else {
-        setError("등록되지 않은 코드입니다.");
-      }
+    try {
+      await submitFamilycode(familycode);
+      prevStep();
+      setHideElements(false);
+      setHideInputNotice(true);
+      setHideInviteNotice(true);
+      window.location.reload();
     } catch (err) {
-      console.error(err);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -78,21 +72,12 @@ const CodeInputFamily = ({
             ))}
           </CodeInputs>
           {loading && (
-            <p
-              style={{
-                fontFamily: "Pretendard",
-                fontSize: "14px",
-                marginBottom: "-10%",
-                color: "red",
-              }}
-            >
-              가족코드를 확인 중입니다...
-            </p>
+            <LoadingMessage>가족코드를 확인 중입니다...</LoadingMessage>
           )}
           {error && <ErrorMessage>{error}</ErrorMessage>}
           <Button
             onClick={handleNext}
-            disabled={code.some((digit) => digit === "")}
+            disabled={code.some((digit) => digit === "") || loading}
           >
             다음
           </Button>
@@ -122,7 +107,7 @@ const ContainerBase = styled.div`
     width: 8%;
     margin-bottom: 58px;
     margin-top: 0px;
-    cursor: pointer; // 클릭할 수 있음을 나타내기 위해 커서 변경
+    cursor: pointer;
   }
 `;
 
@@ -191,6 +176,6 @@ const ErrorMessage = styled.p`
 const LoadingMessage = styled.p`
   font-family: "Pretendard";
   font-size: 14px;
-  color: orange;
-  margin-bottom: 10%;
+  color: red;
+  margin-bottom: -10%;
 `;
