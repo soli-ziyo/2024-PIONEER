@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import SelectImoji from './SelectImoji';
 import ImojiDash from '../images/Imoji_dash.svg'; 
 import Call from '../images/Call.svg';
 import Message from '../images/Message.svg';
 
-const Post = ({ post, currentUser, onCall, onMessage, isCurrentUserPage }) => {
+const baseurl = 'https://minsol.pythonanywhere.com';
+
+const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
   const timeSince = (date) => {
     const now = new Date();
     const postDate = new Date(date);
@@ -34,14 +37,32 @@ const Post = ({ post, currentUser, onCall, onMessage, isCurrentUserPage }) => {
     setShowEmojiSelector(true);
   };
 
-  const handleSelectEmoji = (emoji) => {
-    setSelectedEmoji(emoji);
+  const handleSelectEmoji = async (emoji) => {
+    const accessToken = localStorage.getItem('accessToken');
+    console.log(post.id)
+    try {
+      const response = await axios.put(
+        `${baseurl}/interest/list/${post.id}/emoji/`,
+
+        { emoji },
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
+      );
+      if (response.status === 200) {
+        setSelectedEmoji(emoji);
+      }
+    } catch (error) {
+      console.error("Failed to update emoji:", error);
+    }
     setShowEmojiSelector(false);
   };
 
   return (
     <PostContainer>
-      <PostImage src={post.img} alt={post.description} />
+      {post.img && <PostImage src={post.img} alt={post.description} />}
       <PostContent>
         <PostUser>
           <UserProfile src={post.user.profile} alt={post.user.nickname} />

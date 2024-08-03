@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../fonts/KulimPark.css";
 import Close from "../images/Close.svg";
 import Plus from "../images/Plus.svg";
@@ -14,6 +14,13 @@ const HamburgerMenu = ({ toggleMenu }) => {
 
   const toggleSubMenu = (menu) => {
     setSubMenuOpen((prev) => ({ ...prev, [menu]: !prev[menu] }));
+  };
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user_id");
+    navigate("/");
   };
 
   return (
@@ -62,7 +69,7 @@ const HamburgerMenu = ({ toggleMenu }) => {
           </SubMenu>
         )}
       </MenuItem>
-      <LogoutButton>로그아웃</LogoutButton>
+      <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
     </MenuWrapper>
   );
 };

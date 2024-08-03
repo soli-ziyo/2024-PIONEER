@@ -7,7 +7,6 @@ import Header from "../components/Header";
 import Logo from "../images/Logo.svg";
 import HomeNotice from "../components/HomeNotice.jsx";
 
-import axios from 'axios';
 
 const HomePage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,8 +24,8 @@ const HomePage = () => {
     <Wrapper>
       <Header toggleMenu={toggleMenu} />
       <Content>
-        {profiles.map((profile, index) => (
-          <FamilyProfile key={index} profile={profile} index={index} />
+        {profiles.map((profile, user_id) => (
+          <FamilyProfile key={user_id} profile={profile} index={user_id} />
         ))}
       </Content>
       <HomeNotice />

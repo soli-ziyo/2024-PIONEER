@@ -34,7 +34,7 @@ const LoginPage = () => {
 
     // 로그인 요청
     try {
-      const response = await axios.post(`${baseurl}accounts/login/`, {
+      const response = await axios.post(`${baseurl}`, {
         username: ID,
         password: PW,
       });
@@ -52,6 +52,8 @@ const LoginPage = () => {
 
       // HomePage로 이동
       navigate("/home");
+      window.location.reload();
+      
       console.log("로그인 성공", response.data);
     } catch (error) {
       console.error(error);

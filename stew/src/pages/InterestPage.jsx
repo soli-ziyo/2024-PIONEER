@@ -26,24 +26,30 @@ const InterestPage = () => {
           'Authorization': `Bearer ${accessToken}`
         }
       });
-
+      console.log(response);
       if (response.status === 200) {
         const interestsData = response.data.data.interests;
-        setPosts(interestsData.map(interest => ({
+        setPosts(interestsData.map((interest, index) => ({
+          key: `${interest.tag.id}-${index}`,
           id: interest.tag.id,
           description: interest.description,
-          img: interest.img,
+          img: interest.img ? `${baseurl}${interest.img}` : null,
           created_at: interest.created_at,
           user: {
             id: interest.user.user_id,
             nickname: interest.user.nickname,
             phonenum: interest.user.phonenum,
-            profile: interest.user.profile,
+            profile: interest.user.profile ? `${baseurl}${interest.user.profile}` : require('../images/Basic.png')
           },
           emoji: interest.emoji
         })));
-        const interest = interestsData.find(interest => interest.user.user_id === parseInt(userId));
-        setHashtag(interest?.tag?.hashtag || '');
+
+        const Hashtag = interestsData[0].tag.hashtag[0]?.hashtag || '';
+        setHashtag(Hashtag)
+        // const interest = interestsData.find(interest => interest.tag.id === parseInt(userId));
+        // setHashtag(interest?.tag?.hashtag[0]?.hashtag || '');
+        console.log(response);
+        // console.log(interest);
       }
     } catch (error) {
       console.error("API 오류:", error);
@@ -103,7 +109,7 @@ const InterestPage = () => {
             <Hashtag>{hashtag}</Hashtag>
           </Container> 
         {posts.map(post => (
-          <Post key={post.id} post={post} currentUser={{ user_id: currentUserId }} onCall={handleCall} onMessage={handleMessage} isCurrentUserPage={parseInt(user_id) === currentUserId} />
+          <Post key={post.key} post={post} currentUser={{ user_id: currentUserId }} onCall={handleCall} onMessage={handleMessage} isCurrentUserPage={parseInt(user_id) === currentUserId} />
         ))}
       </PostsContainer>
       {parseInt(user_id) !== currentUserId && <FloatingButton to="/interest/new"><img src={FloatingBtn} alt="게시글 작성"/></FloatingButton>}
@@ -225,7 +231,9 @@ const Week = styled.div`
 `;
 
 const Hashtag = styled.div`
-  color: #FF6600;
-  font-size: 18px;
+  color: #FF5A00;
+  font-family: Pretendard;
+  font-size: 20px;
   font-weight: 700;
+  margin-bottom: 20px;;
 `;

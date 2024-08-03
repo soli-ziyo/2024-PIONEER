@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import ImojiDash from '../images/Imoji_dash2.svg'; // Imoji_dash 이미지를 불러옴
+import ImojiDash from '../images/Imoji_dash2.svg'; 
 
 const SelectImoji = ({ onClose, onSelect }) => {
   const [selectedEmoji, setSelectedEmoji] = useState(null);

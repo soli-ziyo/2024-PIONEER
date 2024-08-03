@@ -18,7 +18,7 @@ export const useProfilesStore = create((set) => ({
       const profiles = response.data.map((profile) => ({
         user_id: profile.user_id,
         nickname: profile.nickname,
-        profile: profile.profile ? `${baseurl}${profile.profile}` : require('../images/me.jpg'),
+        profile: profile.profile ? `${baseurl}${profile.profile}` : require('../images/Basic.png'),
         content: profile.content || "",
         emoji: profile.emoji || ""
       }));
