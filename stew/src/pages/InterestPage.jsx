@@ -53,19 +53,17 @@ const InterestPage = () => {
                 : require("../images/Basic.png"),
             },
             emoji: interest.emoji,
-          }))
+          })).reverse()
         );
 
-        const Hashtag =
-          response.data.data.hashtags.hashtag[0]?.hashtag ||
-          "이번 주 해시태그가 없습니다.";
-        const HashtagId =
-          response.data.data.hashtags.hashtag[0]?.hashtag_id || "";
+        const Hashtag = response.data.data.hashtags.hashtag[0]?.hashtag || '이번 주 해시태그가 없습니다.';
+        const HashtagId = response.data.data.hashtags.id || '';
         setHashtag(Hashtag);
         setHashtagId(HashtagId);
         // const interest = interestsData.find(interest => interest.tag.id === parseInt(userId));
         // setHashtag(interest?.tag?.hashtag[0]?.hashtag || '');
-        // console.log('해시태그 아이디: ', HashtagId);
+        console.log('해시태그 아이디: ', hashtagId);
+        console.log('해시태그 아이디: ', HashtagId);
       }
     } catch (error) {
       console.error("API 오류:", error);
