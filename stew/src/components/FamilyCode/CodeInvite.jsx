@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import Close from "../../images/Close.svg";
+import instance from "../../api/axios";
 
 const CodeInvite = ({
   nextStep,
@@ -13,18 +14,21 @@ const CodeInvite = ({
   const [familyCode, setFamilyCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const baseurl = "https://minsol.pythonanywhere.com/";
+  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   useEffect(() => {
     const fetchFamilyCode = async () => {
       setLoading(true);
       setError("");
       try {
-        const response = await axios.get(`${baseurl}family/code/`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        });
+        const response = await instance.get(
+          `${process.env.REACT_APP_SERVER_PORT}/family/code/`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
         console.log(response.data);
         if (response.data.familycode) {
           setFamilyCode(response.data.familycode);
@@ -40,7 +44,7 @@ const CodeInvite = ({
     };
 
     fetchFamilyCode();
-  }, [baseurl]);
+  }, []);
 
   const copyToClipboard = () => {
     navigator.clipboard

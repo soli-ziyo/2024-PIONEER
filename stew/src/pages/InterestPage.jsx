@@ -7,8 +7,9 @@ import axios from "axios";
 import Back from "../images/Back.svg";
 import FloatingBtn from "../images/FloatingBtn.svg";
 import { CurrentWeek } from "../components/CurrentWeek";
+import instance from "../api/axios.js";
 
-const baseurl = "https://minsol.pythonanywhere.com";
+// const baseurl = "https://minsol.pythonanywhere.com";
 const currentUserId = parseInt(localStorage.getItem("user_id"));
 
 const InterestPage = () => {
@@ -23,28 +24,37 @@ const InterestPage = () => {
   const fetchData = async (userId) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await axios.get(`${baseurl}/interest/list/${userId}/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await instance.get(
+        `${process.env.REACT_APP_SERVER_PORT}/interest/list/${userId}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       console.log(response);
       if (response.status === 200) {
         const interestsData = response.data.data.interests;
-        setPosts(interestsData.map((interest, index) => ({
-          key: `${interest.tag.id}-${index}`,
-          id: interest.interest_id,
-          description: interest.description,
-          img: interest.img ? `${baseurl}${interest.img}` : null,
-          created_at: interest.created_at,
-          user: {
-            id: interest.user.user_id,
-            nickname: interest.user.nickname,
-            phonenum: interest.user.phonenum,
-            profile: interest.user.profile ? `${baseurl}${interest.user.profile}` : require('../images/Basic.png')
-          },
-          emoji: interest.emoji
-        })).reverse());
+        setPosts(
+          interestsData.map((interest, index) => ({
+            key: `${interest.tag.id}-${index}`,
+            id: interest.interest_id,
+            description: interest.description,
+            img: interest.img
+              ? `${process.env.REACT_APP_SERVER_PORT}${interest.img}`
+              : null,
+            created_at: interest.created_at,
+            user: {
+              id: interest.user.user_id,
+              nickname: interest.user.nickname,
+              phonenum: interest.user.phonenum,
+              profile: interest.user.profile
+                ? `${process.env.REACT_APP_SERVER_PORT}${interest.user.profile}`
+                : require("../images/Basic.png"),
+            },
+            emoji: interest.emoji,
+          })).reverse()
+        );
 
         const Hashtag = response.data.data.hashtags.hashtag[0]?.hashtag || '이번 주 해시태그가 없습니다.';
         const HashtagId = response.data.data.hashtags.id || '';
@@ -57,8 +67,8 @@ const InterestPage = () => {
       }
     } catch (error) {
       console.error("API 오류:", error);
-      setHashtag('이번 주 해시태그가 없습니다.')
-    } finally{
+      setHashtag("이번 주 해시태그가 없습니다.");
+    } finally {
       setLoading(false);
     }
   };
@@ -124,19 +134,36 @@ const InterestPage = () => {
       </ProfileContainer>
       <PostsContainer>
         <Container>
-            <Label>{parseInt(user_id) === currentUserId ? "나의 관심사" : `${profile.nickname}의 관심사`}</Label>
-            <Week>{CurrentWeek().weekOfMonth}</Week>
-            <Hashtag isEmpty={hashtag === '이번 주 해시태그가 없습니다.'}>{hashtag}</Hashtag>
-          </Container> 
-        {posts.map(post => (
-          <Post key={post.key} post={post} currentUser={{ user_id: currentUserId }} onCall={handleCall} onMessage={handleMessage} isCurrentUserPage={parseInt(user_id) === currentUserId} />
+          <Label>
+            {parseInt(user_id) === currentUserId
+              ? "나의 관심사"
+              : `${profile.nickname}의 관심사`}
+          </Label>
+          <Week>{CurrentWeek().weekOfMonth}</Week>
+          <Hashtag isEmpty={hashtag === "이번 주 해시태그가 없습니다."}>
+            {hashtag}
+          </Hashtag>
+        </Container>
+        {posts.map((post) => (
+          <Post
+            key={post.key}
+            post={post}
+            currentUser={{ user_id: currentUserId }}
+            onCall={handleCall}
+            onMessage={handleMessage}
+            isCurrentUserPage={parseInt(user_id) === currentUserId}
+          />
         ))}
       </PostsContainer>
-      {parseInt(user_id) !== currentUserId && hashtag !== '이번 주 해시태그가 없습니다.' && !loading && (
-        <FloatingButton to={`/interest/new?user=${profile.nickname}&hashtag=${hashtag}&hashtag_id=${hashtagId}`}>
-          <img src={FloatingBtn} alt="게시글 작성" />
-        </FloatingButton>
-      )}
+      {parseInt(user_id) !== currentUserId &&
+        hashtag !== "이번 주 해시태그가 없습니다." &&
+        !loading && (
+          <FloatingButton
+            to={`/interest/new?user=${profile.nickname}&hashtag=${hashtag}&hashtag_id=${hashtagId}`}
+          >
+            <img src={FloatingBtn} alt="게시글 작성" />
+          </FloatingButton>
+        )}
     </Wrapper>
   );
 };
@@ -257,9 +284,9 @@ const Week = styled.div`
 `;
 
 const Hashtag = styled.div`
-  color: ${(props) => (props.isEmpty ? '#c8c5c5' : '#FF5A00')};
+  color: ${(props) => (props.isEmpty ? "#c8c5c5" : "#FF5A00")};
   font-family: Pretendard;
   font-size: 20px;
   font-weight: 700;
-  margin-bottom: 20px;;
+  margin-bottom: 20px;
 `;

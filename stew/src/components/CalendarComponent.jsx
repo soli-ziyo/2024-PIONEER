@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { DateStore } from "../stores/DateStore"; // Zustand store import
-import axios from "axios"; // Axios import 추가
+import { DateStore } from "../stores/DateStore";
+import axios from "axios";
+import instance from "../api/axios";
 
 const CalendarComponent = ({ accessToken, familycode }) => {
   const { activityData, currentDate, setCurrentDate, fetchData } = DateStore();
@@ -11,12 +12,14 @@ const CalendarComponent = ({ accessToken, familycode }) => {
   useEffect(() => {
     const fetchCalendarData = async () => {
       try {
-        // API 호출로 달력 데이터 가져오기
-        const response = await axios.get(`/report/calendar/${familycode}/`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        });
+        const response = await instance.get(
+          `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
         setCalendarData(response.data.calendar || []);
         // fetchData를 사용하여 상태 업데이트 (기존 구현 유지)
         fetchData(accessToken, familycode);

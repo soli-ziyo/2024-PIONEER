@@ -1,13 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 import Hamburger from "../images/Hamburger.svg";
 import Bell_none from "../images/Bell_none.svg";
 
 const Header = ({ toggleMenu }) => {
   return (
     <HeaderWrapper>
-      <MenuIcon onClick={toggleMenu}><img src={Hamburger} alt='Hamburger Menu' /></MenuIcon>
-      <NotificationIcon><img src={Bell_none} alt='Notification' /></NotificationIcon>
+      <MenuIcon onClick={toggleMenu}>
+        <img src={Hamburger} alt="Hamburger Menu" />
+      </MenuIcon>
+      <NotificationIcon>
+        <img src={Bell_none} alt="Notification" />
+      </NotificationIcon>
     </HeaderWrapper>
   );
 };

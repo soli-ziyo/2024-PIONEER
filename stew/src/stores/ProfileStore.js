@@ -1,25 +1,30 @@
 import { create } from "zustand";
 import axios from "axios";
+import instance from "../api/axios";
 
-const baseurl = "https://minsol.pythonanywhere.com";
+// const baseurl = "https://minsol.pythonanywhere.com";
 
 export const useProfilesStore = create((set) => ({
   profiles: [],
   fetchProfiles: async () => {
     try {
-      const response = await axios({
-        method: "GET",
-        url: `${baseurl}/home/main/`,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const response = await instance.get(
+        `${process.env.REACT_APP_SERVER_PORT}/home/main`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
       console.log(response);
 
       const profiles = response.data.map((profile) => ({
         user_id: profile.user_id,
         nickname: profile.nickname,
-        profile: profile.profile ? `${baseurl}${profile.profile}` : require('../images/Basic.png'),
+        profile: profile.profile
+          ? `${process.env.REACT_APP_SERVER_PORT}${profile.profile}`
+          : require("../images/Basic.png"),
         content: profile.content || "",
         emoji: profile.emoji || "",
       }));

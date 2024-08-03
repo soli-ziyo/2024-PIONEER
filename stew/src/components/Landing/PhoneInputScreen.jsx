@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-//images
 import Back from "../../images/Back.svg";
+import instance from "../../api/axios";
 
 const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
   const [phoneNB, setPhoneNB] = useState("");
   const [buttonReady, setButtonReady] = useState(false);
   const navigate = useNavigate();
-  const baseurl = "https://minsol.pythonanywhere.com/";
+  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   const phonenum = async () => {
     try {
-      const response = await axios({
-        method: "GET",
-        url: `${baseurl}accounts/phonenum/sendcode/`,
+      const response = await instance.get({
+        url: `${process.env.REACT_APP_SERVER_PORT}/accounts/phonenum/sendcode/`,
         params: {
           phonenum: phoneNB,
         },

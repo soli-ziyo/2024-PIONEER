@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios"; // axios를 사용하여 API 요청을 처리
+import axios from "axios";
+import instance from "../api/axios";
 
 const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
 const MIN_BAR_HEIGHT = 50; // 최소 막대 높이
@@ -12,11 +13,14 @@ const Chart = ({ accessToken, familycode }) => {
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const response = await axios.get(`/report/calendar/${familycode}/`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        });
+        const response = await instance.get(
+          `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
         const { interest_perUser } = response.data;
 
         // 데이터 가공

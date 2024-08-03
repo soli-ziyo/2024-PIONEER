@@ -1,12 +1,15 @@
+//홈화면에 뜰 본인의 상태 설정하는
+
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-const LandingState = ({ profile, index }) => {
+const LandingState = ({ profile }) => {
   const navigate = useNavigate();
-
   const currentUserId = localStorage.getItem("user_id");
   const isCurrentUser = profile.user_id.toString() === currentUserId;
+
+  const handleClick = () => {};
 
   const handleEmojiClick = () => {
     if (isCurrentUser) {
@@ -42,7 +45,7 @@ const ProfileWrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   margin-top: -50px;
 
   &:first-child {
@@ -71,15 +74,14 @@ const ProfileMent = styled.div`
   background-color: #fff;
   word-wrap: break-word;
   text-align: center;
-  align-self: center;
+  align-self: flex-start;
   cursor: ${(props) => (props.isCurrentUser ? "pointer" : "default")};
 `;
 
 const ProfileInfo = styled.div`
   position: relative;
   top: -17px;
-  transform: ${(props) =>
-    props.position === "left" ? "translateX(50%)" : "translateX(-50%)"};
+  transform: translateX(50%);
   z-index: 1;
 `;
 

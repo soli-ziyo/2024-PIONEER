@@ -8,23 +8,25 @@ import Header from "../components/Header";
 import Logo from "../images/Logo.svg";
 import HomeNotice from "../components/HomeNotice.jsx";
 import LoadingScreen from "../components/LoadingScreen.jsx";
+import LandingState from "../components/LandingState.jsx";
+
 import axios from "axios";
 
 // 가족 코드
 import CodeInputNotice from "../components/FamilyCode/CodeInputNotice.jsx";
 import CodeInviteNotice from "../components/FamilyCode/CodeInviteNotice.jsx";
+import instance from "../api/axios.js";
 
 const currentUserId = parseInt(localStorage.getItem("user_id"));
-const baseurl = "https://minsol.pythonanywhere.com/";
 
 const HomePage = () => {
   const { user_id } = useParams();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showBeforeCodeScreen, setShowBeforeCodeScreen] = useState(false);
-  const [hideElements, setHideElements] = useState(false); 
-  const [hideInviteNotice, setHideInviteNotice] = useState(false); 
+  const [hideElements, setHideElements] = useState(false);
+  const [hideInviteNotice, setHideInviteNotice] = useState(false);
   const [hideInputNotice, setHideInputNotice] = useState(false);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   const { profiles, fetchProfiles } = useProfilesStore();
 
@@ -32,12 +34,15 @@ const HomePage = () => {
     try {
       await fetchProfiles();
       const accessToken = localStorage.getItem("accessToken");
-      const response = await axios.get(`${baseurl}report/family/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+      const response = await instance.get(
+        `${process.env.REACT_APP_SERVER_PORT}/report/family/`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
-      });
-      
+      );
+
       if (response.data.family.length <= 1) {
         console.log("등록된 가족이 없습니다");
         setShowBeforeCodeScreen(true);
@@ -74,7 +79,7 @@ const HomePage = () => {
           <>
             {!hideElements &&
               profiles.map((profile, index) => (
-                <FamilyProfile key={index} profile={profile} index={index} />
+                <LandingState key={index} profile={profile} index={index} />
               ))}
           </>
         ) : (

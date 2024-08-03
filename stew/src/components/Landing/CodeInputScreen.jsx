@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-
-// images
 import Back from "../../images/Back.svg";
+import instance from "../../api/axios";
 
 const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
   const [code, setCode] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const baseurl = "https://minsol.pythonanywhere.com/";
+  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   const handleChange = (e, index) => {
     const newCode = [...code];
     newCode[index] = e.target.value;
     setCode(newCode);
 
-    // Automatically focus next input if the current one is filled
     if (e.target.value && index < 3) {
       document.getElementById(`code-input-${index + 1}`).focus();
     }
@@ -25,8 +23,8 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
   const handleNext = async () => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        `${baseurl}accounts/phonenum/getcode/`,
+      const response = await instance.post(
+        `${process.env.REACT_APP_SERVER_PORT}/accounts/phonenum/getcode/`,
         {
           code: code.join(""), //문자열 결합
         }
