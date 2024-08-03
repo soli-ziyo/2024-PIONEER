@@ -4,17 +4,18 @@ import { useNavigate, useLocation } from "react-router-dom";
 import SelectStateImoji from "../components/SelectStateImoji";
 import axios from "axios";
 import Close from "../images/Close.svg";
+import instance from "../api/axios";
 
-const baseurl = 'https://minsol.pythonanywhere.com';
+// const baseurl = 'https://minsol.pythonanywhere.com';
 
 const ChangeState = () => {
   const location = useLocation();
   const profile = location.state?.profile;
 
-  const [content, setContent] = useState(profile?.content || '');
-  const [profileImage, setProfileImage] = useState(profile?.profile || '');
+  const [content, setContent] = useState(profile?.content || "");
+  const [profileImage, setProfileImage] = useState(profile?.profile || "");
   const [imageFile, setImageFile] = useState(null);
-  const [emoji, setEmoji] = useState(profile?.emoji || '');
+  const [emoji, setEmoji] = useState(profile?.emoji || "");
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
   const navigate = useNavigate();
   const inputRef = useRef(null);
@@ -35,7 +36,7 @@ const ChangeState = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setProfileImage(URL.createObjectURL(file));
-    setImageFile(file); 
+    setImageFile(file);
   };
 
   const handleEmojiClick = () => {
@@ -51,24 +52,27 @@ const ChangeState = () => {
     e.preventDefault();
     const accessToken = localStorage.getItem("accessToken");
     try {
-      const response = await axios.post(
-        `${baseurl}/state/edit/`,
+      const response = await instance.post(
+        `${process.env.REACT_APP_SERVER_PORT}/state/edit/`,
 
         {
           content: content,
           emoji: emoji,
-          profile: imageFile
+          profile: imageFile,
         },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'multipart/form-data'
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      if (response.status === 201 && response.data.message === "상태 저장 성공") {
-        console.log(response.data)
+      if (
+        response.status === 201 &&
+        response.data.message === "상태 저장 성공"
+      ) {
+        console.log(response.data);
         navigate("/home");
       } else {
         console.error("상태 저장 실패");

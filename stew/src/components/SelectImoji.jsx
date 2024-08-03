@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import ImojiDash from '../images/Imoji_dash2.svg'; 
+import React, { useState } from "react";
+import styled from "styled-components";
+import ImojiDash from "../images/Imoji_dash2.svg";
 
 const SelectImoji = ({ onClose, onSelect }) => {
   const [selectedEmoji, setSelectedEmoji] = useState(null);
-  const emojis = ['😍', '😂', '🤔', '😭', '😮', '🥳', '😤', '👍', '🧡'];
+  const emojis = ["😍", "😂", "🤔", "😭", "😮", "🥳", "😤", "👍", "🧡"];
 
   const handleSelect = (emoji) => {
     setSelectedEmoji(emoji);
@@ -60,14 +60,14 @@ const Overlay = styled.div`
 `;
 
 const EmojiContainer = styled.div`
-  background: #F9F9F9;;
+  background: #f9f9f9;
   padding: 20px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 390px;
-  height: 91vh; 
+  height: 91vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -131,7 +131,7 @@ const CloseButton = styled.button`
   align-items: center;
   gap: 8px;
   border-radius: 32px;
-  background: var(--Backgrounds-Primary, #FFF);
+  background: var(--Backgrounds-Primary, #fff);
   border: none;
 
   color: var(--Labels-Primary, #000);
@@ -149,11 +149,11 @@ const CompleteButton = styled.button`
   align-items: center;
   gap: 8px;
   border-radius: 32px;
-  background: #FF5A00;
+  background: #ff5a00;
   border: none;
 
-  color: var(--Labels-Primary, #FFF);
+  color: var(--Labels-Primary, #fff);
   font-family: Pretendard;
   font-size: 18px;
   font-weight: 500;
-  `;
+`;

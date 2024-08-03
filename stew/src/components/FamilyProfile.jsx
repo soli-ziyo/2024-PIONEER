@@ -8,6 +8,10 @@ const FamilyProfile = ({ profile, index }) => {
   const currentUserId = localStorage.getItem("user_id");
   const isCurrentUser = profile.user_id.toString() === currentUserId;
 
+  const handleClick = () => {
+    navigate(`/interest/list/${profile.user_id}`);
+  };
+
   const handleEmojiClick = () => {
     if (isCurrentUser) {
       navigate("/home/edit", { state: { profile } });
@@ -30,7 +34,11 @@ const FamilyProfile = ({ profile, index }) => {
         {profile.content}
       </ProfileMent>
       <ProfileInfo position={position}>
-        <ProfileImage src={profile.profile} alt={profile.nickname} />
+        <ProfileImage
+          src={profile.profile}
+          alt={profile.nickname}
+          onClick={handleClick}
+        />
         <EmojiWrapper onClick={handleEmojiClick} isCurrentUser={isCurrentUser}>
           {profile.emoji}
         </EmojiWrapper>

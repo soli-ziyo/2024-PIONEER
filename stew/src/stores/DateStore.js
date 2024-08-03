@@ -1,24 +1,21 @@
 import { create } from "zustand";
 import axios from "axios";
-
-const baseurl = "https://minsol.pythonanywhere.com";
+import instance from "../api/axios";
 
 export const DateStore = create((set) => ({
   activityData: {},
   currentDate: new Date(),
   totalPosts: 0,
   temperature: 0,
-  status: "차가운 스튜",
+  status: "차가운 stew",
 
   setActivityData: (data) => set({ activityData: data }),
   setCurrentDate: (date) => set({ currentDate: date }),
 
-  fetchData: async () => {
+  fetchData: async (accessToken, familycode) => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
-      const familycode = localStorage.getItem("familycode");
-      const response = await axios.get(
-        `${baseurl}/report/calendar/${familycode}/`,
+      const response = await instance.get(
+        `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
@@ -28,17 +25,15 @@ export const DateStore = create((set) => ({
 
       // Set total posts
       const totalPosts = data.interests.find(
-        (interest) => interest["총 게시물 수"] !== undefined
+        (interest) => interest["총 게시물 수"]
       )["총 게시물 수"];
       set({ totalPosts });
 
       // Set temperature and status
-      const temperature = data.interests.find(
-        (interest) => interest["stew_temp"] !== undefined
-      )["stew_temp"];
-      const status = data.interests.find(
-        (interest) => interest["stew"] !== undefined
-      )["stew"];
+      const temperature = data.interests.find((interest) => interest.stew_temp)[
+        "stew_temp"
+      ];
+      const status = data.interests.find((interest) => interest.stew).stew;
       set({ temperature, status });
 
       // Set activity data

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import instance from "../api/axios";
 
 // images
 import Logo from "../images/Logo.svg";
@@ -10,11 +10,10 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [ID, setID] = useState("");
   const [PW, setPW] = useState("");
+  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   const pwInputRef = useRef(null);
   const idInputRef = useRef(null);
-
-  const baseurl = "https://minsol.pythonanywhere.com/";
   //------------------------------------------------------------------------
   const goLogin = async () => {
     if (!ID && !PW) {
@@ -31,14 +30,15 @@ const LoginPage = () => {
       pwInputRef.current.focus(); // 비밀번호 입력란으로 포커스 이동
       return;
     }
-
     // 로그인 요청
     try {
-      const response = await axios.post(`${baseurl}`, {
-        username: ID,
-        password: PW,
-      });
-
+      const response = await instance.post(
+        `${process.env.REACT_APP_SERVER_PORT}`,
+        {
+          username: ID,
+          password: PW,
+        }
+      );
       console.log(response.data);
       // localStorage에 저장
       const { username, access_token, id } = response.data.data;
@@ -49,7 +49,7 @@ const LoginPage = () => {
       // HomePage로 이동
       navigate("/home");
       window.location.reload();
-      
+
       console.log("로그인 성공", response.data);
     } catch (error) {
       console.error(error);

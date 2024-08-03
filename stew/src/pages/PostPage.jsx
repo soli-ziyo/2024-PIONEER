@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import StateInterest from "../components/StateInterest";
 
 import Close from "../images/Close.svg";
 import Plus from "../images/Plus_og.svg";
+import instance from "../api/axios";
+
+// const baseurl = "https://minsol.pythonanywhere.com";
 
 const PostPage = () => {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const user = new URLSearchParams(location.search).get("user");
+  const hashtag = new URLSearchParams(location.search).get("hashtag");
+  const hashtagId = new URLSearchParams(location.search).get("hashtag_id");
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
@@ -26,22 +34,28 @@ const PostPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("description", description);
-    formData.append("image", image);
+    // const formData = new FormData();
+    // formData.append("description", description);
+    // // formData.append("image", image);
+    // formData.append("tag", hashtag);
 
-    const token = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
 
     try {
-      const response = await axios({
-        method: "POST",
-        url: "http://localhost:5000/interest/new/",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+      const response = await instance.post(
+        `${process.env.REACT_APP_SERVER_PORT}/interest/new/`,
+        {
+          tag: hashtagId,
+          description: description,
+          img: image,
         },
-        data: formData,
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.status === 200) {
         const result = response.data;
@@ -52,6 +66,8 @@ const PostPage = () => {
       }
     } catch (error) {
       console.error("에러 발생:", error);
+      console.log(hashtagId);
+      console.log(description);
     }
   };
 
@@ -63,7 +79,7 @@ const PostPage = () => {
         </CloseButton>
         <Title>게시물 작성</Title>
       </Header>
-      <StateInterest user="엄마" hashtag="산책" />
+      <StateInterest user={user} hashtag={hashtag} />
       <Form onSubmit={handleSubmit}>
         <ImageUpload>
           <Label htmlFor="image" preview={preview}>

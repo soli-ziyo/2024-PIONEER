@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
+import React, { useState } from "react";
+import styled from "styled-components";
+import axios from "axios";
 
-import SelectImoji from './SelectImoji';
-import ImojiDash from '../images/Imoji_dash.svg'; 
-import Call from '../images/Call.svg';
-import Message from '../images/Message.svg';
+import SelectImoji from "./SelectImoji";
+import ImojiDash from "../images/Imoji_dash.svg";
+import Call from "../images/Call.svg";
+import Message from "../images/Message.svg";
+import instance from "../api/axios";
 
-const baseurl = 'https://minsol.pythonanywhere.com';
+// const baseurl = 'https://minsol.pythonanywhere.com';
 
 const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
   const timeSince = (date) => {
@@ -38,17 +39,17 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
   };
 
   const handleSelectEmoji = async (emoji) => {
-    const accessToken = localStorage.getItem('accessToken');
-    console.log(post.id)
+    const accessToken = localStorage.getItem("accessToken");
+    console.log(post.id);
     try {
-      const response = await axios.put(
-        `${baseurl}/interest/list/${post.id}/emoji/`,
+      const response = await instance.put(
+        `${process.env.REACT_APP_SERVER_PORT}/interest/list/${post.id}/emoji/`,
 
         { emoji },
         {
           headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
       if (response.status === 200) {
@@ -84,13 +85,22 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
         </PostUser>
         <PostDescription>{post.description}</PostDescription>
       </PostContent>
-      {showEmojiSelector && <SelectImoji onClose={() => setShowEmojiSelector(false)} onSelect={handleSelectEmoji} />}
+      {showEmojiSelector && (
+        <SelectImoji
+          onClose={() => setShowEmojiSelector(false)}
+          onSelect={handleSelectEmoji}
+        />
+      )}
       {!isCurrentUserPage && (
-          <ContactButtons>
-            <ContactButton onClick={() => onCall(post.user.phone)}><img src={Call} alt='Call'/></ContactButton>
-            <ContactButton onClick={() => onMessage(post.user.phone)}><img src={Message} alt='Message'/></ContactButton>
-          </ContactButtons>
-        )}
+        <ContactButtons>
+          <ContactButton onClick={() => onCall(post.user.phone)}>
+            <img src={Call} alt="Call" />
+          </ContactButton>
+          <ContactButton onClick={() => onMessage(post.user.phone)}>
+            <img src={Message} alt="Message" />
+          </ContactButton>
+        </ContactButtons>
+      )}
     </PostContainer>
   );
 };
@@ -110,7 +120,7 @@ const PostImage = styled.img`
 const PostContent = styled.div`
   padding: 11px;
   border-radius: 21px;
-  border: 0.5px solid #E2E2E2;
+  border: 0.5px solid #e2e2e2;
 `;
 
 const PostUser = styled.div`
@@ -134,7 +144,7 @@ const UserName = styled.div`
 const PostTime = styled.div`
   display: flex;
   align-items: center;
-  color: #8C8C8C;
+  color: #8c8c8c;
   margin-right: 5px;
   gap: 8px;
   font-size: 12px;
@@ -144,7 +154,7 @@ const PostTime = styled.div`
 const PostDescription = styled.div`
   font-size: 14px;
   font-weight: 400;
-  line-height: 120%; 
+  line-height: 120%;
   margin-left: 16%;
   margin-bottom: 13px;
 `;

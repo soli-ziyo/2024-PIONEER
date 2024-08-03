@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import Info from '../images/Info.svg';
-import { CurrentWeek } from './CurrentWeek';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import Info from "../images/Info.svg";
+import { CurrentWeek } from "./CurrentWeek";
 const HomeNotice = () => {
   const [showNotice, setShowNotice] = useState(true);
   const [hoursLeft, setHoursLeft] = useState(0);
@@ -53,11 +53,11 @@ const NoticeContainer = styled.div`
   border-radius: 21px;
   padding: 18px;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
-  position: relative; 
+  position: relative;
 `;
 
 const Title = styled.h2`
-  color: #FF6600;
+  color: #ff6600;
   font-weight: 500;
 `;
 
@@ -68,13 +68,13 @@ const Content = styled.p`
 `;
 
 const Information = styled.p`
-  color: #8C8C8C;
+  color: #8c8c8c;
   font-size: 12px;
   font-weight: 500;
   display: flex;
   align-items: center;
-  
-  &::before{
+
+  &::before {
     content: "";
     width: 11px;
     height: 11px;
@@ -88,25 +88,25 @@ const Information = styled.p`
 
 const Button = styled(Link)`
   position: absolute;
-  bottom: 20px; 
+  bottom: 20px;
   right: 20px;
   text-decoration: none;
-  color: #FF5A00;
+  color: #ff5a00;
   text-align: right;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
   padding: 8px 15px;
   border-radius: 20px;
-  border: 1px solid #FF5A00;
+  border: 1px solid #ff5a00;
   background-color: #fff;
 `;
 
 const TimeLeft = styled.span`
-  color: #FF6600;
+  color: #ff6600;
   font-weight: 700;
   font-size: 12px;
   position: absolute;
-  top: 20px; 
-  right: 20px; 
+  top: 20px;
+  right: 20px;
 `;

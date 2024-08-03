@@ -9,7 +9,7 @@ import Back from "../../images/Back.svg";
 const SignupScreen = ({ nextStep, prevStep }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const baseurl = "https://minsol.pythonanywhere.com/";
+  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   const navigate = useNavigate();
 

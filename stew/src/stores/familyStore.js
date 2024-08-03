@@ -1,14 +1,15 @@
 import create from "zustand";
 import axios from "axios";
+import instance from "../api/axios";
 
 const useFamilyStore = create((set) => ({
   familycode: "",
   setFamilycode: (code) => set({ familycode: code }),
   submitFamilycode: async (familycode) => {
-    const baseurl = "https://minsol.pythonanywhere.com/";
+    // const baseurl = "https://minsol.pythonanywhere.com/";
     try {
-      const response = await axios.post(
-        `${baseurl}family/create/`,
+      const response = await instance.post(
+        `${process.env.REACT_APP_SERVER_PORT}family/create/`,
         { familycode },
         {
           headers: {
@@ -16,9 +17,6 @@ const useFamilyStore = create((set) => ({
           },
         }
       );
-      localStorage.setItem("familycode", response.data.data.familycode);
-      console.log("ddd");
-      console.log(response.data.data.familycode);
       return response.data;
     } catch (err) {
       if (err.response && err.response.status === 400) {
@@ -30,11 +28,14 @@ const useFamilyStore = create((set) => ({
   },
   fetchFamilyData: async (accessToken, familycode) => {
     try {
-      const response = await axios.get(`/report/calendar/${familycode}/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await instance.get(
+        `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching family data:", error);

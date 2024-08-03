@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 
 // images
 import Back from "../../images/Back.svg";
+import instance from "../../api/axios";
 
 const ProfileSetupScreen = ({ id, password, prevStep, nextStep }) => {
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const navigate = useNavigate();
-  const baseurl = "https://minsol.pythonanywhere.com/";
+  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   const handleSubmit = async () => {
     try {
@@ -23,8 +24,8 @@ const ProfileSetupScreen = ({ id, password, prevStep, nextStep }) => {
         formData.append("profile", profileImage);
       }
 
-      const response = await axios.post(
-        `${baseurl}accounts/signup/`,
+      const response = await instance.post(
+        `${process.env.REACT_APP_SERVER_PORT}/accounts/signup/`,
         formData,
         {
           headers: {
