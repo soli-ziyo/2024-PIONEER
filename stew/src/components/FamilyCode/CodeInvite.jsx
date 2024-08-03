@@ -26,6 +26,7 @@ const CodeInvite = ({
           },
         });
         console.log(response.data);
+        localStorage.setItem("familycode", response.data.familycode);
         if (response.data.familycode) {
           setFamilyCode(response.data.familycode);
         } else if (response.data.data && response.data.data.familycode) {

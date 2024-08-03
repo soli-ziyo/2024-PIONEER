@@ -1,40 +1,43 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { DateStore } from "../stores/DateStore"; // Zustand store import
-import axios from "axios"; // Axios import 추가
+import { DateStore } from "../stores/DateStore";
+import axios from "axios";
 
-const CalendarComponent = ({ accessToken, familycode }) => {
-  const { activityData, currentDate, setCurrentDate, fetchData } = DateStore();
+const baseurl = "https://minsol.pythonanywhere.com";
 
+const CalendarComponent = () => {
+  const { activityData, currentDate, setCurrentDate } = DateStore();
   const [calendarData, setCalendarData] = useState([]);
 
   useEffect(() => {
     const fetchCalendarData = async () => {
       try {
-        // API 호출로 달력 데이터 가져오기
-        const response = await axios.get(`/report/calendar/${familycode}/`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        });
+        const familycode = localStorage.getItem("familycode");
+        const response = await axios.get(
+          `${baseurl}/report/calendar/${familycode}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
         setCalendarData(response.data.calendar || []);
-        // fetchData를 사용하여 상태 업데이트 (기존 구현 유지)
-        fetchData(accessToken, familycode);
+        console.log("달력 데이터를 불러왔습니다.");
       } catch (error) {
         console.error("Error fetching calendar data:", error);
       }
     };
 
     fetchCalendarData();
-  }, [accessToken, familycode, fetchData]);
+  }, []);
 
   const getColorForDay = (day) => {
     const data = calendarData.find(
       (item) => new Date(item.date).getDate() === day
     );
     const percentage = data ? data.percentage : 0;
-    const opacity = Math.min(percentage / 100, 1); // 퍼센티지 기반 투명도 설정
-    return `rgba(255, 91, 2, ${opacity})`; // 색상 조정
+    const opacity = Math.min(percentage / 100, 1);
+    return `rgba(255, 91, 2, ${opacity})`;
   };
 
   const getDaysInMonth = (year, month) => {
@@ -82,7 +85,7 @@ const CalendarComponent = ({ accessToken, familycode }) => {
     days.push(
       <Day key={i} color={backgroundColor}>
         {i}
-        {percentage === 100 && <Heart>🧡</Heart>}{" "}
+        {percentage === 100 && <Heart>🧡</Heart>}
       </Day>
     );
   }
@@ -187,7 +190,7 @@ const Day = styled.div`
   background-color: ${(props) => props.color};
   color: black;
   font-weight: 400;
-  position: relative; /* 상대적 위치 설정 */
+  position: relative;
 `;
 
 const EmptyDay = styled.div`
@@ -207,10 +210,10 @@ const WeekDay = styled.div`
 `;
 
 const Heart = styled.div`
-  position: absolute; /* 절대 위치 지정 */
-  left: 50%; /* 가운데 정렬 */
-  top: 50%; /* 가운데 정렬 */
-  transform: translate(10%, 10%); /* 오른쪽 아래로 이동 */
-  font-size: 20px; /* 하트 크기 조정 */
-  margin-top: 0px; /* 추가적인 아래 위치 조정 */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(10%, 10%);
+  font-size: 20px;
+  margin-top: 0px;
 `;

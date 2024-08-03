@@ -1,38 +1,21 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
 import { DateStore } from "../stores/DateStore";
 import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import CalendarComponent from "../components/CalendarComponent";
 import Chart from "../components/Chart";
-import useFamilyStore from "../stores/familyStore";
 
 import Close from "../images/Close.svg";
 
-const ReportPage = ({ accessToken, familycode }) => {
+const ReportPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [noticeVisible, setNoticeVisible] = useState(false);
   const { totalPosts, temperature, status, fetchData } = DateStore();
-  const fetchFamilyData = useFamilyStore((state) => state.fetchFamilyData);
 
   useEffect(() => {
-    fetchData(accessToken, familycode);
-  }, [accessToken, familycode, fetchData]);
-
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        const data = await fetchFamilyData(accessToken, familycode);
-        // 초기 데이터를 상태로 설정
-        console.log("Fetched family data: ", data);
-      } catch (error) {
-        console.error("Failed to fetch initial family data:", error);
-      }
-    };
-
-    fetchInitialData();
-  }, [accessToken, familycode, fetchFamilyData]);
+    fetchData();
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -45,6 +28,8 @@ const ReportPage = ({ accessToken, familycode }) => {
   const closeNotice = () => {
     setNoticeVisible(false);
   };
+
+  console.log("리포트페이지");
 
   return (
     <Wrapper>
@@ -80,15 +65,12 @@ const ReportPage = ({ accessToken, familycode }) => {
         <CalendarSection>
           <CalendarTitle>가족 달력</CalendarTitle>
           <Calendar>
-            <CalendarComponent
-              accessToken={accessToken}
-              familycode={familycode}
-            />
+            <CalendarComponent />
           </Calendar>
         </CalendarSection>
         <ParticipationSection>
           <ParticipationTitle>참여 현황</ParticipationTitle>
-          <Chart accessToken={accessToken} familycode={familycode} />
+          <Chart />
         </ParticipationSection>
       </ContentWrapper>
     </Wrapper>

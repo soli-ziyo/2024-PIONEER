@@ -16,6 +16,9 @@ const useFamilyStore = create((set) => ({
           },
         }
       );
+      localStorage.setItem("familycode", response.data.data.familycode);
+      console.log("ddd");
+      console.log(response.data.data.familycode);
       return response.data;
     } catch (err) {
       if (err.response && err.response.status === 400) {
