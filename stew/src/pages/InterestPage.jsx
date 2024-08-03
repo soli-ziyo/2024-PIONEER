@@ -35,6 +35,7 @@ const InterestPage = () => {
       console.log(response);
       if (response.status === 200) {
         const interestsData = response.data.data.interests;
+<<<<<<< HEAD
         setPosts(
           interestsData.map((interest, index) => ({
             key: `${interest.tag.id}-${index}`,
@@ -61,6 +62,25 @@ const InterestPage = () => {
           "이번 주 해시태그가 없습니다.";
         const HashtagId =
           response.data.data.hashtags.hashtag[0]?.hashtag_id || "";
+=======
+        setPosts(interestsData.map((interest, index) => ({
+          key: `${interest.tag.id}-${index}`,
+          id: interest.interest_id,
+          description: interest.description,
+          img: interest.img ? `${baseurl}${interest.img}` : null,
+          created_at: interest.created_at,
+          user: {
+            id: interest.user.user_id,
+            nickname: interest.user.nickname,
+            phonenum: interest.user.phonenum,
+            profile: interest.user.profile ? `${baseurl}${interest.user.profile}` : require('../images/Basic.png')
+          },
+          emoji: interest.emoji
+        })));
+
+        const Hashtag = response.data.data.hashtags.hashtag[0]?.hashtag || '이번 주 해시태그가 없습니다.';
+        const HashtagId = response.data.data.hashtags.hashtag[0]?.hashtag_id || '';
+>>>>>>> b62b61db4da05b2c409cf6916520226a7b086b24
         setHashtag(Hashtag);
         setHashtagId(HashtagId);
         // const interest = interestsData.find(interest => interest.tag.id === parseInt(userId));
@@ -69,8 +89,13 @@ const InterestPage = () => {
       }
     } catch (error) {
       console.error("API 오류:", error);
+<<<<<<< HEAD
       setHashtag("이번 주 해시태그가 없습니다.");
     } finally {
+=======
+      setHashtag('이번 주 해시태그가 없습니다.')
+    } finally{
+>>>>>>> b62b61db4da05b2c409cf6916520226a7b086b24
       setLoading(false);
     }
   };
@@ -136,6 +161,7 @@ const InterestPage = () => {
       </ProfileContainer>
       <PostsContainer>
         <Container>
+<<<<<<< HEAD
           <Label>
             {parseInt(user_id) === currentUserId
               ? "나의 관심사"
@@ -166,6 +192,21 @@ const InterestPage = () => {
             <img src={FloatingBtn} alt="게시글 작성" />
           </FloatingButton>
         )}
+=======
+            <Label>{parseInt(user_id) === currentUserId ? "나의 관심사" : `${profile.nickname}의 관심사`}</Label>
+            <Week>{CurrentWeek().weekOfMonth}</Week>
+            <Hashtag isEmpty={hashtag === '이번 주 해시태그가 없습니다.'}>{hashtag}</Hashtag>
+          </Container> 
+        {posts.map(post => (
+          <Post key={post.key} post={post} currentUser={{ user_id: currentUserId }} onCall={handleCall} onMessage={handleMessage} isCurrentUserPage={parseInt(user_id) === currentUserId} />
+        ))}
+      </PostsContainer>
+      {parseInt(user_id) !== currentUserId && hashtag !== '이번 주 해시태그가 없습니다.' && !loading && (
+        <FloatingButton to={`/interest/new?user=${profile.nickname}&hashtag=${hashtag}&hashtag_id=${hashtagId}`}>
+          <img src={FloatingBtn} alt="게시글 작성" />
+        </FloatingButton>
+      )}
+>>>>>>> b62b61db4da05b2c409cf6916520226a7b086b24
     </Wrapper>
   );
 };
@@ -286,7 +327,11 @@ const Week = styled.div`
 `;
 
 const Hashtag = styled.div`
+<<<<<<< HEAD
   color: ${(props) => (props.isEmpty ? "#c8c5c5" : "#FF5A00")};
+=======
+  color: ${(props) => (props.isEmpty ? '#c8c5c5' : '#FF5A00')};
+>>>>>>> b62b61db4da05b2c409cf6916520226a7b086b24
   font-family: Pretendard;
   font-size: 20px;
   font-weight: 700;

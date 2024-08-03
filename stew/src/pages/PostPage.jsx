@@ -10,6 +10,8 @@ import instance from "../api/axios";
 
 // const baseurl = "https://minsol.pythonanywhere.com";
 
+const baseurl = "https://minsol.pythonanywhere.com";
+
 const PostPage = () => {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
@@ -17,9 +19,17 @@ const PostPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+<<<<<<< HEAD
   const user = new URLSearchParams(location.search).get("user");
   const hashtag = new URLSearchParams(location.search).get("hashtag");
   const hashtagId = new URLSearchParams(location.search).get("hashtag_id");
+=======
+
+  const user = new URLSearchParams(location.search).get('user'); 
+  const hashtag = new URLSearchParams(location.search).get('hashtag'); 
+  const hashtagId = new URLSearchParams(location.search).get('hashtag_id');
+
+>>>>>>> b62b61db4da05b2c409cf6916520226a7b086b24
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
@@ -42,18 +52,32 @@ const PostPage = () => {
     const accessToken = localStorage.getItem("accessToken");
 
     try {
+<<<<<<< HEAD
       const response = await instance.post(
         `${process.env.REACT_APP_SERVER_PORT}/interest/new/`,
         {
           tag: hashtagId,
           description: description,
           img: image,
+=======
+      const response = await axios.post(
+        `${baseurl}/interest/new/`,
+        {
+          tag: hashtagId,
+          description: description,
+          img: image
+>>>>>>> b62b61db4da05b2c409cf6916520226a7b086b24
         },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
+<<<<<<< HEAD
             "Content-Type": "multipart/form-data",
           },
+=======
+            "Content-Type": "multipart/form-data"
+          }
+>>>>>>> b62b61db4da05b2c409cf6916520226a7b086b24
         }
       );
 

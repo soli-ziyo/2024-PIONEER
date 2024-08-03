@@ -23,10 +23,17 @@ const HomePage = () => {
   const { user_id } = useParams();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showBeforeCodeScreen, setShowBeforeCodeScreen] = useState(false);
+<<<<<<< HEAD
   const [hideElements, setHideElements] = useState(false);
   const [hideInviteNotice, setHideInviteNotice] = useState(false);
   const [hideInputNotice, setHideInputNotice] = useState(false);
   const [loading, setLoading] = useState(true);
+=======
+  const [hideElements, setHideElements] = useState(false); 
+  const [hideInviteNotice, setHideInviteNotice] = useState(false); 
+  const [hideInputNotice, setHideInputNotice] = useState(false);
+  const [loading, setLoading] = useState(true); 
+>>>>>>> b62b61db4da05b2c409cf6916520226a7b086b24
 
   const { profiles, fetchProfiles } = useProfilesStore();
 
@@ -34,6 +41,7 @@ const HomePage = () => {
     try {
       await fetchProfiles();
       const accessToken = localStorage.getItem("accessToken");
+<<<<<<< HEAD
       const response = await instance.get(
         `${process.env.REACT_APP_SERVER_PORT}/report/family/`,
         {
@@ -43,6 +51,14 @@ const HomePage = () => {
         }
       );
 
+=======
+      const response = await axios.get(`${baseurl}report/family/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      });
+      
+>>>>>>> b62b61db4da05b2c409cf6916520226a7b086b24
       if (response.data.family.length <= 1) {
         console.log("등록된 가족이 없습니다");
         setShowBeforeCodeScreen(true);
