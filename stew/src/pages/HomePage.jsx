@@ -8,6 +8,8 @@ import Header from "../components/Header";
 import Logo from "../images/Logo.svg";
 import HomeNotice from "../components/HomeNotice.jsx";
 import LoadingScreen from "../components/LoadingScreen.jsx";
+import LandingState from "../components/LandingState.jsx";
+
 import axios from "axios";
 
 // 가족 코드
@@ -74,7 +76,7 @@ const HomePage = () => {
           <>
             {!hideElements &&
               profiles.map((profile, index) => (
-                <FamilyProfile key={index} profile={profile} index={index} />
+                <LandingState key={index} profile={profile} index={index} />
               ))}
           </>
         ) : (
