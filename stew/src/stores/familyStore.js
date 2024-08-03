@@ -1,4 +1,3 @@
-// src/stores/familyStore.js
 import create from "zustand";
 import axios from "axios";
 
@@ -24,6 +23,19 @@ const useFamilyStore = create((set) => ({
       } else {
         throw new Error(err.response ? err.response.data : err.message);
       }
+    }
+  },
+  fetchFamilyData: async (accessToken, familycode) => {
+    try {
+      const response = await axios.get(`/report/calendar/${familycode}/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching family data:", error);
+      throw error;
     }
   },
 }));

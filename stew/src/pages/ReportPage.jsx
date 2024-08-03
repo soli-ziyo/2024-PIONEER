@@ -1,38 +1,53 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { DateStore } from "../stores/DateStore"; // Zustand store import
+import { DateStore } from "../stores/DateStore";
 import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import CalendarComponent from "../components/CalendarComponent";
 import Chart from "../components/Chart";
+import useFamilyStore from "../stores/familyStore";
 
 import Close from "../images/Close.svg";
 
 const ReportPage = ({ accessToken, familycode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [noticeVisible, setNoticeVisible] = useState(false); // Notice 상태 추가
-  const { totalPosts, temperature, status, fetchData } = DateStore(); // Zustand 상태 가져오기
+  const [noticeVisible, setNoticeVisible] = useState(false);
+  const { totalPosts, temperature, status, fetchData } = DateStore();
+  const fetchFamilyData = useFamilyStore((state) => state.fetchFamilyData);
 
   useEffect(() => {
     fetchData(accessToken, familycode);
   }, [accessToken, familycode, fetchData]);
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const data = await fetchFamilyData(accessToken, familycode);
+        // 초기 데이터를 상태로 설정
+        console.log("Fetched family data: ", data);
+      } catch (error) {
+        console.error("Failed to fetch initial family data:", error);
+      }
+    };
+
+    fetchInitialData();
+  }, [accessToken, familycode, fetchFamilyData]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
   const toggleNotice = () => {
-    setNoticeVisible(!noticeVisible); // Notice 상태 토글
+    setNoticeVisible(!noticeVisible);
   };
 
   const closeNotice = () => {
-    setNoticeVisible(false); // Notice 숨기기
+    setNoticeVisible(false);
   };
 
   return (
     <Wrapper>
       <Header toggleMenu={toggleMenu} />
-
       {menuOpen && <HamburgerMenu toggleMenu={toggleMenu} />}
       <ContentWrapper>
         <Header2>
@@ -61,17 +76,18 @@ const ReportPage = ({ accessToken, familycode }) => {
           </Comment>
           <Temperature>{temperature}°</Temperature>
         </Header2>
-
         <CalendarSection>
           <CalendarTitle>가족 달력</CalendarTitle>
           <Calendar>
-            <CalendarComponent accessToken={accessToken} />
+            <CalendarComponent
+              accessToken={accessToken}
+              familycode={familycode}
+            />
           </Calendar>
         </CalendarSection>
-
         <ParticipationSection>
           <ParticipationTitle>참여 현황</ParticipationTitle>
-          <Chart accessToken={accessToken}></Chart>
+          <Chart accessToken={accessToken} familycode={familycode} />
         </ParticipationSection>
       </ContentWrapper>
     </Wrapper>
