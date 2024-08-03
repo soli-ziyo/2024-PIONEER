@@ -8,13 +8,14 @@ class InterestSerializer(serializers.ModelSerializer):
     #user_id = UserSerializer(source='user.id', read_only=True)
     #tag_id = WeekHashTagSerializer(source='tag.id', read_only=True)
 
+    interest_id = serializers.IntegerField(source='id', read_only=True)
     user = UserProfileSerializer(read_only=True)
     tag = WeekHashTagSerializer(read_only=True)
 
     class Meta:
         model = Interest
         #fields = ['tag_id', 'user_id', 'nickname', 'description', 'img']
-        fields = ['tag', 'user', 'description', 'img', 'emoji', 'created_at']
+        fields = ['interest_id', 'tag', 'user', 'description', 'img', 'emoji', 'created_at']
 
 
 class UserInterestSerializer(serializers.ModelSerializer):
