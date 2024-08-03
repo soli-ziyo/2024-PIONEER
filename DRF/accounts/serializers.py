@@ -68,25 +68,24 @@ class UserInterestSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'nickname']
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['nickname', 'profile']
-
 class FamilySerializer(serializers.ModelSerializer):
     class Meta:
         model = Family
         fields = ['familycode', 'users']
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='id', read_only=True)
+
     class Meta:
         model = User
-        fields = ['nickname', 'profile', 'phonenum']
+        fields = ['user_id', 'nickname', 'profile', 'phonenum']
 
 class UserUpdateSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='id', read_only=True)
+
     class Meta:
         model = User
-        fields = ['phonenum', 'password', 'nickname', 'profile']
+        fields = ['user_id', 'phonenum', 'password', 'nickname', 'profile']
 
 class UserHomeSerializer(serializers.ModelSerializer):
     class Meta:

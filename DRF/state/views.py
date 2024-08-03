@@ -26,6 +26,10 @@ class StateList(views.APIView):
         #데이터 유효하면 생성된 객체 반환, 아니면 오류메세지를 반환
         serializer = StateEditSerializer(data=request.data)
         if serializer.is_valid():
+            profile = request.FILES.get('profile', None)
+            if profile:
+                request.user.profile = profile
+                request.user.save()
             serializer.save(user=request.user)  
             return Response({"message": "상태 저장 성공", "data": serializer.data}, status=status.HTTP_201_CREATED)
         return Response({"message": "상태 저장 실패", "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

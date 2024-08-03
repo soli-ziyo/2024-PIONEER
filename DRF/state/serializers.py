@@ -6,7 +6,7 @@ class StateEditSerializer(serializers.ModelSerializer):
     state_id = serializers.IntegerField(source='id', read_only=True)
     nickname = serializers.CharField(source='user.nickname', read_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
-    profile = serializers.ImageField(source='user.profile', read_only=True)
+    profile = serializers.ImageField(source='user.profile', required=False)
     phonenum = serializers.IntegerField(source='user.phonenum', read_only=True)
 
     class Meta:
