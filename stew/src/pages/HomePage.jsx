@@ -7,9 +7,8 @@ import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import Logo from "../images/Logo.svg";
 import HomeNotice from "../components/HomeNotice.jsx";
+import LoadingScreen from "../components/LoadingScreen.jsx";
 import axios from "axios";
-
-//import LandingState from "../components/LandingState.jsx";
 
 // 가족 코드
 import CodeInputNotice from "../components/FamilyCode/CodeInputNotice.jsx";
@@ -25,6 +24,7 @@ const HomePage = () => {
   const [hideElements, setHideElements] = useState(false); // 새 상태 추가
   const [hideInviteNotice, setHideInviteNotice] = useState(false); // 새 상태 추가
   const [hideInputNotice, setHideInputNotice] = useState(false); // 새 상태 추가
+  const [loading, setLoading] = useState(true); // 추가: 로딩 상태 추가
 
   const { profiles, fetchProfiles } = useProfilesStore();
 
@@ -51,6 +51,8 @@ const HomePage = () => {
     } catch (error) {
       console.error("등록된 가족 확인 실패:", error);
       setShowBeforeCodeScreen(true);
+    } finally {
+      setLoading(false); // 추가: 로딩 완료 설정
     }
   };
 
@@ -66,9 +68,10 @@ const HomePage = () => {
     <Wrapper>
       {!hideElements && <Header toggleMenu={toggleMenu} />}
       <Content>
-        {showBeforeCodeScreen ? (
+        {loading ? ( // 추가: 로딩 중 상태 확인
+          <LoadingScreen />
+        ) : showBeforeCodeScreen ? (
           <>
-            {" "}
             {!hideElements &&
               profiles.map((profile, index) => (
                 <FamilyProfile key={index} profile={profile} index={index} />
@@ -83,26 +86,27 @@ const HomePage = () => {
           </>
         )}
       </Content>
-      {showBeforeCodeScreen ? (
-        <>
-          {!hideInviteNotice && (
-            <CodeInviteNotice
-              setHideElements={setHideElements}
-              setHideInviteNotice={setHideInviteNotice}
-              setHideInputNotice={setHideInputNotice}
-            />
-          )}
-          {!hideInputNotice && (
-            <CodeInputNotice
-              setHideElements={setHideElements}
-              setHideInviteNotice={setHideInviteNotice}
-              setHideInputNotice={setHideInputNotice}
-            />
-          )}
-        </>
-      ) : (
-        <HomeNotice />
-      )}
+      {!loading && // 추가: 로딩이 완료된 후에만 렌더링
+        (showBeforeCodeScreen ? (
+          <>
+            {!hideInviteNotice && (
+              <CodeInviteNotice
+                setHideElements={setHideElements}
+                setHideInviteNotice={setHideInviteNotice}
+                setHideInputNotice={setHideInputNotice}
+              />
+            )}
+            {!hideInputNotice && (
+              <CodeInputNotice
+                setHideElements={setHideElements}
+                setHideInviteNotice={setHideInviteNotice}
+                setHideInputNotice={setHideInputNotice}
+              />
+            )}
+          </>
+        ) : (
+          <HomeNotice />
+        ))}
       {menuOpen && !hideElements && <HamburgerMenu toggleMenu={toggleMenu} />}
       {!hideElements && (
         <Footer>

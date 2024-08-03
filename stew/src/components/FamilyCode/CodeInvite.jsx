@@ -51,6 +51,7 @@ const CodeInvite = ({
 
   const closeInvite = () => {
     prevStep();
+    window.location.reload();
 
     setHideElements(false);
     setHideInputNotice(true);

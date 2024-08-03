@@ -32,13 +32,19 @@ const CodeInputFamily = ({
 
     try {
       await submitFamilycode(familycode);
+      // 요청이 성공한 경우
       prevStep();
       setHideElements(false);
       setHideInputNotice(true);
       setHideInviteNotice(true);
       window.location.reload();
     } catch (err) {
-      setError(err.message);
+      if (err.message === "이미 가족에 속해있습니다.") {
+        setError(err.message);
+      } else {
+        setError("가족 코드 확인 중 오류가 발생했습니다.");
+        window.location.reload();
+      }
     } finally {
       setLoading(false);
     }
