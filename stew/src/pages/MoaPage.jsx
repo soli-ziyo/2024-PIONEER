@@ -3,29 +3,29 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useProfilesStore } from "../stores/ProfileStore.js";
 import styled from "styled-components";
 import Post from "../components/Post";
-import axios from "axios";
 import Back from "../images/Back.svg";
-import FloatingBtn from "../images/FloatingBtn.svg";
 import { CurrentWeek } from "../components/CurrentWeek";
 import instance from "../api/axios.js";
+import LoadingScreen from "../components/LoadingScreen.jsx";
 
 // const baseurl = "https://minsol.pythonanywhere.com";
 const currentUserId = parseInt(localStorage.getItem("user_id"));
 
-const InterestPage = () => {
+const MoaPage = () => {
   const { user_id } = useParams();
   const navigate = useNavigate();
-  const { profiles, fetchProfiles } = useProfilesStore();
   const [posts, setPosts] = useState([]);
+  const [profiles, setProfiles] = useState([]);
   const [hashtag, setHashtag] = useState("");
   const [hashtagId, setHashtagId] = useState("");
+  const [moa, setMoa] = useState("");
   const [loading, setLoading] = useState(true);
 
   const fetchData = async (userId) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await instance.get(
-        `${process.env.REACT_APP_SERVER_PORT}/interest/list/${userId}/`,
+        `${process.env.REACT_APP_SERVER_PORT}/report/family/`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -34,40 +34,37 @@ const InterestPage = () => {
       );
       console.log(response);
       if (response.status === 200) {
-        const interestsData = response.data.data.interests;
-        setPosts(
-          interestsData
-            .map((interest, index) => ({
-              key: `${interest.tag.id}-${index}`,
-              id: interest.interest_id,
-              description: interest.description,
-              img: interest.img
-                ? `${process.env.REACT_APP_SERVER_PORT}${interest.img}`
-                : null,
-              created_at: interest.created_at,
-              user: {
-                id: interest.user.user_id,
-                nickname: interest.user.nickname,
-                phonenum: interest.user.phonenum,
-                profile: interest.user.profile
-                  ? `${process.env.REACT_APP_SERVER_PORT}${interest.user.profile}`
-                  : require("../images/Basic.png"),
-              },
-              emoji: interest.emoji,
-            }))
-            .reverse()
+        const user_hashtags = response.data.user_hashtags;
+        const familyProfile = response.data.data;
+        const hashtagData = user_hashtags.hashtag;
+        setProfiles(
+          familyProfile.map((index) => ({
+            nickname: index.nickname,
+            profile: index.profile
+              ? `${process.env.REACT_APP_SERVER_PORT}${index.profile}`
+              : require("../images/Basic.png"),
+          }))
         );
+        setPosts(
+          user_hashtags.map((index) =>
+            ({
+              id: index.id,
+              thumbnail: index.latest_post_image,
+              // img: interest.img
+              //   ? `${process.env.REACT_APP_SERVER_PORT}${interest.img}`
+              //   : null,
+              created_at: index.created_at,
 
-        const Hashtag =
-          response.data.data.hashtags.hashtag[0]?.hashtag ||
-          "이번 주 해시태그가 없습니다.";
-        const HashtagId = response.data.data.hashtags.id || "";
-        setHashtag(Hashtag);
-        setHashtagId(HashtagId);
-        // const interest = interestsData.find(interest => interest.tag.id === parseInt(userId));
-        // setHashtag(interest?.tag?.hashtag[0]?.hashtag || '');
-        console.log("해시태그 아이디: ", hashtagId);
-        console.log("해시태그 아이디: ", HashtagId);
+              postCount: index.post_count,
+            }.reverse())
+          )
+        );
+        setMoa(
+          hashtagData.map((index) => ({
+            hashtagTxt: index.hashtag,
+            hashtagId: index.hashtag_id,
+          }))
+        );
       }
     } catch (error) {
       console.error("API 오류:", error);
@@ -78,25 +75,15 @@ const InterestPage = () => {
   };
 
   useEffect(() => {
-    fetchProfiles();
     setHashtag("");
     setHashtagId("");
-    fetchData(user_id);
-  }, [user_id, fetchProfiles]);
+  }, []);
 
-  const profile = profiles.find((p) => p.user_id === parseInt(user_id));
+  const profile = setProfiles.profile;
 
   if (!profile) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
-
-  const handleCall = (phone) => {
-    window.location.href = `tel:${phone}`;
-  };
-
-  const handleMessage = (phone) => {
-    window.location.href = `sms:${phone}`;
-  };
 
   const handleProfileClick = (userId) => {
     setPosts([]);
@@ -104,10 +91,9 @@ const InterestPage = () => {
     setHashtagId("");
     setLoading(true);
     fetchData(userId);
-    navigate(`/interest/list/${userId}`);
   };
 
-  const sortedProfiles = profiles
+  const sortedProfiles = profile
     .map((profile) => {
       if (profile.user_id === currentUserId) {
         return { ...profile, nickname: "나" };
@@ -153,26 +139,15 @@ const InterestPage = () => {
             key={post.key}
             post={post}
             currentUser={{ user_id: currentUserId }}
-            onCall={handleCall}
-            onMessage={handleMessage}
             isCurrentUserPage={parseInt(user_id) === currentUserId}
           />
         ))}
       </PostsContainer>
-      {parseInt(user_id) !== currentUserId &&
-        hashtag !== "이번 주 해시태그가 없습니다." &&
-        !loading && (
-          <FloatingButton
-            to={`/interest/new?user=${profile.nickname}&hashtag=${hashtag}&hashtag_id=${hashtagId}`}
-          >
-            <img src={FloatingBtn} alt="게시글 작성" />
-          </FloatingButton>
-        )}
     </Wrapper>
   );
 };
 
-export default InterestPage;
+export default MoaPage;
 
 const Wrapper = styled.div`
   width: 100%;

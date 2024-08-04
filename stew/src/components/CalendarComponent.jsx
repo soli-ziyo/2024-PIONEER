@@ -2,16 +2,24 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { DateStore } from "../stores/DateStore";
 import instance from "../api/axios";
+import { useFamilycodeStore } from "../stores/FamilycodeStore";
 
 const CalendarComponent = () => {
   const { activityData, currentDate, setCurrentDate, fetchData } = DateStore();
-
+  const { familycode, fetchFamilycode } = useFamilycodeStore();
   const [calendarData, setCalendarData] = useState([]);
 
   useEffect(() => {
+    const fetchDataWithFamilycode = async () => {
+      await fetchFamilycode();
+    };
+    fetchDataWithFamilycode();
+  }, [fetchFamilycode]);
+
+  useEffect(() => {
     const fetchCalendarData = async () => {
-      const familycode = localStorage.getItem("familycode");
       try {
+        await fetchFamilycode();
         const response = await instance.get(
           `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
           {
@@ -21,18 +29,23 @@ const CalendarComponent = () => {
           }
         );
         setCalendarData(response.data.calendar || []);
-        fetchData();
+        if (familycode) {
+          fetchData(familycode);
+        }
       } catch (error) {
         console.error("Error fetching calendar data:", error);
       }
     };
 
     fetchCalendarData();
-  }, []);
+  }, [familycode, fetchData]);
 
   const getColorForDay = (day) => {
     const data = calendarData.find(
-      (item) => new Date(item.date).getDate() === day
+      (item) => {
+        const itemDate = new Date(item.date);
+        return itemDate.getFullYear() === year && itemDate.getMonth() === month && itemDate.getDate() === day;
+      }
     );
     const percentage = data ? data.percentage : 0;
     const opacity = Math.min(percentage / 100, 1); // 퍼센티지 기반 투명도 설정
@@ -78,16 +91,20 @@ const CalendarComponent = () => {
   for (let i = 1; i <= daysInMonth; i++) {
     const backgroundColor = getColorForDay(i);
     const data = calendarData.find(
-      (item) => new Date(item.date).getDate() === i
+      (item) => {
+        const itemDate = new Date(item.date);
+        return itemDate.getFullYear() === year && itemDate.getMonth() === month && itemDate.getDate() === i;
+      }
     );
     const percentage = data ? data.percentage : 0;
     days.push(
       <Day key={i} color={backgroundColor}>
         {i}
-        {percentage === 100 && <Heart>🧡</Heart>}{" "}
+        {percentage === 100 && <Heart>🧡</Heart>}
       </Day>
     );
   }
+  
 
   return (
     <CalendarWrapper>

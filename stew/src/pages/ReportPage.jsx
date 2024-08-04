@@ -8,15 +8,27 @@ import CalendarComponent from "../components/CalendarComponent";
 import Chart from "../components/Chart";
 
 import Close from "../images/Close.svg";
+import { useFamilycodeStore } from "../stores/FamilycodeStore";
 
-const ReportPage = ({ accessToken, familycode }) => {
+const ReportPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [noticeVisible, setNoticeVisible] = useState(false);
+  const { familycode, fetchFamilycode } = useFamilycodeStore();
   const { totalPosts, temperature, status, fetchData } = DateStore();
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const fetchDataWithFamilycode = async () => {
+      await fetchFamilycode();
+    };
+    fetchDataWithFamilycode();
+  }, [fetchFamilycode]);
+
+  useEffect(() => {
+    if (familycode) {
+      fetchData(familycode);
+    }
+  }, [familycode, fetchData]);
+
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
