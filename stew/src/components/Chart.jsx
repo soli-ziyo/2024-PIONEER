@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import instance from "../api/axios";
 import basicImg from "../images/Basic.png";
-import {useFamilycodeStore} from "../stores/FamilycodeStore"
+import { useFamilycodeStore } from "../stores/FamilycodeStore";
 const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
 const MIN_BAR_HEIGHT = 50; // 최소 막대 높이
 
 const Chart = () => {
   const [chartDate, setChartDate] = useState(new Date());
   const [data, setData] = useState([]);
-  const {familycode, fetchFamilycode } = useFamilycodeStore();
+  const { familycode, fetchFamilycode } = useFamilycodeStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +19,7 @@ const Chart = () => {
           `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
             },
           }
         );
@@ -32,7 +32,7 @@ const Chart = () => {
             : basicImg,
           posts: index.user_interests,
         }));
-
+        console.log(response.data);
         setData(formattedData);
       } catch (err) {
         console.error(err);
@@ -114,12 +114,20 @@ const ChartContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  border: 1px solid #e2e2e2;
-  border-radius: 10px;
+
+  border-radius: 21px;
   background-color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
+
   position: relative; // Relative로 설정하여 자식 요소의 절대 위치를 기준으로 함
   overflow: hidden; // 내부 요소가 컨테이너 밖으로 벗어나지 않도록 설정
+  width: 300px;
+  overflow: hidden;
+  flex: 1;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const BarContainer = styled.div`
@@ -128,12 +136,6 @@ const BarContainer = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100%;
-  overflow: hidden;
-  flex: 1;
-  overflow-x: auto;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 const Arrow = styled.div`

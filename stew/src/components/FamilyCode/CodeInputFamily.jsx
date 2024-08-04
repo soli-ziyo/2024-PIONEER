@@ -39,8 +39,7 @@ const CodeInputFamily = ({
           },
         }
       );
-      console.log(response.data)
-      localStorage.setItem("familycode", response.data.data.familycode);
+      console.log(response.data);
       prevStep();
       setHideElements(false);
       setHideInputNotice(true);
@@ -48,13 +47,41 @@ const CodeInputFamily = ({
       window.location.reload();
     } catch (err) {
       if (err.message === "이미 가족에 속해있습니다.") {
-        setError(err.message);
+        putFamilycode();
       } else {
         setError("가족 코드 확인 중 오류가 발생했습니다.");
         console.log(error);
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const putFamilycode = async () => {
+    const inputCode = code.join("");
+    try {
+      const response = await instance.put(
+        `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
+        {
+          familycode: inputCode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      console.log(response.data);
+      prevStep();
+      setHideElements(false);
+      setHideInputNotice(true);
+      setHideInviteNotice(true);
+      window.location.reload();
+    } catch (err) {
+      {
+        setError("가족 코드 확인 중 오류가 발생했습니다.");
+        console.log(error);
+      }
     }
   };
 

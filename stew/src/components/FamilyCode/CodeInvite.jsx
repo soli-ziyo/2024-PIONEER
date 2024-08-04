@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
-import Close from "../../images/Close.svg";
 import instance from "../../api/axios";
+import { useFamilycodeStore } from "../../stores/FamilycodeStore";
+import Close from "../../images/Close.svg";
 
 const CodeInvite = ({
   nextStep,
@@ -11,30 +11,17 @@ const CodeInvite = ({
   setHideInviteNotice,
   setHideInputNotice,
 }) => {
-  const [familyCode, setFamilyCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { familycode, fetchFamilycode } = useFamilycodeStore();
 
   useEffect(() => {
-    const fetchFamilyCode = async () => {
+    const fetchCode = async () => {
       setLoading(true);
       setError("");
       try {
-        const response = await instance.get(
-          `${process.env.REACT_APP_SERVER_PORT}/family/code/`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-            },
-          }
-        );
-        localStorage.setItem("familycode", response.data.familycode);
-        console.log(response.data);
-        if (response.data.familycode) {
-          setFamilyCode(response.data.familycode);
-        } else if (response.data.data && response.data.data.familycode) {
-          setFamilyCode(response.data.data.familycode);
-        }
+        await fetchFamilycode();
+        console.log(familycode);
       } catch (err) {
         setError("가족 코드를 가져오는 데 실패했습니다.");
         console.error(err);
@@ -43,12 +30,12 @@ const CodeInvite = ({
       }
     };
 
-    fetchFamilyCode();
-  }, []);
+    fetchCode();
+  }, [fetchFamilycode, familycode]);
 
   const copyToClipboard = () => {
     navigator.clipboard
-      .writeText(familyCode)
+      .writeText(familycode)
       .then(() => alert("가족 코드가 클립보드에 복사되었습니다."))
       .catch((err) => setError("클립보드에 복사하는 중 오류가 발생했습니다."));
   };
@@ -71,11 +58,11 @@ const CodeInvite = ({
         </ContainerBase>
         <InputWrapper>
           <CodeInput
-            value={familyCode}
+            value={familycode}
             readOnly
             placeholder="가족 코드를 불러오는 중입니다..."
           />
-          <Button onClick={copyToClipboard} disabled={loading || !familyCode}>
+          <Button onClick={copyToClipboard} disabled={loading || !familycode}>
             {loading ? "로딩 중..." : "가족 코드 복사"}
           </Button>
         </InputWrapper>

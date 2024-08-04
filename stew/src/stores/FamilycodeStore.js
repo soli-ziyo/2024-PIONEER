@@ -14,8 +14,13 @@ export const useFamilycodeStore = create((set) => ({
         }
       );
       console.log(response.data.familycode);
-      const familycode = response.data.familycode;
-      set({ familycode });
+      if (response.data.familycode) {
+        const familycode = response.data.familycode;
+        set({ familycode });
+      } else if (response.data.data && response.data.data.familycode) {
+        const familycode = response.data.data.familycode;
+        set({ familycode });
+      }
     } catch (err) {
       console.error(err);
     }

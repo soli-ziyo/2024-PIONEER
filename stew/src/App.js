@@ -12,7 +12,7 @@ import ChangeInterest from "./pages/ChangeInterest.jsx";
 import InterestPage from "./pages/InterestPage.jsx";
 import PostPage from "./pages/PostPage.jsx";
 import ReportPage from "./pages/ReportPage.jsx";
-import AllIssueViewPage from "./pages/AllIssueViewPage.jsx";
+import MoaPage from "./pages/MoaPage.jsx";
 
 import ChangeState from "./pages/ChangeState.jsx";
 
@@ -33,7 +33,7 @@ function App() {
           <Route path="/interest/list/:user_id" element={<InterestPage />} />
           <Route path="/interest/new" element={<PostPage />} />
           <Route path="/report/stats" element={<ReportPage />} />
-          <Route path="/report/summary" element={<AllIssueViewPage />} />
+          <Route path="/report/summary" element={<MoaPage />} />
         </Routes>
       </Router>
     </>
