@@ -8,8 +8,6 @@ import Call from "../images/Call.svg";
 import Message from "../images/Message.svg";
 import instance from "../api/axios";
 
-// const baseurl = 'https://minsol.pythonanywhere.com';
-
 const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
   const timeSince = (date) => {
     const now = new Date();
@@ -145,7 +143,7 @@ const PostTime = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8C8C8C;
+  color: #8c8c8c;
   margin-right: 5px;
   gap: 8px;
   font-size: 12px;

@@ -90,7 +90,7 @@ const ReportPage = () => {
         </CalendarSection>
         <ParticipationSection>
           <ParticipationTitle>참여 현황</ParticipationTitle>
-          <Chart />
+          <Chart setLoading={setLoading} />
         </ParticipationSection>
       </ContentWrapper>
     </Wrapper>

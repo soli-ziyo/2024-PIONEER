@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { useProfilesStore } from "../stores/ProfileStore.js";
 import styled from "styled-components";
-import Post from "../components/Post";
+import MoaBox from "../components/MoaBox.jsx";
 import Back from "../images/Back.svg";
 import { CurrentWeek } from "../components/CurrentWeek";
+import HamburgerMenu from "../components/HamburgerMenu";
+
 import instance from "../api/axios.js";
 import LoadingScreen from "../components/LoadingScreen.jsx";
+import { useProfilesStore } from "../stores/ProfileStore.js";
+import Header from "../components/Header";
 
-// const baseurl = "https://minsol.pythonanywhere.com";
 const currentUserId = parseInt(localStorage.getItem("user_id"));
 
 const MoaPage = () => {
   const { user_id } = useParams();
   const navigate = useNavigate();
+  const { profiles, fetchProfiles } = useProfilesStore();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [noticeVisible, setNoticeVisible] = useState(false);
+
   const [posts, setPosts] = useState([]);
-  const [profiles, setProfiles] = useState([]);
+  const [hashtagData, setHashtagData] = useState([]);
   const [hashtag, setHashtag] = useState("");
   const [hashtagId, setHashtagId] = useState("");
   const [moa, setMoa] = useState("");
@@ -34,36 +40,24 @@ const MoaPage = () => {
       );
       console.log(response);
       if (response.status === 200) {
-        const user_hashtags = response.data.user_hashtags;
-        const familyProfile = response.data.data;
-        const hashtagData = user_hashtags.hashtag;
-        setProfiles(
-          familyProfile.map((index) => ({
-            nickname: index.nickname,
-            profile: index.profile
-              ? `${process.env.REACT_APP_SERVER_PORT}${index.profile}`
-              : require("../images/Basic.png"),
-          }))
-        );
+        const hashtagData = response.data.user_hashtags;
         setPosts(
-          user_hashtags.map((index) =>
-            ({
-              id: index.id,
-              thumbnail: index.latest_post_image,
-              // img: interest.img
-              //   ? `${process.env.REACT_APP_SERVER_PORT}${interest.img}`
-              //   : null,
+          hashtagData
+            .map((usertag, index) => ({
+              key: `${usertag.weekhashtag_id}-${index}`,
+              weekhashtagId: index.weekhashtag_id,
+              nickname: index.nickname,
+              thumbnail: index.latest_post_image
+                ? `${process.env.REACT_APP_SERVER_PORT}${index.latest_post_image}`
+                : null,
               created_at: index.created_at,
-
               postCount: index.post_count,
-            }.reverse())
-          )
-        );
-        setMoa(
-          hashtagData.map((index) => ({
-            hashtagTxt: index.hashtag,
-            hashtagId: index.hashtag_id,
-          }))
+              hashtag: {
+                hashtag: usertag.hashtag.hashtag,
+                hashtagId: usertag.hashtag.hashtag_id,
+              },
+            }))
+            .reverse()
         );
       }
     } catch (error) {
@@ -75,25 +69,24 @@ const MoaPage = () => {
   };
 
   useEffect(() => {
+    fetchProfiles();
+    setPosts([]);
     setHashtag("");
     setHashtagId("");
-  }, []);
+    fetchData(user_id); // 데이터를 가져오도록 호출
+  }, [user_id, fetchProfiles]);
 
-  const profile = setProfiles.profile;
-
-  if (!profile) {
-    return <LoadingScreen />;
-  }
+  const profile = profiles.find((p) => p.user_id === parseInt(user_id));
 
   const handleProfileClick = (userId) => {
     setPosts([]);
     setHashtag("");
     setHashtagId("");
-    setLoading(true);
     fetchData(userId);
+    navigate(`/report/summary/${userId}`);
   };
 
-  const sortedProfiles = profile
+  const sortedProfiles = profiles
     .map((profile) => {
       if (profile.user_id === currentUserId) {
         return { ...profile, nickname: "나" };
@@ -102,48 +95,57 @@ const MoaPage = () => {
     })
     .sort((a, b) => (a.user_id === currentUserId ? -1 : 1));
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
-    <Wrapper>
-      <BackButton onClick={() => navigate("/home")}>
-        <img src={Back} alt="Back" />
-      </BackButton>
-      <ProfileContainer>
-        {sortedProfiles.map((member) => (
-          <ProfileItem key={member.user_id}>
-            <ProfileImageButton
-              active={member.user_id === parseInt(user_id)}
-              onClick={() => handleProfileClick(member.user_id)}
-            >
-              <img src={member.profile} alt={member.nickname} />
-            </ProfileImageButton>
-            <ProfileName>
-              {member.user_id === currentUserId ? "나" : member.nickname}
-            </ProfileName>
-          </ProfileItem>
-        ))}
-      </ProfileContainer>
-      <PostsContainer>
-        <Container>
-          <Label>
-            {parseInt(user_id) === currentUserId
-              ? "나의 관심사"
-              : `${profile.nickname}의 관심사`}
-          </Label>
-          <Week>{CurrentWeek().weekOfMonth}</Week>
-          <Hashtag isEmpty={hashtag === "이번 주 해시태그가 없습니다."}>
-            {hashtag}
-          </Hashtag>
-        </Container>
-        {posts.map((post) => (
-          <Post
-            key={post.key}
-            post={post}
-            currentUser={{ user_id: currentUserId }}
-            isCurrentUserPage={parseInt(user_id) === currentUserId}
-          />
-        ))}
-      </PostsContainer>
-    </Wrapper>
+    <>
+      {profile ? (
+        <>
+          <LoadingScreen />
+        </>
+      ) : (
+        <>
+          <Wrapper>
+            <Header toggleMenu={toggleMenu} />
+            {menuOpen && <HamburgerMenu toggleMenu={toggleMenu} />}
+
+            <ProfileContainer>
+              {sortedProfiles.map((member) => (
+                <ProfileItem key={member.user_id}>
+                  <ProfileImageButton
+                    active={member.user_id === parseInt(user_id)}
+                    onClick={() => handleProfileClick(member.user_id)}
+                  >
+                    <img src={member.profile} alt={member.nickname} />
+                  </ProfileImageButton>
+                  <ProfileName>
+                    {member.user_id === currentUserId ? "나" : member.nickname}
+                  </ProfileName>
+                </ProfileItem>
+              ))}
+            </ProfileContainer>
+            <PostsContainer>
+              <Container>
+                {/* <Week>{CurrentWeek().weekOfMonth}</Week>
+                <Hashtag isEmpty={hashtag === "이번 주 해시태그가 없습니다."}>
+                  {hashtag}
+                </Hashtag> */}
+              </Container>
+              {posts.map((post) => (
+                <MoaBox
+                  key={post.key}
+                  post={post}
+                  currentUser={{ user_id: currentUserId }}
+                  isCurrentUserPage={parseInt(user_id) === currentUserId}
+                />
+              ))}
+            </PostsContainer>
+          </Wrapper>
+        </>
+      )}
+    </>
   );
 };
 
@@ -156,15 +158,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`;
-
-const BackButton = styled.button`
-  cursor: pointer;
-  border: none;
-  background: none;
-  width: 27px;
-  height: 21px;
-  padding: 0px;
 `;
 
 const ProfileContainer = styled.div`
@@ -219,21 +212,24 @@ const PostsContainer = styled.div`
     display: none;
   }
   padding-top: 20px;
-`;
-
-const FloatingButton = styled(Link)`
-  position: absolute;
-  right: 0px;
-  bottom: 15px;
-  width: 59px;
-  height: 59px;
-  z-index: 9;
+  width: 333px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: left;
+  margin: 0px auto;
+  padding: 0px auto;
 `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: left;
+  background-image: url(${(props) => props.thumbnail});
+  background-size: cover;
+  background-position: center;
+  border-radius: 21px;
 `;
 
 const Label = styled.div`

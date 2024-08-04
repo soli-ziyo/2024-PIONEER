@@ -4,7 +4,6 @@ import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
 
 const CodeInputFamily = ({
-  nextStep,
   prevStep,
   setHideElements,
   setHideInviteNotice,
@@ -13,6 +12,40 @@ const CodeInputFamily = ({
   const [code, setCode] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const postFamilycode = async (inputCode) => {
+    setLoading(true);
+
+    try {
+      const response = await instance.post(
+        `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
+        {
+          familycode: inputCode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      console.log(response.data);
+      prevStep(); ////
+      setHideElements(false);
+      setHideInputNotice(true);
+      setHideInviteNotice(true);
+      window.location.reload();
+    } catch ({ response, err }) {
+      if (response.status === 400) {
+        console.log(err);
+      } else {
+        setError("가족 코드 확인 중 오류가 발생했습니다. POST");
+        console.log(error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleChange = (e, index) => {
     const newCode = [...code];
@@ -28,60 +61,22 @@ const CodeInputFamily = ({
     setLoading(true);
     const inputCode = code.join("");
     try {
-      const response = await instance.post(
+      const response = await instance.delete(
         `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
-        {
-          familycode: inputCode,
-        },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         }
       );
+
       console.log(response.data);
-      prevStep();
-      setHideElements(false);
-      setHideInputNotice(true);
-      setHideInviteNotice(true);
-      window.location.reload();
-    } catch (err) {
-      if (err.message === "이미 가족에 속해있습니다.") {
-        putFamilycode();
-      } else {
-        setError("가족 코드 확인 중 오류가 발생했습니다.");
-        console.log(error);
-      }
+      postFamilycode(inputCode);
+    } catch ({ err }) {
+      setError("가족 코드 확인 중 오류가 발생했습니다. POST");
+      console.log(error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const putFamilycode = async () => {
-    const inputCode = code.join("");
-    try {
-      const response = await instance.put(
-        `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
-        {
-          familycode: inputCode,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-      console.log(response.data);
-      prevStep();
-      setHideElements(false);
-      setHideInputNotice(true);
-      setHideInviteNotice(true);
-      window.location.reload();
-    } catch (err) {
-      {
-        setError("가족 코드 확인 중 오류가 발생했습니다.");
-        console.log(error);
-      }
     }
   };
 
