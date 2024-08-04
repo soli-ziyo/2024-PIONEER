@@ -11,7 +11,7 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import ChangeInterest from "./pages/ChangeInterest.jsx";
 import InterestPage from "./pages/InterestPage.jsx";
 import PostPage from "./pages/PostPage.jsx";
-import ReportPage from "./pages/ReportPage.jsx;
+import ReportPage from "./pages/ReportPage.jsx";
 import MoaPage from "./pages/MoaPage.jsx";
 
 import ChangeState from "./pages/ChangeState.jsx";
