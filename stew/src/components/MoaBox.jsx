@@ -1,18 +1,38 @@
 import React from "react";
 import styled from "styled-components";
+import { CurrentWeek } from "../components/CurrentWeek";
+
+const parseDate = (dateString) => {
+  const [year, month, day] = dateString.split("-").map(Number);
+  return new Date(year, month - 1, day);
+};
+
+const getLastDayOfMonth = (date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
+  return new Date(year, month, 0).getDate(); // 다음 달의 0일을 구하면 해당 월의 마지막 일을 얻을 수 있음
+};
+
+const getWeekOfMonth = (date) => {
+  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  const day = date.getDate();
+  return Math.ceil((day + firstDay) / 7);
+};
 
 const MoaBox = ({ post, isCurrentUserPage }) => {
+  const dateString = post.created_at;
+  const date = parseDate(dateString);
+  const lastDayOfMonth = getLastDayOfMonth(date);
+  const weekOfMonth = getWeekOfMonth(date);
+
   return (
     <BoxContainer thumbnail={post.thumbnail}>
       <TextContainer>
-        <Subtitle>{post.created_at}</Subtitle>
-        <Title
-          isEmpty={post.hashtag.hashtag === "이번 주 해시태그가 없습니다."}
-        >
-          {post.hashtag.hashtag}
-        </Title>
+        <Week>
+          {date.getMonth() + 1}월 {weekOfMonth}째 주
+        </Week>
+        <Hashtag>{post.tag.hashtag}</Hashtag>
       </TextContainer>
-      {/* <Week>{CurrentWeek().weekOfMonth}</Week> */}
       <Notification>{post.postCount}</Notification>
     </BoxContainer>
   );
@@ -20,15 +40,33 @@ const MoaBox = ({ post, isCurrentUserPage }) => {
 
 const BoxContainer = styled.div`
   position: relative;
-  width: 160px; /* adjust the width as needed */
-  height: 155px; /* adjust the height as needed */
+  width: 160px;
+  height: 155px;
   border-radius: 21px;
   overflow: hidden;
-  box-shadow: 0 4px 0px rgba(0, 0, 0, 0.1);
+  background: #e2e2e2;
+  /* box-shadow: 0 4px 0px rgba(0, 0, 0, 0.1); */
   background-image: ${(props) => `url(${props.thumbnail})`};
   background-size: cover;
   background-position: center;
   margin-right: 6.5px;
+  margin-bottom: 10px;
+
+  /* 그라데이션 추가 */
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90%; /* 그라데이션의 높이를 조절합니다 */
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.8) 100%
+    );
+    z-index: 1;
+  }
 `;
 
 const TextContainer = styled.div`
@@ -36,21 +74,29 @@ const TextContainer = styled.div`
   bottom: 10px;
   left: 10px;
   color: black;
+  margin: 10px;
+  /* border: 1px solid red; */
+  z-index: 3;
+  max-width: 90px;
 `;
 
-const Subtitle = styled.div`
+const Week = styled.div`
   font-size: 12px;
   margin-bottom: 5px;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 200;
+  line-height: 22px;
 `;
 
-const Title = styled.div`
-  font-size: 16px;
-  font-weight: bold;
+const Hashtag = styled.div`
+  font-size: 20px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
 `;
 
 const Notification = styled.div`
   position: absolute;
-  top: 20px;
+  top: 10px;
   right: 10px;
   background-color: #ff5a00;
   color: white;
@@ -62,6 +108,7 @@ const Notification = styled.div`
   font-size: 12px;
   height: 30px;
   flex-direction: column;
+  z-index: 4;
 `;
 
 export default MoaBox;

@@ -32,6 +32,7 @@ const MoaPage = () => {
       const accessToken = localStorage.getItem("accessToken");
       const response = await instance.get(
         `${process.env.REACT_APP_SERVER_PORT}/report/family/`,
+        // `${process.env.REACT_APP_SERVER_PORT}/report/family/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -45,16 +46,17 @@ const MoaPage = () => {
           hashtagData
             .map((usertag, index) => ({
               key: `${usertag.weekhashtag_id}-${index}`,
-              weekhashtagId: index.weekhashtag_id,
-              nickname: index.nickname,
-              thumbnail: index.latest_post_image
-                ? `${process.env.REACT_APP_SERVER_PORT}${index.latest_post_image}`
+              // userid: usertag.user_id,
+              weekhashtagId: usertag.weekhashtag_id,
+              nickname: usertag.nickname,
+              thumbnail: usertag.latest_post_image
+                ? `${process.env.REACT_APP_SERVER_PORT}${usertag.latest_post_image}`
                 : null,
-              created_at: index.created_at,
-              postCount: index.post_count,
-              hashtag: {
-                hashtag: usertag.hashtag.hashtag,
-                hashtagId: usertag.hashtag.hashtag_id,
+              created_at: usertag.created_at,
+              postCount: usertag.post_count,
+              tag: {
+                hashtag: usertag.hashtag[0].hashtag,
+                hashtagId: usertag.hashtag[0].hashtag_id,
               },
             }))
             .reverse()
@@ -164,7 +166,6 @@ const ProfileContainer = styled.div`
   display: flex;
   margin-top: 30px;
   padding-bottom: 11px;
-  border-bottom: 0.5px solid #e2e2e2;
 `;
 
 const ProfileItem = styled.div`
@@ -219,6 +220,7 @@ const PostsContainer = styled.div`
   justify-content: left;
   margin: 0px auto;
   padding: 0px auto;
+  align-content: flex-start;
 `;
 
 const Container = styled.div`
@@ -226,7 +228,6 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: left;
-  background-image: url(${(props) => props.thumbnail});
   background-size: cover;
   background-position: center;
   border-radius: 21px;
