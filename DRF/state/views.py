@@ -9,6 +9,7 @@ from .serializers import *
 from accounts.models import User
 from django.db.models import OuterRef, Subquery
 from accounts.models import Family
+from accounts.serializers import UserHomeSerializer
 
 # Create your views here.
 class StateList(views.APIView):
@@ -25,6 +26,10 @@ class StateList(views.APIView):
         #데이터 유효하면 생성된 객체 반환, 아니면 오류메세지를 반환
         serializer = StateEditSerializer(data=request.data)
         if serializer.is_valid():
+            profile = request.FILES.get('profile', None)
+            if profile:
+                request.user.profile = profile
+                request.user.save()
             serializer.save(user=request.user)  
             return Response({"message": "상태 저장 성공", "data": serializer.data}, status=status.HTTP_201_CREATED)
         return Response({"message": "상태 저장 실패", "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -67,7 +72,16 @@ class HomeListView(views.APIView):
     def get(self, request, format=None):
         user = request.user
         family_codes = user.families.values_list('familycode', flat=True)
-        family_users = User.objects.filter(families__familycode__in=family_codes)
+        
+        if not family_codes:
+            latest_state = StateEdit.objects.filter(user=user).order_by('-updated_at').first()
+            if latest_state:
+                serializer = StateEditSerializer(latest_state)
+            else:
+                serializer = UserHomeSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            family_users = User.objects.filter(families__familycode__in=family_codes) | User.objects.filter(id=user.id)
         
         # 각 사용자별로 가장 최근에 업데이트된 StateEdit만 가져옴
         latest_states = StateEdit.objects.filter(
@@ -86,6 +100,21 @@ class HomeListView(views.APIView):
             )
         )
         
-        serializer = StateEditSerializer(states, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
+        users = []
+        for family_user in family_users:
+            # 사용자의 최신 상태가 있는지 확인
+            state = next((s for s in states if s.user_id == family_user.id), None)
+            if state is not None:
+                users.append(state)
+            else:
+                # 최신 상태가 없으면 기본값 사용
+                default_state = StateEdit(
+                    user=family_user,
+                    content="빈 content",
+                    emoji="빈 emoji",
+                )
+                users.append(default_state)
+
+        state_serializer = StateEditSerializer(users, many=True)
+
+        return Response(state_serializer.data, status=status.HTTP_200_OK)

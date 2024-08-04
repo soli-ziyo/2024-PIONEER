@@ -19,7 +19,8 @@ class HashTagView(views.APIView):
 
     def put(self, request, format=None):
         hashtag_data = request.data.get('hashtag')
-        nickname = request.data.get('nickname')
+        weekOfMonth = request.data.get('weekOfMonth')
+        nickname = request.user.nickname
         
         if not hashtag_data:
             return Response({'message': 'hashtag post 실패', 'error': 'No hashtag data provided'}, status=status.HTTP_400_BAD_REQUEST)
@@ -33,9 +34,9 @@ class HashTagView(views.APIView):
         except User.DoesNotExist:
             return Response({'message': 'hashtag post 실패', 'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        week_hashtag = WeekHashTag.objects.create(user=user)
+        #week_hashtag = WeekHashTag.objects.create(user=user)
+        week_hashtag = WeekHashTag.objects.create(user=user, weekOfMonth=weekOfMonth)
         week_hashtag.hashtag.add(hashtag)
 
         serializer = WeekHashTagSerializer(week_hashtag)
         return Response({'message': 'hashtag post 성공', 'data': serializer.data})
-

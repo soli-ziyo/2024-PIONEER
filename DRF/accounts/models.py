@@ -6,7 +6,7 @@ import string
 # Create your models here.
 # AbstractUser에 username(아이디), password(비밀번호) 포함
 class User(AbstractUser):
-    nickname = models.CharField(max_length=20)
+    nickname = models.CharField(max_length=20, unique=True)
     phonenum = models.IntegerField(blank=True, null=True, unique=True)
     profile = models.ImageField(upload_to='%Y%m%d/', blank=True, null=True)
     #familycode = models.TextField(blank=True, null=True)

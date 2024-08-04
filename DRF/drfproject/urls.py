@@ -1,11 +1,15 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from accounts.views import FamilyListView, FamilyCreateView, FamilyDetailView, UserUpdateView, FamilyCodeGenerateView
-from interest.views import ReportView, ReportDetailView
+from accounts.views import FamilyListView, FamilyCreateView, FamilyDetailView, UserUpdateView, FamilyCodeGenerateView, LoginView
+from interest.views import ReportView, ReportDetailView, CalendarView
+from alarm.views import AlarmView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('myadmin/', admin.site.urls), #보안을 위해 어드민 주소를 바꿈
+    path('', LoginView.as_view(), name='login'),
     path('accounts/', include('accounts.urls')),
     path('state/', include('state.urls')),
     path('home/', include('home.urls')),
@@ -17,4 +21,6 @@ urlpatterns = [
     path('settings/profile/', UserUpdateView.as_view(), name='profile_settings'),
     path('report/family/', ReportView.as_view(), name='report_view'),
     path('report/<int:tag_id>/', ReportDetailView.as_view(), name='hashtag_interest_view'),
-]
+    path('report/calendar/<str:familycode>/', CalendarView.as_view(), name='calendar'),
+    path('settings/alarm/', AlarmView.as_view()),
+] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
