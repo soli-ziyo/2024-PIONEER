@@ -113,7 +113,32 @@ class InterestEmojiView(views.APIView):
             'message': '이모지 업데이트 성공', 
             'data': serializer.data})
     
+class ReportView(views.APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, user_id, format=None):
+        user = get_object_or_404(User, id=user_id)
+        user_families = Family.objects.filter(users=user)
+        familycodes = user_families.values_list('familycode', flat=True)
+        
+        if familycodes:
+            family_users = User.objects.filter(families__familycode__in=familycodes).distinct()
+        else:
+            family_users = User.objects.filter(id=user.id)
 
+        user_serializer = UserProfileSerializer(family_users, many=True)
+        
+        user_hashtags = WeekHashTag.objects.filter(tag_interests__user=user).distinct()
+        hashtag_serializer = ReportHashTagSerializer(user_hashtags, many=True)
+        
+        response_data = {
+            "message": "가족 레포트 불러오기 성공",
+            "family_users": user_serializer.data,
+            "user_hashtags": hashtag_serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
+
+'''
 class ReportView(views.APIView):
     permission_classes = [IsAuthenticated]
 
@@ -131,6 +156,7 @@ class ReportView(views.APIView):
             "user_hashtags": hashtag_serializer.data
         }
         return Response(response_data, status=status.HTTP_200_OK)
+'''
 
 
 class ReportDetailView(views.APIView):
