@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import User
+from .models import User, generate_familycode
 from rest_framework import views, status
 from .serializers import *
 from rest_framework.views import APIView
@@ -63,6 +63,19 @@ class FamilyListView(views.APIView):
     
 class FamilyCreateView(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get_object(self, user):
+        return get_object_or_404(Family, users=user)
+
+    def put(self, request):
+        user = self.request.user
+        family = self.get_object(user)
+
+        serializer = FamilySerializer(family, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "가족코드 업데이트 성공", "data": serializer.data})
+        return Response({"message": "가족코드 업데이트 실패", "errors": serializer.errors})
 
     def post(self, request, *args, **kwargs):
         user = request.user

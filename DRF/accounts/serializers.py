@@ -61,7 +61,9 @@ class UserLoginSerializer(serializers.Serializer):
                     'username': user.username,
                     'access_token': access
                 }
-                return data       
+                return data      
+        else:
+            raise serializers.ValidationError('존재하지않는 유저입니다.')  
 
 class UserInterestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -69,6 +71,11 @@ class UserInterestSerializer(serializers.ModelSerializer):
         fields = ['id', 'nickname']
 
 class FamilySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Family
+        fields = ['familycode', 'users']
+
+class FamilyUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Family
         fields = ['familycode', 'users']

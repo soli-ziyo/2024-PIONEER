@@ -47,14 +47,16 @@ class WeekHashTagInterestSerializer(serializers.ModelSerializer):
         fields = ['id', 'hashtag']
 
 class ReportHashTagSerializer(serializers.ModelSerializer):
+    weekhashtag_id = serializers.IntegerField(source='id', read_only=True)
     hashtag = HashTagSerializer(many=True, read_only=True)
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
     nickname = serializers.CharField(source='user.nickname', read_only=True)
     post_count = serializers.SerializerMethodField()
     latest_post_image = serializers.SerializerMethodField()
 
     class Meta:
         model = WeekHashTag
-        fields = ['id', 'nickname', 'hashtag', 'created_at', 'post_count', 'latest_post_image']
+        fields = ['weekhashtag_id', 'user_id', 'nickname', 'hashtag', 'created_at', 'post_count', 'latest_post_image']
 
     def get_post_count(self, obj):
         return Interest.objects.filter(tag=obj).count()

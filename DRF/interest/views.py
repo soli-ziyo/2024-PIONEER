@@ -24,6 +24,16 @@ class InterestView(views.APIView):
             return Response({'message':'interest post 성공', 'data':serializer.data}, status=status.HTTP_201_CREATED)
         return Response({'messange':'interest post 실패', 'error':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
+class InterestDeleteView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, interest_id, format=None):
+        interest=get_object_or_404(Interest, pk=interest_id)
+        if not interest:
+            return Response({'message': 'interest 게시글이 없습니다'}, status=status.HTTP_404_NOT_FOUND)
+        interest.delete()
+        return Response({"message":"interest 삭제 성공"}, status=status.HTTP_200_OK)
+
 '''
     def get(self, request, pk, format=None):
         interest=get_object_or_404(Interest, pk=pk)
