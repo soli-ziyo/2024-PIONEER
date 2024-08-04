@@ -1,63 +1,62 @@
 import React from "react";
-import styled from "styled-components";
-
-import Logo from "../images/Logo.svg";
+import styled, { keyframes } from 'styled-components';
 
 const LoadingScreen = () => {
   return (
-    <Wrapper>
-      <CarouselIndicators>
-        <Indicator active />
-        <Indicator />
-        <Indicator />
-      </CarouselIndicators>
-      <Content>
-        <Tagline>stay tewgether</Tagline>
-        <BrandName img src={Logo} alt="Logo" />
-      </Content>
-    </Wrapper>
+    <LoadingContainer>
+      <div>
+        <Dot> </Dot>
+        <Dot> </Dot>
+        <Dot> </Dot>
+      </div>
+      <Text>stay tewgether</Text>
+      <Logo>stew</Logo>
+    </LoadingContainer>
   );
-};
+}
 
 export default LoadingScreen;
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  padding: 0 20px;
-  box-sizing: border-box;
+const colorChange = keyframes`
+  0%, 3% { background-color: #FF5A00; } 
+  97% { background-color: #D9D9D9; }    
 `;
 
-const CarouselIndicators = styled.div`
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-`;
-
-const Indicator = styled.div`
-  width: 10px;
-  height: 10px;
+const Dot = styled.span`
+  all: unset;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  background-color: ${(props) => (props.active ? "#FF6600" : "#E0E0E0")};
+  margin-right: 15px;
+  background-color: #D9D9D9;               
+  animation: ${colorChange} 2s infinite;     
+  &:nth-child(1) { animation-delay: 0.5s; }    
+  &:nth-child(2) { animation-delay: 1s; }      
+  &:nth-child(3) { animation-delay: 1.5s; }     
 `;
 
-const Content = styled.div`
+const Text = styled.div`
+margin: 20px 0 15px;
+color: #FF5A00;
+font-family: KulimPark;
+font-size: 34px;
+font-weight: 400;
+`;
+
+const Logo = styled.div`
+color: #FF5A00;
+font-family: KulimPark;
+font-size: 88px;
+font-weight: 600;
+`;
+
+const LoadingContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-`;
-
-const Tagline = styled.div`
-  color: #ff6600;
-  font-size: 18px;
-  margin-bottom: 8px;
-`;
-
-const BrandName = styled.div`
-  color: #ff6600;
-  font-size: 36px;
-  font-weight: bold;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100vh;
+  margin-left: 17px;
+  margin-bottom: 85px;
 `;

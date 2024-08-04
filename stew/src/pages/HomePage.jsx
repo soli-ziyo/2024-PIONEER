@@ -10,9 +10,7 @@ import HomeNotice from "../components/HomeNotice.jsx";
 import LoadingScreen from "../components/LoadingScreen.jsx";
 import LandingState from "../components/LandingState.jsx";
 
-import axios from "axios";
 
-// 가족 코드
 import CodeInputNotice from "../components/FamilyCode/CodeInputNotice.jsx";
 import CodeInviteNotice from "../components/FamilyCode/CodeInviteNotice.jsx";
 import instance from "../api/axios.js";
@@ -69,13 +67,15 @@ const HomePage = () => {
     setMenuOpen(!menuOpen);
   };
 
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <Wrapper>
       {!hideElements && <Header toggleMenu={toggleMenu} />}
       <Content>
-        {loading ? ( // 추가: 로딩 중 상태 확인
-          <LoadingScreen />
-        ) : showBeforeCodeScreen ? (
+        {showBeforeCodeScreen ? (
           <>
             {!hideElements &&
               profiles.map((profile, index) => (
@@ -91,8 +91,7 @@ const HomePage = () => {
           </>
         )}
       </Content>
-      {!loading && // 추가: 로딩이 완료된 후에만 렌더링
-        (showBeforeCodeScreen ? (
+      {(showBeforeCodeScreen ? (
           <>
             {!hideInviteNotice && (
               <CodeInviteNotice
