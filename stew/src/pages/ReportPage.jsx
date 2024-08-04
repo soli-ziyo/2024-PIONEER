@@ -6,6 +6,7 @@ import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import CalendarComponent from "../components/CalendarComponent";
 import Chart from "../components/Chart";
+import LoadingScreen from "../components/LoadingScreen";
 
 import Close from "../images/Close.svg";
 import { useFamilycodeStore } from "../stores/FamilycodeStore";
@@ -15,20 +16,24 @@ const ReportPage = () => {
   const [noticeVisible, setNoticeVisible] = useState(false);
   const { familycode, fetchFamilycode } = useFamilycodeStore();
   const { totalPosts, temperature, status, fetchData } = DateStore();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDataWithFamilycode = async () => {
-      await fetchFamilycode();
+    const fetchAllData = async () => {
+      try {
+        await fetchFamilycode();
+        if (familycode) {
+          await fetchData(familycode);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
-    fetchDataWithFamilycode();
-  }, [fetchFamilycode]);
 
-  useEffect(() => {
-    if (familycode) {
-      fetchData(familycode);
-    }
-  }, [familycode, fetchData]);
-
+    fetchAllData();
+  }, [fetchFamilycode, familycode, fetchData]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -41,6 +46,10 @@ const ReportPage = () => {
   const closeNotice = () => {
     setNoticeVisible(false);
   };
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <Wrapper>
@@ -76,12 +85,12 @@ const ReportPage = () => {
         <CalendarSection>
           <CalendarTitle>가족 달력</CalendarTitle>
           <Calendar>
-            <CalendarComponent/>
+            <CalendarComponent />
           </Calendar>
         </CalendarSection>
         <ParticipationSection>
           <ParticipationTitle>참여 현황</ParticipationTitle>
-          <Chart/>
+          <Chart />
         </ParticipationSection>
       </ContentWrapper>
     </Wrapper>
