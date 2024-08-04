@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Back from "../../images/Back.svg";
-import useFamilyStore from "../../stores/familyStore";
+import instance from "../../api/axios";
 
 const CodeInputFamily = ({
   nextStep,
@@ -11,7 +11,6 @@ const CodeInputFamily = ({
   setHideInputNotice,
 }) => {
   const [code, setCode] = useState(["", "", "", ""]);
-  const { setFamilycode, submitFamilycode } = useFamilyStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -27,12 +26,20 @@ const CodeInputFamily = ({
 
   const handleNext = async () => {
     setLoading(true);
-    const familycode = code.join("");
-    setFamilycode(familycode); // Update familycode in Zustand store
-
+    const inputCode = code.join("");
     try {
-      await submitFamilycode(familycode);
-      // 요청이 성공한 경우
+      const response = await instance.post(
+        `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
+        {
+          familycode: inputCode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      console.log(response.data);
       prevStep();
       setHideElements(false);
       setHideInputNotice(true);
@@ -40,13 +47,41 @@ const CodeInputFamily = ({
       window.location.reload();
     } catch (err) {
       if (err.message === "이미 가족에 속해있습니다.") {
-        setError(err.message);
+        putFamilycode();
       } else {
         setError("가족 코드 확인 중 오류가 발생했습니다.");
-        window.location.reload();
+        console.log(error);
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const putFamilycode = async () => {
+    const inputCode = code.join("");
+    try {
+      const response = await instance.put(
+        `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
+        {
+          familycode: inputCode,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      console.log(response.data);
+      prevStep();
+      setHideElements(false);
+      setHideInputNotice(true);
+      setHideInviteNotice(true);
+      window.location.reload();
+    } catch (err) {
+      {
+        setError("가족 코드 확인 중 오류가 발생했습니다.");
+        console.log(error);
+      }
     }
   };
 

@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import instance from "../api/axios";
-
+import basicImg from "../images/Basic.png";
+import { useFamilycodeStore } from "../stores/FamilycodeStore";
 const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
 const MIN_BAR_HEIGHT = 50; // 최소 막대 높이
 
-const Chart = ({ accessToken, familycode }) => {
+const Chart = () => {
   const [chartDate, setChartDate] = useState(new Date());
   const [data, setData] = useState([]);
+  const { familycode, fetchFamilycode } = useFamilycodeStore();
 
   useEffect(() => {
-    const fetchChartData = async () => {
+    const fetchData = async () => {
       try {
+        await fetchFamilycode();
         const response = await instance.get(
           `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,
           {
@@ -23,21 +25,22 @@ const Chart = ({ accessToken, familycode }) => {
         );
         const { interest_perUser } = response.data;
 
-        // 데이터 가공
-        const formattedData = interest_perUser.map((user) => ({
-          name: user.user.nickname,
-          image: user.user.profile || "/default-profile.jpg", // 기본 이미지 설정
-          posts: user.user_interests,
+        const formattedData = interest_perUser.map((index) => ({
+          name: index.user.nickname,
+          image: index.user.profile
+            ? `${process.env.REACT_APP_SERVER_PORT}${index.user.profile}`
+            : basicImg,
+          posts: index.user_interests,
         }));
-
+        console.log(response.data);
         setData(formattedData);
-      } catch (error) {
-        console.error("데이터를 불러오는 데 실패했습니다.", error);
+      } catch (err) {
+        console.error(err);
       }
     };
 
-    fetchChartData();
-  }, [accessToken, familycode]);
+    fetchData();
+  }, [fetchFamilycode, familycode]);
 
   const handlePrevMonth = () => {
     const newDate = new Date(
@@ -72,21 +75,21 @@ const Chart = ({ accessToken, familycode }) => {
       </MonthYear>
       <BarContainer>
         <Bars>
-          {data.map((member, index) => {
+          {data.map((index) => {
             const height = Math.max(
-              (member.posts / maxPosts) * MAX_BAR_HEIGHT,
+              (index.posts / maxPosts) * MAX_BAR_HEIGHT,
               MIN_BAR_HEIGHT
-            ); // 최소 높이 적용
-            const opacity = member.posts / maxPosts;
+            );
+            const opacity = index.posts / maxPosts;
             return (
               <Bar key={index}>
                 <PostCount
                   style={{
                     bottom: `${height + 10}px`,
-                    color: member.posts === maxPosts ? "#FF5A00" : "#000",
+                    color: index.posts === maxPosts ? "#FF5A00" : "#000",
                   }}
                 >
-                  {member.posts}
+                  {index.posts}
                 </PostCount>
                 <BarFill
                   style={{
@@ -94,7 +97,7 @@ const Chart = ({ accessToken, familycode }) => {
                     backgroundColor: `rgba(255, 91, 2, ${opacity})`,
                   }}
                 />
-                <ProfileImage src={member.image} alt={member.name} />
+                <ProfileImage src={index.image} alt={index.name} />
               </Bar>
             );
           })}
@@ -111,12 +114,20 @@ const ChartContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  border: 1px solid #e2e2e2;
-  border-radius: 10px;
+
+  border-radius: 21px;
   background-color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
+
   position: relative; // Relative로 설정하여 자식 요소의 절대 위치를 기준으로 함
   overflow: hidden; // 내부 요소가 컨테이너 밖으로 벗어나지 않도록 설정
+  width: 300px;
+  overflow: hidden;
+  flex: 1;
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const BarContainer = styled.div`
@@ -125,12 +136,6 @@ const BarContainer = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100%;
-  overflow: hidden;
-  flex: 1;
-  overflow-x: auto;
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 const Arrow = styled.div`

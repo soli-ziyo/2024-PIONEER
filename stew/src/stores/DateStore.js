@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import axios from "axios";
 import instance from "../api/axios";
 
 export const DateStore = create((set) => ({
@@ -12,7 +11,8 @@ export const DateStore = create((set) => ({
   setActivityData: (data) => set({ activityData: data }),
   setCurrentDate: (date) => set({ currentDate: date }),
 
-  fetchData: async (accessToken, familycode) => {
+  fetchData: async (familycode) => {
+    const accessToken = localStorage.getItem("accessToken");
     try {
       const response = await instance.get(
         `${process.env.REACT_APP_SERVER_PORT}/report/calendar/${familycode}/`,

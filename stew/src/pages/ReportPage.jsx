@@ -6,33 +6,29 @@ import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import CalendarComponent from "../components/CalendarComponent";
 import Chart from "../components/Chart";
-import useFamilyStore from "../stores/familyStore";
 
 import Close from "../images/Close.svg";
+import { useFamilycodeStore } from "../stores/FamilycodeStore";
 
-const ReportPage = ({ accessToken, familycode }) => {
+const ReportPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [noticeVisible, setNoticeVisible] = useState(false);
+  const { familycode, fetchFamilycode } = useFamilycodeStore();
   const { totalPosts, temperature, status, fetchData } = DateStore();
-  const fetchFamilyData = useFamilyStore((state) => state.fetchFamilyData);
 
   useEffect(() => {
-    fetchData(accessToken, familycode);
-  }, [accessToken, familycode, fetchData]);
-
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        const data = await fetchFamilyData(accessToken, familycode);
-        // 초기 데이터를 상태로 설정
-        console.log("Fetched family data: ", data);
-      } catch (error) {
-        console.error("Failed to fetch initial family data:", error);
-      }
+    const fetchDataWithFamilycode = async () => {
+      await fetchFamilycode();
     };
+    fetchDataWithFamilycode();
+  }, [fetchFamilycode]);
 
-    fetchInitialData();
-  }, [accessToken, familycode, fetchFamilyData]);
+  useEffect(() => {
+    if (familycode) {
+      fetchData(familycode);
+    }
+  }, [familycode, fetchData]);
+
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -80,15 +76,12 @@ const ReportPage = ({ accessToken, familycode }) => {
         <CalendarSection>
           <CalendarTitle>가족 달력</CalendarTitle>
           <Calendar>
-            <CalendarComponent
-              accessToken={accessToken}
-              familycode={familycode}
-            />
+            <CalendarComponent/>
           </Calendar>
         </CalendarSection>
         <ParticipationSection>
           <ParticipationTitle>참여 현황</ParticipationTitle>
-          <Chart accessToken={accessToken} familycode={familycode} />
+          <Chart/>
         </ParticipationSection>
       </ContentWrapper>
     </Wrapper>
