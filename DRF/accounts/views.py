@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import User, generate_familycode
+from .models import User, Family, generate_familycode
 from rest_framework import views, status
 from .serializers import *
 from rest_framework.views import APIView
@@ -66,7 +66,7 @@ class FamilyCreateView(APIView):
 
     def get_object(self, user):
         return get_object_or_404(Family, users=user)
-
+    '''
     def put(self, request):
         user = self.request.user
         family = self.get_object(user)
@@ -76,6 +76,19 @@ class FamilyCreateView(APIView):
             serializer.save()
             return Response({"message": "가족코드 업데이트 성공", "data": serializer.data})
         return Response({"message": "가족코드 업데이트 실패", "errors": serializer.errors})
+    '''
+
+    def delete(self, request):
+        user = request.user
+        family = Family.objects.filter(users=user).first()
+
+        if not family:
+            return Response({"message": "사용자가 속한 가족 코드가 없습니다."}, status=status.HTTP_404_NOT_FOUND)
+
+        family.users.remove(user)
+        if family.users.count() == 0:
+            family.delete()
+        return Response({"message": "사용자의 가족코드가 삭제되었습니다."}, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -104,7 +117,7 @@ class FamilyDetailView(APIView):
         families = user.families.all()
         if families.exists():
             family = families.first() 
-            serializer = FamilySerializer(family) #여러개의 가족으로 이루어지므로 many=True
+            serializer = FamilySerializer(family)
             return Response({"message": "포함된 가족코드 불러오기 성공", "data": serializer.data})
         else:
             return Response({"message": "실패(포함된 가족이 없음)"})

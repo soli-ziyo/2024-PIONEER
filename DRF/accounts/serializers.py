@@ -80,6 +80,7 @@ class FamilyUpdateSerializer(serializers.ModelSerializer):
         model = Family
         fields = ['familycode', 'users']
 
+
 class UserProfileSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(source='id', read_only=True)
 
