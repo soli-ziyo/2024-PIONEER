@@ -22,7 +22,7 @@ const LandingState = () => {
       );
 
       if (response.status === 200) {
-        setProfile(response.data);
+        setProfile(response.data[0]);
         console.log(response);
       } else {
         console.error("프로필 데이터를 가져오는데 실패했습니다.");
@@ -39,8 +39,7 @@ const LandingState = () => {
   const handleClick = () => {
     const fullProfile = {
       ...profile,
-      profile: profile.profile && !profile.profile.startsWith('http') ? `${baseurl}${profile.profile}` : profile.profile
-    };
+              profile: profile.profile ? `${process.env.REACT_APP_SERVER_PORT}${profile.profile}` : require("../images/Basic.png")};
     navigate("/home/edit", { state: { profile: fullProfile } });
   };
 
