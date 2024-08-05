@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MoaBox from "../components/MoaBox.jsx";
-import Back from "../images/Back.svg";
-import { CurrentWeek } from "../components/CurrentWeek";
 import HamburgerMenu from "../components/HamburgerMenu";
 
 import instance from "../api/axios.js";
@@ -18,12 +16,10 @@ const MoaPage = () => {
   const navigate = useNavigate();
   const { profiles, fetchProfiles } = useProfilesStore();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [noticeVisible, setNoticeVisible] = useState(false);
 
   const [posts, setPosts] = useState([]);
   const [hashtagData, setHashtagData] = useState([]);
-  const [hashtag, setHashtag] = useState("");
-  const [hashtagId, setHashtagId] = useState("");
+  // const [familyData, setFamilyData] = useState([]);
   const [moa, setMoa] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -31,8 +27,7 @@ const MoaPage = () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await instance.get(
-        `${process.env.REACT_APP_SERVER_PORT}/report/family/`,
-        // `${process.env.REACT_APP_SERVER_PORT}/report/family/${userId}`,
+        `${process.env.REACT_APP_SERVER_PORT}/report/summary/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -41,12 +36,13 @@ const MoaPage = () => {
       );
       console.log(response);
       if (response.status === 200) {
+        // const familyUsers = response.data.family_users;
         const hashtagData = response.data.user_hashtags;
         setPosts(
           hashtagData
             .map((usertag, index) => ({
               key: `${usertag.weekhashtag_id}-${index}`,
-              // userid: usertag.user_id,
+              userid: usertag.user_id,
               weekhashtagId: usertag.weekhashtag_id,
               nickname: usertag.nickname,
               thumbnail: usertag.latest_post_image
@@ -64,7 +60,6 @@ const MoaPage = () => {
       }
     } catch (error) {
       console.error("API 오류:", error);
-      setHashtag("이번 주 해시태그가 없습니다.");
     } finally {
       setLoading(false);
     }
@@ -73,17 +68,14 @@ const MoaPage = () => {
   useEffect(() => {
     fetchProfiles();
     setPosts([]);
-    setHashtag("");
-    setHashtagId("");
-    fetchData(user_id); // 데이터를 가져오도록 호출
+    fetchData(user_id);
   }, [user_id, fetchProfiles]);
 
   const profile = profiles.find((p) => p.user_id === parseInt(user_id));
 
   const handleProfileClick = (userId) => {
     setPosts([]);
-    setHashtag("");
-    setHashtagId("");
+
     fetchData(userId);
     navigate(`/report/summary/${userId}`);
   };
@@ -102,52 +94,53 @@ const MoaPage = () => {
   };
 
   return (
-    <>
-      {profile ? (
-        <>
-          <LoadingScreen />
-        </>
-      ) : (
-        <>
-          <Wrapper>
-            <Header toggleMenu={toggleMenu} />
-            {menuOpen && <HamburgerMenu toggleMenu={toggleMenu} />}
+    // <>
+    //   {!profile ? (
+    //     <>
+    //       <LoadingScreen />
+    //     </>
+    //   ) : (
+    //     <>
+    <Wrapper>
+      <Header toggleMenu={toggleMenu} />
+      {menuOpen && <HamburgerMenu toggleMenu={toggleMenu} />}
 
-            <ProfileContainer>
-              {sortedProfiles.map((member) => (
-                <ProfileItem key={member.user_id}>
-                  <ProfileImageButton
-                    active={member.user_id === parseInt(user_id)}
-                    onClick={() => handleProfileClick(member.user_id)}
-                  >
-                    <img src={member.profile} alt={member.nickname} />
-                  </ProfileImageButton>
-                  <ProfileName>
-                    {member.user_id === currentUserId ? "나" : member.nickname}
-                  </ProfileName>
-                </ProfileItem>
-              ))}
-            </ProfileContainer>
-            <PostsContainer>
-              <Container>
-                {/* <Week>{CurrentWeek().weekOfMonth}</Week>
+      <ProfileContainer>
+        {sortedProfiles.map((member) => (
+          <ProfileItem key={member.user_id}>
+            <ProfileImageButton
+              active={member.user_id === parseInt(user_id)}
+              onClick={() => handleProfileClick(member.user_id)}
+            >
+              <img src={member.profile} alt={member.nickname} />
+            </ProfileImageButton>
+            <ProfileName>
+              {member.user_id === currentUserId ? "나" : member.nickname}
+            </ProfileName>
+          </ProfileItem>
+        ))}
+      </ProfileContainer>
+      <PostsContainer>
+        <Container>
+          {/* <Week>{CurrentWeek().weekOfMonth}</Week>
                 <Hashtag isEmpty={hashtag === "이번 주 해시태그가 없습니다."}>
                   {hashtag}
                 </Hashtag> */}
-              </Container>
-              {posts.map((post) => (
-                <MoaBox
-                  key={post.key}
-                  post={post}
-                  currentUser={{ user_id: currentUserId }}
-                  isCurrentUserPage={parseInt(user_id) === currentUserId}
-                />
-              ))}
-            </PostsContainer>
-          </Wrapper>
-        </>
-      )}
-    </>
+        </Container>
+        {posts.map((post) => (
+          <MoaBox
+            key={post.key}
+            toggleMenu={toggleMenu}
+            post={post}
+            currentUser={{ user_id: currentUserId }}
+            isCurrentUserPage={parseInt(user_id) === currentUserId}
+          />
+        ))}
+      </PostsContainer>
+    </Wrapper>
+    //   </>
+    // )}
+    // </>
   );
 };
 

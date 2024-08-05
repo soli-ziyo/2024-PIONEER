@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { CurrentWeek } from "../components/CurrentWeek";
+import { Link, useNavigate } from "react-router-dom";
+
+import MoaDetail from "./MoaDetail";
 
 const parseDate = (dateString) => {
   const [year, month, day] = dateString.split("-").map(Number);
@@ -19,11 +21,18 @@ const getWeekOfMonth = (date) => {
   return Math.ceil((day + firstDay) / 7);
 };
 
-const MoaBox = ({ post, isCurrentUserPage }) => {
+const MoaBox = ({ post, isCurrentUserPage, toggleMenu }) => {
   const dateString = post.created_at;
   const date = parseDate(dateString);
   const lastDayOfMonth = getLastDayOfMonth(date);
   const weekOfMonth = getWeekOfMonth(date);
+  const navigate = useNavigate();
+
+  // const MoveDetail = (toggleMenu) => {
+  //   const tag_id = post.weekhashtagId;
+  //   navigate(`/report/${tag_id}/`);
+  //   post = { post };
+  // };
 
   return (
     <BoxContainer thumbnail={post.thumbnail}>
