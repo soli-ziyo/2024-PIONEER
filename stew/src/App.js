@@ -65,7 +65,6 @@ const GlobalStyle = createGlobalStyle`
     max-width: 390px;
     height: var(--app-height, 100vh);
     margin: 0 auto;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
