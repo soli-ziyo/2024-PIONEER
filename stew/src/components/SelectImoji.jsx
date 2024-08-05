@@ -71,6 +71,7 @@ const EmojiContainer = styled.div`
   max-width: 390px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   box-sizing: border-box;
   height: 90%;
@@ -83,7 +84,6 @@ const SelectedEmojiContainer = styled.div`
 `;
 
 const EmojiImage = styled.img`
-  margin-top: 40px;
   width: 58px;
   height: 58px;
 `;
@@ -104,8 +104,7 @@ const EmojiGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   aspect-ratio: 1;
-  gap: auto;
-  width: 100%;
+  width: 70%;
   max-width: 300px;
   margin: 20px 0;
 `;

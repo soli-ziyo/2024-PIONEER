@@ -251,7 +251,7 @@ const EmojiButton = styled.button`
   img {
     width: 24px;
     height: 24px;
-    margin-bottom: 7px;
+    /* margin-bottom: 7px; */
   }
 `;
 
@@ -262,7 +262,7 @@ const EmojiDisplay = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  margin-bottom: 11px;
+  margin-bottom: 5px;
 `;
 
 const EmojiImg = styled.img`
