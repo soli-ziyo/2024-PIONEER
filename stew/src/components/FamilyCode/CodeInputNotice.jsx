@@ -77,4 +77,5 @@ const Button = styled.div`
   border-radius: 20px;
   border: 1px solid #ff5a00;
   background-color: #fff;
+  cursor: pointer;
 `;

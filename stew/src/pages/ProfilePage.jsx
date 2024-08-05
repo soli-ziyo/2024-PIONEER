@@ -117,7 +117,6 @@ const ProfileItem = styled.div`
   border-radius: 50%;
   margin-right: 5%;
   margin-top: 12px;
-  cursor: pointer;
 `;
 
 const ProfileImageButton = styled.div`
