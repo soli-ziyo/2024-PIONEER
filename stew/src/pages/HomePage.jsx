@@ -7,6 +7,7 @@ import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import Logo from "../images/Logo.svg";
 import HomeNotice from "../components/HomeNotice.jsx";
+import HomeNoticeNS from "../components/HomeNoticeNS.jsx";
 import LoadingScreen from "../components/LoadingScreen.jsx";
 import LandingState from "../components/LandingState.jsx";
 
@@ -24,6 +25,7 @@ const HomePage = () => {
   const [hideInviteNotice, setHideInviteNotice] = useState(false);
   const [hideInputNotice, setHideInputNotice] = useState(false);
   const [loading, setLoading] = useState(true);
+
 
   const { profiles, fetchProfiles } = useProfilesStore();
 
@@ -71,6 +73,10 @@ const HomePage = () => {
     return <LoadingScreen />;
   }
 
+  const today = new Date().getDay();
+
+
+
   return (
     <Wrapper>
       {!hideElements && <Header toggleMenu={toggleMenu} />}
@@ -102,8 +108,12 @@ const HomePage = () => {
             />
           )}
         </>
-      ) : (
-        <HomeNotice />
+      ) : 
+        today === 0 ? ( 
+          <HomeNotice />
+        ) : ( 
+          <HomeNoticeNS currentUserId={currentUserId} /> 
+        
       )}
       {menuOpen && !hideElements && <HamburgerMenu toggleMenu={toggleMenu} />}
       {!hideElements && (

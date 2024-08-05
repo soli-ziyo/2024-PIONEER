@@ -225,7 +225,7 @@ const DeleteBtn = styled.div`
 const ContactButtons = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 3px 5px;
+  margin: 3px 11px;
   gap: 3px;
 `;
 
