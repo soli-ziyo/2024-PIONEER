@@ -28,16 +28,16 @@ const HomeNoticeNS = ({ currentUserId }) => {
   });
 
   return (
-    <NoticeContainer>
-      <Title>우리 가족이 나를 생각해줬어요!</Title>
-      <Content>
-        가족이 올려준 글을 확인하러 가요.<br />글을 확인하고 가족에게 연락해볼까요?
-      </Content>
-      <TimeLeft>
-        {timeLeft.days}일 {timeLeft.hours}시간 남음
-      </TimeLeft>
-      <Button onClick={() => navigate(`/interest/list/${currentUserId}`)}>확인하기</Button>
-    </NoticeContainer>
+      <NoticeContainer>
+        <Title>우리 가족이 나를 생각해줬어요!</Title>
+        <Content>
+          가족이 올려준 글을 확인하러 가요.<br />글을 확인하고 가족에게 연락해볼까요?
+        </Content>
+        <TimeLeft>
+          {timeLeft.days}일 {timeLeft.hours}시간 남음
+        </TimeLeft>
+        <Button onClick={() => navigate(`/interest/list/${currentUserId}`)}>확인하기</Button>
+      </NoticeContainer>
   );
 };
 
