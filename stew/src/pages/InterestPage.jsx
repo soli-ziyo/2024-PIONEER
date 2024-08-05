@@ -3,13 +3,12 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useProfilesStore } from "../stores/ProfileStore.js";
 import styled from "styled-components";
 import Post from "../components/Post";
-import axios from "axios";
 import Back from "../images/Back.svg";
 import FloatingBtn from "../images/FloatingBtn.svg";
 import { CurrentWeek } from "../components/CurrentWeek";
 import instance from "../api/axios.js";
+import LoadingScreen from "../components/LoadingScreen.jsx";
 
-// const baseurl = "https://minsol.pythonanywhere.com";
 const currentUserId = parseInt(localStorage.getItem("user_id"));
 
 const InterestPage = () => {
@@ -20,8 +19,28 @@ const InterestPage = () => {
   const [hashtag, setHashtag] = useState("");
   const [hashtagId, setHashtagId] = useState("");
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      await fetchProfiles();
+    };
+
+    loadData();
+  }, [fetchProfiles]);
+
+  useEffect(() => {
+    if (profiles.length > 0) {
+      const currentUserId = parseInt(localStorage.getItem("user_id"));
+      const foundUser = profiles.find(profile => profile.user_id === currentUserId);
+      setCurrentUser(foundUser);
+      fetchData(user_id);
+      console.log("Current User:", foundUser);
+    }
+  }, [user_id, profiles]);
 
   const fetchData = async (userId) => {
+    setLoading(true);
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await instance.get(
@@ -66,8 +85,6 @@ const InterestPage = () => {
         setHashtagId(HashtagId);
         // const interest = interestsData.find(interest => interest.tag.id === parseInt(userId));
         // setHashtag(interest?.tag?.hashtag[0]?.hashtag || '');
-        console.log("해시태그 아이디: ", hashtagId);
-        console.log("해시태그 아이디: ", HashtagId);
       }
     } catch (error) {
       console.error("API 오류:", error);
@@ -77,18 +94,15 @@ const InterestPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProfiles();
-    setHashtag("");
-    setHashtagId("");
-    fetchData(user_id);
-  }, [user_id, fetchProfiles]);
-
   const profile = profiles.find((p) => p.user_id === parseInt(user_id));
 
   if (!profile) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
+
+  const handleDeletePost = (postId) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+  };
 
   const handleCall = (phone) => {
     window.location.href = `tel:${phone}`;
@@ -136,6 +150,7 @@ const InterestPage = () => {
           </ProfileItem>
         ))}
       </ProfileContainer>
+      {!loading && (
       <PostsContainer>
         <Container>
           <Label>
@@ -148,19 +163,38 @@ const InterestPage = () => {
             {hashtag}
           </Hashtag>
         </Container>
-        {posts.map((post) => (
-          <Post
-            key={post.key}
-            post={post}
-            currentUser={{ user_id: currentUserId }}
-            onCall={handleCall}
-            onMessage={handleMessage}
-            isCurrentUserPage={parseInt(user_id) === currentUserId}
-          />
-        ))}
+        {hashtag !== "등록된 해시태그가 없습니다." && posts.length === 0 ? (
+          <EmptyPosts>
+          {parseInt(user_id) === currentUserId
+            ? (
+              <>
+                아직 작성된 글이 없어요!<br />우리 가족의 글을 기다려 볼까요?
+              </>
+            )
+            : (
+              <>
+                아직 작성된 글이 없어요!<br />가족을 생각하는 마음을 표현해 보세요.
+              </>
+            )
+          }
+        </EmptyPosts>
+        ) : (
+          posts.map((post) => (
+            <Post
+              key={post.key}
+              post={post}
+              currentUser={currentUser}
+              onCall={handleCall}
+              onMessage={handleMessage}
+              isCurrentUserPage={parseInt(user_id) === currentUserId}
+              onDelete={handleDeletePost}
+            />
+          ))
+        )}
       </PostsContainer>
+      )}
       {parseInt(user_id) !== currentUserId &&
-        hashtag !== "이번 주 해시태그가 없습니다." &&
+        hashtag !== "등록된 해시태그가 없습니다." &&
         !loading && (
           <FloatingButton
             to={`/interest/new?user=${profile.nickname}&hashtag=${hashtag}&hashtag_id=${hashtagId}`}
@@ -197,6 +231,13 @@ const ProfileContainer = styled.div`
   margin-top: 30px;
   padding-bottom: 11px;
   border-bottom: 0.5px solid #e2e2e2;
+  overflow-x: auto; 
+  flex-wrap: nowrap;
+  white-space: nowrap; 
+
+  &::-webkit-scrollbar {
+    display: none; 
+  }
 `;
 
 const ProfileItem = styled.div`
@@ -293,4 +334,18 @@ const Hashtag = styled.div`
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 20px;
+`;
+
+const EmptyPosts = styled.div`
+margin-top: 33%;
+display: flex;
+flex-direction: center;
+justify-content: center;
+color: var(--Labels-Primary, #000);
+text-align: center;
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 200%; /* 28px */
 `;

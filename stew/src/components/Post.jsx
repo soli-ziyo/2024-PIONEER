@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import DeleteModal from "./Delete"; 
 
 import SelectImoji from "./SelectImoji";
 import ImojiDash from "../images/Imoji_dash.svg";
 import Call from "../images/Call.svg";
 import Message from "../images/Message.svg";
 import instance from "../api/axios";
+import Trash from "../images/Trash.svg";
 
-const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
+const Post = ({ post, onCall, onMessage, isCurrentUserPage, currentUser, onDelete}) => {
   const timeSince = (date) => {
     const now = new Date();
     const postDate = new Date(date);
@@ -31,14 +32,14 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
 
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState(post.emoji);
-
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  
   const handleEmojiClick = () => {
     setShowEmojiSelector(true);
   };
 
   const handleSelectEmoji = async (emoji) => {
     const accessToken = localStorage.getItem("accessToken");
-    console.log(post.id);
     try {
       const response = await instance.put(
         `${process.env.REACT_APP_SERVER_PORT}/interest/list/${post.id}/emoji/`,
@@ -57,6 +58,26 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
       console.error("Failed to update emoji:", error);
     }
     setShowEmojiSelector(false);
+  };
+
+  const openDeleteModal = () => setShowDeleteModal(true);
+  const closeDeleteModal = () => setShowDeleteModal(false);
+
+  const handleDeletePost = async () => {
+    try {
+      const response = await instance.delete(`${process.env.REACT_APP_SERVER_PORT}/interest/list/${post.id}/delete/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+      if (response.status === 200) {
+        console.log("Post deleted successfully");
+        closeDeleteModal();
+        onDelete(post.id);
+      }
+    } catch (error) {
+      console.error("Failed to delete post:", error);
+    }
   };
 
   return (
@@ -83,6 +104,16 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
         </PostUser>
         <PostDescription>{post.description}</PostDescription>
       </PostContent>
+      {currentUser && currentUser.user_id === post.user.id && (
+          <DeleteBtn onClick={openDeleteModal}>
+            <img src={Trash} alt="Delete" />
+          </DeleteBtn>
+        )}
+        <DeleteModal
+          isOpen={showDeleteModal}
+          onClose={closeDeleteModal}
+          onConfirm={handleDeletePost}
+        />
       {showEmojiSelector && (
         <SelectImoji
           onClose={() => setShowEmojiSelector(false)}
@@ -158,6 +189,24 @@ const PostDescription = styled.div`
   margin-left: 16%;
   margin-bottom: 13px;
 `;
+
+const DeleteBtn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 66px;
+  height: 48px;
+  margin: 3px 5px;
+  border-radius: 21px;
+  border: 0.5px #E2E2E2;
+  background: #FFF;
+  cursor: pointer;
+
+  img{
+    width: 22px;
+    height: 18px;
+  }
+`
 
 const ContactButtons = styled.div`
   display: flex;
