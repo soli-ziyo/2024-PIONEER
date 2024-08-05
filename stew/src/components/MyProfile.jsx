@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
+import Next from "../images/Next.svg";
 import { useProfilesStore } from "../stores/ProfileStore.js";
 
 const currentUserId = parseInt(localStorage.getItem("user_id"));
@@ -18,6 +18,8 @@ const MyProfile = ({ sortedProfiles }) => {
     return <Wrapper>프로필을 찾을 수 없습니다.</Wrapper>;
   }
 
+  const addFamily = () => {};
+
   return (
     <Wrapper>
       <ProfileContainer>
@@ -27,10 +29,10 @@ const MyProfile = ({ sortedProfiles }) => {
           </ProfileImageButton>
           <ProfileTxt>
             <ProfileName>{me.nickname}</ProfileName>
-            <Prifilenum>{me.phonenum}</Prifilenum>
+            <Profilenum>{me.phonenum}</Profilenum>
           </ProfileTxt>
         </ProfileItem>
-        <img />
+        <img src={Next} alt="다음" />
       </ProfileContainer>
     </Wrapper>
   );
@@ -47,17 +49,20 @@ const Wrapper = styled.div`
   border-radius: 21px;
   padding: 13px;
   padding-top: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
 `;
 
 const ProfileTxt = styled.div`
   display: flex;
   flex-direction: column;
+  justify-items: center;
 `;
 
 const ProfileContainer = styled.div`
   display: flex;
   flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
 `;
 
 const ProfileItem = styled.div`
@@ -65,8 +70,8 @@ const ProfileItem = styled.div`
   flex-direction: row;
   align-items: center;
   border-radius: 50%;
-  margin-right: 5%;
-  margin-top: 12px;
+
+  justify-content: center;
 `;
 
 const ProfileImageButton = styled.div`
@@ -80,7 +85,7 @@ const ProfileImageButton = styled.div`
   box-sizing: border-box;
   overflow: hidden;
   background-color: white;
-  margin-right: 20px;
+  margin-right: 16px;
 
   img {
     width: 100%;
@@ -93,14 +98,15 @@ const ProfileImageButton = styled.div`
 `;
 
 const ProfileName = styled.div`
-  margin-top: 12px;
   font-size: 20px;
   font-weight: 600;
   color: #222;
+  line-height: 1.5;
 `;
 
-const Prifilenum = styled.div`
+const Profilenum = styled.div`
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 300;
   color: #8c8c8c;
+  line-height: 1.5;
 `;

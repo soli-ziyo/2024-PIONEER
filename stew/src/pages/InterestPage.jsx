@@ -92,7 +92,9 @@ const InterestPage = () => {
   useEffect(() => {
     if (profiles.length > 0) {
       const currentUserId = parseInt(localStorage.getItem("user_id"));
-      const foundUser = profiles.find(profile => profile.user_id === currentUserId);
+      const foundUser = profiles.find(
+        (profile) => profile.user_id === currentUserId
+      );
       setCurrentUser(foundUser);
       fetchData(user_id);
     }
@@ -116,7 +118,7 @@ const InterestPage = () => {
     setPosts([]);
     setHashtag("");
     setHashtagId("");
-    fetchData(userId, false); 
+    fetchData(userId, false);
     navigate(`/interest/list/${userId}`);
   };
 
@@ -166,11 +168,15 @@ const InterestPage = () => {
             <EmptyPosts>
               {parseInt(user_id) === currentUserId ? (
                 <>
-                  아직 작성된 글이 없어요!<br />우리 가족의 글을 기다려 볼까요?
+                  아직 작성된 글이 없어요!
+                  <br />
+                  우리 가족의 글을 기다려 볼까요?
                 </>
               ) : (
                 <>
-                  아직 작성된 글이 없어요!<br />가족을 생각하는 마음을 표현해 보세요.
+                  아직 작성된 글이 없어요!
+                  <br />
+                  가족을 생각하는 마음을 표현해 보세요.
                 </>
               )}
             </EmptyPosts>
@@ -191,7 +197,8 @@ const InterestPage = () => {
       )}
       {parseInt(user_id) !== currentUserId &&
         hashtag !== "등록된 해시태그가 없습니다." &&
-        dataLoaded && delayComplete && (
+        dataLoaded &&
+        delayComplete && (
           <FloatingButton
             to={`/interest/new?user=${profile.nickname}&hashtag=${hashtag}&hashtag_id=${hashtagId}`}
           >
@@ -227,12 +234,12 @@ const ProfileContainer = styled.div`
   margin-top: 30px;
   padding-bottom: 11px;
   border-bottom: 0.5px solid #e2e2e2;
-  overflow-x: auto; 
+  overflow-x: auto;
   flex-wrap: nowrap;
-  white-space: nowrap; 
+  white-space: nowrap;
 
   &::-webkit-scrollbar {
-    display: none; 
+    display: none;
   }
 `;
 
@@ -281,7 +288,7 @@ const PostsContainer = styled.div`
     display: none;
   }
   padding-top: 20px;
-  display: ${props => (props.hidden ? "none" : "block")}; 
+  display: ${(props) => (props.hidden ? "none" : "block")};
 `;
 
 const FloatingButton = styled(Link)`
@@ -344,5 +351,5 @@ const EmptyPosts = styled.div`
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 200%; 
+  line-height: 200%;
 `;

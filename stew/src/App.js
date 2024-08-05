@@ -17,19 +17,23 @@ import MoaDetail from "./components/MoaDetail.jsx";
 import ChangeState from "./pages/ChangeState.jsx";
 
 import { createGlobalStyle } from "styled-components";
+import CodeInputFamily from "./components/FamilyCode/CodeInputFamily.jsx";
 
 function App() {
   useEffect(() => {
     const handleResize = () => {
-      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+      document.documentElement.style.setProperty(
+        "--app-height",
+        `${window.innerHeight}px`
+      );
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize(); // Set the initial value
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
-  
+
   return (
     <>
       <GlobalStyle />
@@ -46,6 +50,7 @@ function App() {
           <Route path="/report/stats" element={<ReportPage />} />
           <Route path="/report/summary/:user_id" element={<MoaPage />} />
           <Route path="/report/:tag_id" element={<MoaDetail />} />
+          <Route path="/familyCode" element={<CodeInputFamily />} />
         </Routes>
       </Router>
     </>

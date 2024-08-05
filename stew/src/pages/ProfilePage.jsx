@@ -30,7 +30,7 @@ const ProfilePage = () => {
   const sortedProfiles = profiles
     .map((profile) => {
       if (profile.user_id === currentUserId) {
-        return { ...profile, nickname: "나" };
+        return { ...profile };
       }
       return profile;
     })
@@ -38,6 +38,11 @@ const ProfilePage = () => {
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const handleAddClick = () => {
+    console.log("Add button clicked");
+    navigate("/familyCode");
   };
 
   return (
@@ -58,11 +63,10 @@ const ProfilePage = () => {
                 <ProfileImageButton active={member.user_id === currentUserId}>
                   <img src={member.profile} alt={member.nickname} />
                 </ProfileImageButton>
-                <ProfileName>
-                  {member.user_id === currentUserId ? "나" : member.nickname}
-                </ProfileName>
+                <ProfileName>{member.nickname}</ProfileName>
               </ProfileItem>
             ))}
+            <AddButton onClick={handleAddClick}>+</AddButton>
           </ProfileContainer>
         </FamilySection>
       </ContentWrapper>
@@ -166,4 +170,20 @@ const FamilySection = styled.section`
 const FamilyTitle = styled.h3`
   margin-bottom: 4px;
   font-weight: bold;
+`;
+
+const AddButton = styled.button`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #e2e2e2;
+  background-color: rgba(249, 249, 249, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 200;
+  font-size: 24px;
+  margin-top: 12px;
+  font-weight: 100;
+  cursor: pointer;
 `;
