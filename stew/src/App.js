@@ -13,7 +13,7 @@ import InterestPage from "./pages/InterestPage.jsx";
 import PostPage from "./pages/PostPage.jsx";
 import ReportPage from "./pages/ReportPage.jsx";
 import MoaPage from "./pages/MoaPage.jsx";
-
+import LandingState from "./components/LandingState.jsx"
 import ChangeState from "./pages/ChangeState.jsx";
 
 import { createGlobalStyle } from "styled-components";

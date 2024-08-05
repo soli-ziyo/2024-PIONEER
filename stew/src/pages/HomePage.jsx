@@ -75,14 +75,8 @@ const HomePage = () => {
     <Wrapper>
       {!hideElements && <Header toggleMenu={toggleMenu} />}
       <Content>
-        {showBeforeCodeScreen ? (
-          <>
-            {!hideElements &&
-              profiles.map((profile, index) => (
-                <LandingState key={index} profile={profile} index={index} />
-              ))}
-          </>
-        ) : (
+        {showBeforeCodeScreen ? 
+            <LandingState/> : (
           <>
             {!hideElements &&
               profiles.map((profile, index) => (
