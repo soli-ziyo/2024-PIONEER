@@ -15,6 +15,7 @@ import ReportPage from "./pages/ReportPage.jsx";
 import MoaPage from "./pages/MoaPage.jsx";
 import MoaDetail from "./components/MoaDetail.jsx";
 
+import LandingState from "./components/LandingState.jsx";
 import ChangeState from "./pages/ChangeState.jsx";
 
 import { createGlobalStyle } from "styled-components";

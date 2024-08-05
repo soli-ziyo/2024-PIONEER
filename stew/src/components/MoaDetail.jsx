@@ -23,7 +23,7 @@ const MoaDetail = ({ toggleMenu }) => {
           },
         }
       );
-      console.log(response);
+      console.log("API 응답 데이터:", response.data.data);
       if (response.status === 200) {
         const postsData = response.data.data;
         setTagPosts(
@@ -65,14 +65,20 @@ const MoaDetail = ({ toggleMenu }) => {
   return (
     <Wrapper>
       <Header>
-        <CloseButton onClick={() => navigate(`/report/summary/${user_id}`)}>
-          <img src={Close} alt="Close" />
+        <CloseButton>
+          <img
+            src={Close}
+            alt="Close"
+            onClick={() => navigate(`/report/summary/${user_id}`)}
+          />
         </CloseButton>
         <Title>{tagposts.length > 0 ? tagposts[0].tagName : ""}</Title>
       </Header>
-      {tagposts.map((tagpost) => (
-        <Post key={tagpost.key} post={tagpost} isCurrentUserPage={true} />
-      ))}
+      <PostsContainer>
+        {tagposts.map((tagpost) => (
+          <Post key={tagpost.key} post={tagpost} isCurrentUserPage={false} />
+        ))}
+      </PostsContainer>
     </Wrapper>
   );
 };
@@ -87,15 +93,21 @@ const Wrapper = styled.div`
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: #f9f9f9;
   padding: 20px;
   box-sizing: border-box;
   margin: 0 auto;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `;
 
 const CloseButton = styled.div`
   cursor: pointer;
+  width: 19px;
   img {
     width: 19px;
     height: 19px;
@@ -108,10 +120,7 @@ const Header = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  margin-bottom: 45px;
+  margin-bottom: 30px;
 `;
 
 const Title = styled.h1`
@@ -120,5 +129,13 @@ const Title = styled.h1`
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.5px;
-  margin-left: 30%;
+`;
+
+const PostsContainer = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  margin: 0px auto;
 `;

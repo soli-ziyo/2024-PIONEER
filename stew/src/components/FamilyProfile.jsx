@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import ImojiDash from "../images/Imoji_dash.svg";
 
 const FamilyProfile = ({ profile, index }) => {
   const position = index % 2 === 0 ? "left" : "right";
@@ -31,7 +32,7 @@ const FamilyProfile = ({ profile, index }) => {
         onClick={handleContentClick}
         isCurrentUser={isCurrentUser}
       >
-        {profile.content}
+        {profile.content || <span style={{color: '#cccccc'}}> {profile.nickname} : . . . </span>}
       </ProfileMent>
       <ProfileInfo position={position}>
         <ProfileImage
@@ -40,7 +41,7 @@ const FamilyProfile = ({ profile, index }) => {
           onClick={handleClick}
         />
         <EmojiWrapper onClick={handleEmojiClick} isCurrentUser={isCurrentUser}>
-          {profile.emoji}
+          {profile.emoji || <img src={ImojiDash} alt='imoji'/>}
         </EmojiWrapper>
         <ProfileName>{profile.nickname}</ProfileName>
       </ProfileInfo>

@@ -5,14 +5,14 @@ import SelectStateImoji from "../components/SelectStateImoji";
 import axios from "axios";
 import Close from "../images/Close.svg";
 import instance from "../api/axios";
-
-// const baseurl = 'https://minsol.pythonanywhere.com';
+import ImojiDash from "../images/Imoji_dash.svg";
+import ImageBasic from "../images/Basic.png";
 
 const ChangeState = () => {
   const location = useLocation();
   const profile = location.state?.profile;
 
-  const [content, setContent] = useState(profile?.content || "");
+  const [content, setContent] = useState(profile?.content || "나의 한 마디");
   const [profileImage, setProfileImage] = useState(profile?.profile || "");
   const [imageFile, setImageFile] = useState(null);
   const [emoji, setEmoji] = useState(profile?.emoji || "");
@@ -114,7 +114,9 @@ const ChangeState = () => {
             onChange={handleImageChange}
           />
         </ProfileImageWrapper>
-        <EmojiWrapper onClick={handleEmojiClick}>{emoji}</EmojiWrapper>
+        <EmojiWrapper onClick={handleEmojiClick}>
+          {emoji ? emoji : <img src={ImojiDash} alt="Default Emoji" />}
+        </EmojiWrapper>
         <SubmitButton type="submit">완료</SubmitButton>
       </Form>
       {showEmojiSelector && (
@@ -146,6 +148,7 @@ const Header = styled.div`
 
 const CloseButton = styled.div`
   cursor: pointer;
+  width: 19px;
   img {
     width: 19px;
     height: 19px;

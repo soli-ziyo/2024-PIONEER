@@ -73,8 +73,8 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
           )}
           {error && <ErrorMessage>{error}</ErrorMessage>}
           <Button
-            //onClick={handleNext}
-            onClick={nextStep}
+            onClick={handleNext}
+            // onClick={nextStep}
             disabled={code.some((digit) => digit === "")}
           >
             다음

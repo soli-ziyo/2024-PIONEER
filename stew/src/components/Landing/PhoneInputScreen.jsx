@@ -8,7 +8,6 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
   const [phoneNB, setPhoneNB] = useState("");
   const [buttonReady, setButtonReady] = useState(false);
   const navigate = useNavigate();
-  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   const phonenum = async () => {
     try {
@@ -58,8 +57,8 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
               backgroundColor: buttonReady ? "white" : "#F1F1F1",
               color: buttonReady ? "black" : "#8C8C8C",
             }}
-            //onClick={handleNext}
-            onClick={nextStep}
+            onClick={handleNext}
+            // onClick={nextStep}
             disabled={!buttonReady}
           >
             다음
