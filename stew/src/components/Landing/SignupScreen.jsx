@@ -69,10 +69,11 @@ export default SignupScreen;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
   max-width: 390px;
   height: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
 `;
 
 const ContainerBase = styled.div`
@@ -98,7 +99,7 @@ const Container = styled.div`
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 350px;
+  width: 100%;
   margin-top: 30px;
 
   input,
@@ -111,7 +112,7 @@ const InputWrapper = styled.div`
   }
 
   input {
-    margin-bottom: 5%;
+    margin-bottom: 4%;
     padding-left: 7%;
     border: 1px solid #e2e2e2;
     background: #f9f9f9;
