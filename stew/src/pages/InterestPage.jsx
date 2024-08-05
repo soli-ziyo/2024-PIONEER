@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useProfilesStore } from "../stores/ProfileStore.js";
 import styled from "styled-components";
@@ -7,7 +7,6 @@ import Back from "../images/Back.svg";
 import FloatingBtn from "../images/FloatingBtn.svg";
 import { CurrentWeek } from "../components/CurrentWeek";
 import instance from "../api/axios.js";
-import LoadingScreen from "../components/LoadingScreen.jsx";
 
 const currentUserId = parseInt(localStorage.getItem("user_id"));
 
@@ -20,27 +19,13 @@ const InterestPage = () => {
   const [hashtagId, setHashtagId] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [delayComplete, setDelayComplete] = useState(false);
 
-  useEffect(() => {
-    const loadData = async () => {
-      await fetchProfiles();
-    };
-
-    loadData();
-  }, [fetchProfiles]);
-
-  useEffect(() => {
-    if (profiles.length > 0) {
-      const currentUserId = parseInt(localStorage.getItem("user_id"));
-      const foundUser = profiles.find(profile => profile.user_id === currentUserId);
-      setCurrentUser(foundUser);
-      fetchData(user_id);
-      console.log("Current User:", foundUser);
-    }
-  }, [user_id, profiles]);
-
-  const fetchData = async (userId) => {
+  const fetchData = useCallback(async (userId, withDelay = true) => {
     setLoading(true);
+    setDataLoaded(false);
+    setDelayComplete(!withDelay);
     try {
       const accessToken = localStorage.getItem("accessToken");
       const response = await instance.get(
@@ -51,7 +36,6 @@ const InterestPage = () => {
           },
         }
       );
-      console.log(response);
       if (response.status === 200) {
         const interestsData = response.data.data.interests;
         setPosts(
@@ -83,22 +67,38 @@ const InterestPage = () => {
         const HashtagId = response.data.data.hashtags.id || "";
         setHashtag(Hashtag);
         setHashtagId(HashtagId);
-        // const interest = interestsData.find(interest => interest.tag.id === parseInt(userId));
-        // setHashtag(interest?.tag?.hashtag[0]?.hashtag || '');
       }
     } catch (error) {
       console.error("API 오류:", error);
       setHashtag("등록된 해시태그가 없습니다.");
     } finally {
       setLoading(false);
+      setDataLoaded(true);
+      if (withDelay) {
+        const delay = setTimeout(() => {
+          setDelayComplete(true);
+        }, 700); // 1초 딜레이
+        return () => clearTimeout(delay);
+      } else {
+        setDelayComplete(true);
+      }
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchProfiles();
+  }, [fetchProfiles]);
+
+  useEffect(() => {
+    if (profiles.length > 0) {
+      const currentUserId = parseInt(localStorage.getItem("user_id"));
+      const foundUser = profiles.find(profile => profile.user_id === currentUserId);
+      setCurrentUser(foundUser);
+      fetchData(user_id);
+    }
+  }, [user_id, profiles, fetchData]);
 
   const profile = profiles.find((p) => p.user_id === parseInt(user_id));
-
-  if (!profile) {
-    return <LoadingScreen />;
-  }
 
   const handleDeletePost = (postId) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
@@ -116,8 +116,7 @@ const InterestPage = () => {
     setPosts([]);
     setHashtag("");
     setHashtagId("");
-    setLoading(true);
-    fetchData(userId);
+    fetchData(userId, false); 
     navigate(`/interest/list/${userId}`);
   };
 
@@ -150,52 +149,49 @@ const InterestPage = () => {
           </ProfileItem>
         ))}
       </ProfileContainer>
-      {!loading && (
-      <PostsContainer>
-        <Container>
-          <Label>
-            {parseInt(user_id) === currentUserId
-              ? "나의 관심사"
-              : `${profile.nickname}의 관심사`}
-          </Label>
-          <Week>{CurrentWeek().weekOfMonth}</Week>
-          <Hashtag isEmpty={hashtag === "등록된 해시태그가 없습니다."}>
-            {hashtag}
-          </Hashtag>
-        </Container>
-        {hashtag !== "등록된 해시태그가 없습니다." && posts.length === 0 ? (
-          <EmptyPosts>
-          {parseInt(user_id) === currentUserId
-            ? (
-              <>
-                아직 작성된 글이 없어요!<br />우리 가족의 글을 기다려 볼까요?
-              </>
-            )
-            : (
-              <>
-                아직 작성된 글이 없어요!<br />가족을 생각하는 마음을 표현해 보세요.
-              </>
-            )
-          }
-        </EmptyPosts>
-        ) : (
-          posts.map((post) => (
-            <Post
-              key={post.key}
-              post={post}
-              currentUser={currentUser}
-              onCall={handleCall}
-              onMessage={handleMessage}
-              isCurrentUserPage={parseInt(user_id) === currentUserId}
-              onDelete={handleDeletePost}
-            />
-          ))
-        )}
-      </PostsContainer>
+      {dataLoaded && delayComplete && (
+        <PostsContainer>
+          <Container>
+            <Label>
+              {parseInt(user_id) === currentUserId
+                ? "나의 관심사"
+                : `${profile.nickname}의 관심사`}
+            </Label>
+            <Week>{CurrentWeek().weekOfMonth}</Week>
+            <Hashtag isEmpty={hashtag === "등록된 해시태그가 없습니다."}>
+              {hashtag}
+            </Hashtag>
+          </Container>
+          {hashtag !== "등록된 해시태그가 없습니다." && posts.length === 0 ? (
+            <EmptyPosts>
+              {parseInt(user_id) === currentUserId ? (
+                <>
+                  아직 작성된 글이 없어요!<br />우리 가족의 글을 기다려 볼까요?
+                </>
+              ) : (
+                <>
+                  아직 작성된 글이 없어요!<br />가족을 생각하는 마음을 표현해 보세요.
+                </>
+              )}
+            </EmptyPosts>
+          ) : (
+            posts.map((post) => (
+              <Post
+                key={post.key}
+                post={post}
+                currentUser={currentUser}
+                onCall={(phonenum) => handleCall(phonenum)}
+                onMessage={(phonenum) => handleMessage(phonenum)}
+                isCurrentUserPage={parseInt(user_id) === currentUserId}
+                onDelete={() => handleDeletePost(post.id)}
+              />
+            ))
+          )}
+        </PostsContainer>
       )}
       {parseInt(user_id) !== currentUserId &&
         hashtag !== "등록된 해시태그가 없습니다." &&
-        !loading && (
+        dataLoaded && delayComplete && (
           <FloatingButton
             to={`/interest/new?user=${profile.nickname}&hashtag=${hashtag}&hashtag_id=${hashtagId}`}
           >
@@ -285,6 +281,7 @@ const PostsContainer = styled.div`
     display: none;
   }
   padding-top: 20px;
+  display: ${props => (props.hidden ? "none" : "block")}; 
 `;
 
 const FloatingButton = styled(Link)`
@@ -337,15 +334,15 @@ const Hashtag = styled.div`
 `;
 
 const EmptyPosts = styled.div`
-margin-top: 33%;
-display: flex;
-flex-direction: center;
-justify-content: center;
-color: var(--Labels-Primary, #000);
-text-align: center;
-font-family: Pretendard;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: 200%; /* 28px */
+  margin-top: 33%;
+  display: flex;
+  flex-direction: center;
+  justify-content: center;
+  color: var(--Labels-Primary, #000);
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 200%; 
 `;

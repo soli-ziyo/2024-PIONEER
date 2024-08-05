@@ -132,13 +132,17 @@ const Post = ({
       )}
       {isCurrentUserPage && (
         <ContactButtons>
-          <ContactButton onClick={() => onCall(post.user.phone)}>
-            <img src={Call} alt="Call" />
-          </ContactButton>
-          <ContactButton onClick={() => onMessage(post.user.phone)}>
-            <img src={Message} alt="Message" />
-          </ContactButton>
-        </ContactButtons>
+        <ContactButton onClick={() => {
+          onCall(post.user.phonenum);
+        }}>
+          <img src={Call} alt="Call" />
+        </ContactButton>
+        <ContactButton onClick={() => {
+          onMessage(post.user.phonenum);
+        }}>
+          <img src={Message} alt="Message" />
+        </ContactButton>
+      </ContactButtons>
       )}
     </PostContainer>
   );
@@ -222,7 +226,7 @@ const DeleteBtn = styled.div`
 const ContactButtons = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 3px 5px;
+  margin: 3px 11px;
   gap: 3px;
 `;
 

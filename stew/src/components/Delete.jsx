@@ -71,6 +71,7 @@ font-size: 16px;
 font-style: normal;
 font-weight: 500;
 line-height: 120%; 
+cursor: pointer;
 `;
 
 const DeleteButton = styled.button`
@@ -83,4 +84,5 @@ font-size: 16px;
 font-style: normal;
 font-weight: 500;
 line-height: 120%; 
+cursor: pointer;
 `;

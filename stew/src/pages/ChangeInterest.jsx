@@ -4,10 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Close from "../images/Close.svg";
 import { CurrentWeek } from "../components/CurrentWeek";
 import { useProfilesStore } from "../stores/ProfileStore.js";
-import axios from "axios";
 import instance from "../api/axios.js";
-
-// const baseurl = 'https://minsol.pythonanywhere.com';
 
 const ChangeInterest = () => {
   const { profiles, fetchProfiles } = useProfilesStore();
@@ -253,6 +250,7 @@ const SuggestedInterest = styled.div`
 `;
 
 const SubmitButton = styled.button`
+  color: #000;
   position: absolute;
   bottom: 80px;
   left: 50%;

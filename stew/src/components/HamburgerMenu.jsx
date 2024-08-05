@@ -119,10 +119,6 @@ const StyledLink = styled(Link)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  &:hover {
-    color: #ff5a00;
-  }
 `;
 
 const MenuLink = styled.div`

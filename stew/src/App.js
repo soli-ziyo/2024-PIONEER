@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useEffect } from "react";
 import { reset } from "styled-reset";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./fonts/Pretendard.css";
@@ -14,13 +14,22 @@ import PostPage from "./pages/PostPage.jsx";
 import ReportPage from "./pages/ReportPage.jsx";
 import MoaPage from "./pages/MoaPage.jsx";
 import MoaDetail from "./components/MoaDetail.jsx";
-
-import LandingState from "./components/LandingState.jsx";
 import ChangeState from "./pages/ChangeState.jsx";
 
 import { createGlobalStyle } from "styled-components";
 
 function App() {
+  useEffect(() => {
+    const handleResize = () => {
+      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Set the initial value
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
   return (
     <>
       <GlobalStyle />
@@ -49,7 +58,7 @@ const GlobalStyle = createGlobalStyle`
   ${reset}
   #root{
     max-width: 390px;
-    height: 100vh;
+    height: var(--app-height, 100vh);
     margin: 0 auto;
     height: 100vh;
     display: flex;
