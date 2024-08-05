@@ -60,7 +60,7 @@ const InterestPage = () => {
 
         const Hashtag =
           response.data.data.hashtags.hashtag[0]?.hashtag ||
-          "이번 주 해시태그가 없습니다.";
+          "등록된 해시태그가 없습니다.";
         const HashtagId = response.data.data.hashtags.id || "";
         setHashtag(Hashtag);
         setHashtagId(HashtagId);
@@ -71,7 +71,7 @@ const InterestPage = () => {
       }
     } catch (error) {
       console.error("API 오류:", error);
-      setHashtag("이번 주 해시태그가 없습니다.");
+      setHashtag("등록된 해시태그가 없습니다.");
     } finally {
       setLoading(false);
     }
@@ -144,7 +144,7 @@ const InterestPage = () => {
               : `${profile.nickname}의 관심사`}
           </Label>
           <Week>{CurrentWeek().weekOfMonth}</Week>
-          <Hashtag isEmpty={hashtag === "이번 주 해시태그가 없습니다."}>
+          <Hashtag isEmpty={hashtag === "등록된 해시태그가 없습니다."}>
             {hashtag}
           </Hashtag>
         </Container>

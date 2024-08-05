@@ -89,7 +89,7 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
           onSelect={handleSelectEmoji}
         />
       )}
-      {!isCurrentUserPage && (
+      {isCurrentUserPage && (
         <ContactButtons>
           <ContactButton onClick={() => onCall(post.user.phone)}>
             <img src={Call} alt="Call" />

@@ -13,9 +13,9 @@ const ChangeState = () => {
   const profile = location.state?.profile;
 
   const [content, setContent] = useState(profile?.content || "나의 한 마디");
-  const [profileImage, setProfileImage] = useState(profile?.profile || ImageBasic);
+  const [profileImage, setProfileImage] = useState(profile?.profile || "");
   const [imageFile, setImageFile] = useState(null);
-  const [emoji, setEmoji] = useState(profile?.emoji || ImojiDash);
+  const [emoji, setEmoji] = useState(profile?.emoji || "");
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
   const navigate = useNavigate();
   const inputRef = useRef(null);
@@ -114,7 +114,9 @@ const ChangeState = () => {
             onChange={handleImageChange}
           />
         </ProfileImageWrapper>
-        <EmojiWrapper onClick={handleEmojiClick}>{emoji}</EmojiWrapper>
+        <EmojiWrapper onClick={handleEmojiClick}>
+  {emoji ? emoji : <img src={ImojiDash} alt='Default Emoji' />}
+</EmojiWrapper>
         <SubmitButton type="submit">완료</SubmitButton>
       </Form>
       {showEmojiSelector && (
