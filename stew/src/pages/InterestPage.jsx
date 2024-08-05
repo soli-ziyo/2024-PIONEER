@@ -219,7 +219,7 @@ const ProfileImageButton = styled.div`
     props.active ? "1px solid #FF6600" : "1px solid #E2E2E2"};
   box-sizing: border-box;
   overflow: hidden;
-
+  background-color: white;
   img {
     width: 100%;
     height: 100%;

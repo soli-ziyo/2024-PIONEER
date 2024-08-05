@@ -7,6 +7,6 @@ export const CurrentWeek = () => {
   return {
     month: month,
     week: weekNumber,
-    weekOfMonth: `${month}월 ${weekNumber}째주`
+    weekOfMonth: `${month}월 ${weekNumber}째주`,
   };
 };

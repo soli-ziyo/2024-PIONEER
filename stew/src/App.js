@@ -33,8 +33,7 @@ function App() {
           <Route path="/interest/list/:user_id" element={<InterestPage />} />
           <Route path="/interest/new" element={<PostPage />} />
           <Route path="/report/stats" element={<ReportPage />} />
-          <Route path="/report/summary" element={<MoaPage />} />
-          <Route path="dev" element={<LandingState />} />
+          <Route path="/report/summary/:user_id" element={<MoaPage />} />
         </Routes>
       </Router>
     </>
