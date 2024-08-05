@@ -27,9 +27,10 @@ const HomePage = () => {
 
   const { profiles, fetchProfiles } = useProfilesStore();
 
-  const checkFamilyCode = async (userId) => {
+  const checkFamilyCode = async () => {
     try {
       await fetchProfiles();
+      const userId = localStorage.getItem("user_id");
       const accessToken = localStorage.getItem("accessToken");
       const response = await instance.get(
         `${process.env.REACT_APP_SERVER_PORT}/report/summary/${userId}`,
@@ -40,7 +41,7 @@ const HomePage = () => {
         }
       );
       console.log(response);
-      if (response.data.family_users.length <= 0) {
+      if (response.data.family_users.length <= 1) {
         console.log("등록된 가족이 없습니다");
         setShowBeforeCodeScreen(true);
       } else {
@@ -54,13 +55,13 @@ const HomePage = () => {
       console.error("등록된 가족 확인 실패:", error);
       setShowBeforeCodeScreen(true);
     } finally {
-      setLoading(false); // 추가: 로딩 완료 설정
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    checkFamilyCode(user_id);
-  }, [user_id, fetchProfiles]);
+    checkFamilyCode();
+  }, [fetchProfiles]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
