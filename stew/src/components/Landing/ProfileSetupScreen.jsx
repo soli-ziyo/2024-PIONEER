@@ -120,12 +120,13 @@ const ProfileSetupScreen = ({ id, password, prevStep, nextStep }) => {
 export default ProfileSetupScreen;
 
 const Wrapper = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 390px;
+  width: 100%;
+
+  height: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
 `;
 
 const ContainerBase = styled.div`
@@ -142,7 +143,6 @@ const ContainerBase = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -151,8 +151,8 @@ const Container = styled.div`
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 350px;
-  margin-top: 30px;
+  width: 100%;
+  margin-top: 8px;
 
   input,
   button {

@@ -11,17 +11,30 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
 
   const phonenum = async () => {
     try {
-      const response = await instance.get({
-        url: `${process.env.REACT_APP_SERVER_PORT}/accounts/phonenum/sendcode/`,
-        params: {
+      const response = await instance.post(
+        `${process.env.REACT_APP_SERVER_PORT}/accounts/phonenum/sendCode/`,
+        {
           phonenum: phoneNB,
-        },
-      });
-      console.log("본인확인 sms 전송 성공", response);
-      nextStep();
+        }
+      );
+      if (response.status === 200) {
+        console.log("본인확인 sms 전송 성공", response.data.message);
+        nextStep();
+      }
     } catch (error) {
-      console.log(error);
-      throw new Error(error);
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400) {
+          console.error("휴대폰 번호가 필요합니다:", data.error);
+        } else if (status === 500) {
+          console.error(
+            "인증 코드를 발송하는 데에 실패하였습니다:",
+            data.error
+          );
+        }
+      } else {
+        console.error("알 수 없는 오류:", error);
+      }
     }
   };
 
@@ -72,13 +85,13 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
 export default PhoneInputScreen;
 
 const Wrapper = styled.div`
-  /* height: 100%; */
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
   max-width: 390px;
   height: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
 `;
 
 const ContainerBase = styled.div`
@@ -104,7 +117,7 @@ const Container = styled.div`
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 350px;
+  width: 100%;
   margin-top: 30px;
 
   input,

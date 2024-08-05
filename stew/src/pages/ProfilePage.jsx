@@ -8,7 +8,10 @@ import Header from "../components/Header";
 import LoadingScreen from "../components/LoadingScreen";
 import instance from "../api/axios.js";
 
+import MyProfile from "../components/MyProfile.jsx";
 import { useProfilesStore } from "../stores/ProfileStore.js";
+
+const currentUserId = parseInt(localStorage.getItem("user_id"));
 
 const ProfilePage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,8 +22,10 @@ const ProfilePage = () => {
   const { profiles, fetchProfiles } = useProfilesStore();
 
   useEffect(() => {
-    fetchProfiles();
-  }, [fetchProfiles]);
+    fetchProfiles(user_id);
+  }, [user_id, fetchProfiles]);
+
+  const profile = profiles.find((p) => p.user_id === parseInt(user_id));
 
   const sortedProfiles = profiles
     .map((profile) => {
@@ -43,13 +48,14 @@ const ProfilePage = () => {
         <Header2></Header2>
         <ProfileSection>
           <ProfileTitle>프로필</ProfileTitle>
+          <MyProfile sortedProfiles={sortedProfiles}></MyProfile>
+        </ProfileSection>
+        <FamilySection>
+          <FamilyTitle>우리 가족</FamilyTitle>
           <ProfileContainer>
             {sortedProfiles.map((member) => (
               <ProfileItem key={member.user_id}>
-                <ProfileImageButton
-                  active={member.user_id === parseInt(user_id)}
-                  onClick={() => handleProfileClick(member.user_id)}
-                >
+                <ProfileImageButton active={member.user_id === currentUserId}>
                   <img src={member.profile} alt={member.nickname} />
                 </ProfileImageButton>
                 <ProfileName>
@@ -58,11 +64,6 @@ const ProfilePage = () => {
               </ProfileItem>
             ))}
           </ProfileContainer>
-          z
-        </ProfileSection>
-        <FamilySection>
-          <FamilyTitle>우리 가족</FamilyTitle>
-          <Family></Family>
         </FamilySection>
       </ContentWrapper>
     </Wrapper>
@@ -93,7 +94,8 @@ const ContentWrapper = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-  padding-top: 20px;
+  margin: 0px auto;
+  width: 100%;
 `;
 
 const ProfileSection = styled.section`
@@ -103,8 +105,9 @@ const ProfileSection = styled.section`
 
 const ProfileContainer = styled.div`
   display: flex;
-  margin-top: 30px;
   padding-bottom: 11px;
+  flex-wrap: wrap;
+  width: 99%;
 `;
 
 const ProfileItem = styled.div`
@@ -112,7 +115,8 @@ const ProfileItem = styled.div`
   flex-direction: column;
   align-items: center;
   border-radius: 50%;
-  margin-right: 12px;
+  margin-right: 5%;
+  margin-top: 12px;
   cursor: pointer;
 `;
 
@@ -151,18 +155,6 @@ const ProfileTitle = styled.h3`
   font-weight: bold;
 `;
 
-const Profile = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  border-radius: 21px;
-  padding: 13px;
-  padding-top: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-`;
-
 const Family = styled.div`
   display: flex;
   flex-direction: row;
@@ -173,6 +165,6 @@ const FamilySection = styled.section`
 `;
 
 const FamilyTitle = styled.h3`
-  margin-bottom: 20px;
+  margin-bottom: 4px;
   font-weight: bold;
 `;

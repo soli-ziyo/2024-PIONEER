@@ -17,15 +17,19 @@ export const useProfilesStore = create((set) => ({
 
       console.log(response);
 
-      const profiles = Array.isArray(response.data) ? response.data.map((profile) => ({
-        user_id: profile.user_id,
-        nickname: profile.nickname,
-        profile: profile.profile ? `${process.env.REACT_APP_SERVER_PORT}${profile.profile}` : require("../images/Basic.png"),
-        content: profile.content || "",
-        emoji: profile.emoji || "",
-      })) : [];
+      const profiles = Array.isArray(response.data)
+        ? response.data.map((profile) => ({
+            user_id: profile.user_id,
+            nickname: profile.nickname,
+            phonenum: profile.phonenum,
+            profile: profile.profile
+              ? `${process.env.REACT_APP_SERVER_PORT}${profile.profile}`
+              : require("../images/Basic.png"),
+            content: profile.content || "",
+            emoji: profile.emoji || "",
+          }))
+        : [];
       set({ profiles });
-      
     } catch (error) {
       console.error("데이터 가져오기 실패:", error);
 

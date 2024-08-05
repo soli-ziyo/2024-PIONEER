@@ -8,7 +8,6 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
   const [code, setCode] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   const handleChange = (e, index) => {
     const newCode = [...code];
@@ -22,17 +21,40 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
 
   const handleNext = async () => {
     setLoading(true);
+    setError(null);
     try {
+      const codeStr = code.join("");
+      console.log("Submitting code:", codeStr);
       const response = await instance.post(
-        `${process.env.REACT_APP_SERVER_PORT}/accounts/phonenum/getcode/`,
-        {
-          code: code.join(""), //문자열 결합
-        }
+        `${process.env.REACT_APP_SERVER_PORT}/accounts/phonenum/getCode/`,
+        { code: codeStr }
       );
-      console.log("sms 인증에 성공하였습니다.");
-      nextStep();
+      console.log(code);
+      if (response.status === 200) {
+        console.log("sms 인증에 성공하였습니다.", response.data.message);
+        nextStep();
+      }
     } catch (err) {
-      setError("인증에 실패하였습니다. 인증번호를 확인해주세요.");
+      if (err.response) {
+        const { status, data } = err.response;
+        if (status === 400) {
+          if (data.error === "인증 코드 오류") {
+            setError("인증에 실패하였습니다. 인증번호를 확인해주세요.");
+            console.log(error);
+          } else if (data.error === "인증코드가 입력되지 않았습니다.") {
+            setError(
+              "인증코드가 입력되지 않았습니다. 인증코드를 입력해주세요."
+            );
+            console.log(error);
+          } else {
+            setError("잘못된 요청입니다.");
+          }
+        } else if (status === 500) {
+          setError("서버 오류입니다. 잠시 후 다시 시도해주세요.");
+        }
+      } else {
+        setError("알 수 없는 오류가 발생했습니다.");
+      }
       console.error(err);
     } finally {
       setLoading(false);
@@ -60,26 +82,17 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
             ))}
           </CodeInputs>
           {loading && (
-            <p
-              style={{
-                fontFamily: "Pretendard",
-                fontSize: "14px",
-                marginBottom: "-10%",
-                color: "red",
-              }}
-            >
-              인증번호를 확인 중입니다...
-            </p>
+            <LoadingMessage>인증번호를 확인 중입니다...</LoadingMessage>
           )}
           {error && <ErrorMessage>{error}</ErrorMessage>}
-          <Button
-            onClick={handleNext}
-            // onClick={nextStep}
-            disabled={code.some((digit) => digit === "")}
-          >
-            다음
-          </Button>
         </InputWrapper>
+        <Button
+          onClick={handleNext}
+          // onClick={nextStep}
+          disabled={code.some((digit) => digit === "")}
+        >
+          다음
+        </Button>
       </Container>
     </Wrapper>
   );
@@ -90,10 +103,10 @@ export default CodeInputScreen;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
   max-width: 390px;
   height: 100%;
+  margin: 0 auto;
 `;
 
 const ContainerBase = styled.div`
@@ -119,7 +132,7 @@ const Container = styled.div`
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 350px;
+  width: 100%;
   margin-top: 30px;
 `;
 
@@ -138,6 +151,8 @@ const CodeInput = styled.input`
   text-align: center;
   font-size: 18px;
   outline: none;
+  margin-bottom: 68%;
+
   font-family: "Pretendard";
 `;
 
@@ -152,8 +167,6 @@ const Button = styled.button`
   font-size: 14px;
   cursor: pointer;
   border: 1px solid #e2e2e2;
-  margin-bottom: 10%;
-  margin-top: 75%;
   font-family: "Pretendard";
 `;
 
@@ -163,9 +176,20 @@ const Comment = styled.div`
   font-family: "Pretendard";
 `;
 
-const ErrorMessage = styled.p`
+const ErrorMessage = styled.div`
   color: red;
   font-family: "Pretendard";
   font-size: 14px;
-  margin-bottom: -10%;
+  margin-top: -65%;
+  z-index: 10;
+  margin-bottom: 61%;
+`;
+
+const LoadingMessage = styled.div`
+  color: red;
+  font-family: "Pretendard";
+  font-size: 14px;
+  margin-top: -65%;
+  z-index: 10;
+  margin-bottom: 61%;
 `;

@@ -109,8 +109,10 @@ export default LoginPage;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   max-width: 390px;
   height: 100%;
+  margin: 0 auto;
   box-sizing: border-box;
 `;
 
@@ -119,20 +121,21 @@ const Container = styled.div`
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
 
   img {
     margin-top: 20%;
-    margin-bottom: 40%;
-    margin-right: 50%;
+
+    margin-right: 30%;
   }
 `;
 
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 160%;
+  width: 100%;
   margin-top: 50%;
+  height: 100%;
 
   div {
     font-size: 14px;
@@ -157,8 +160,8 @@ const InputWrapper = styled.div`
   }
 
   button {
-    margin-bottom: 10px;
     background: #f1f1f1;
+    margin-bottom: 10px;
     color: #8c8c8c;
     border: 1px solid #e2e2e2;
     font-weight: 600;
