@@ -95,7 +95,6 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #f9f9f9;
-  padding: 20px;
   box-sizing: border-box;
   margin: 0 auto;
 
@@ -138,4 +137,5 @@ const PostsContainer = styled.div`
     display: none;
   }
   margin: 0px auto;
+  width: 100%;
 `;

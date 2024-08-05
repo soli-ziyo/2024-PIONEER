@@ -177,6 +177,7 @@ const UserProfile = styled.img`
   height: 40px;
   border-radius: 50%;
   margin-right: 14px;
+  background-color: white;
 `;
 
 const UserName = styled.div`

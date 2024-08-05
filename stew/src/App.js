@@ -31,7 +31,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/home/hashtag" element={<ChangeInterest />} />
           <Route path="/home/edit" element={<ChangeState />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/settings/profile" element={<ProfilePage />} />
           <Route path="/interest/list/:user_id" element={<InterestPage />} />
           <Route path="/interest/new" element={<PostPage />} />
           <Route path="/report/stats" element={<ReportPage />} />
