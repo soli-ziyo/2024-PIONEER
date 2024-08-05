@@ -10,8 +10,6 @@ import instance from "../api/axios";
 
 // const baseurl = "https://minsol.pythonanywhere.com";
 
-const baseurl = "https://minsol.pythonanywhere.com";
-
 const PostPage = () => {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
@@ -41,15 +39,14 @@ const PostPage = () => {
     // // formData.append("image", image);
     // formData.append("tag", hashtag);
 
+    //   const formData = new FormData();
+    // formData.append("description", description);
+    // formData.append("tag", hashtagId);
+    // // if (image) {
+    // //   formData.append("img", image);
+    // // }
 
-  //   const formData = new FormData();
-  // formData.append("description", description);
-  // formData.append("tag", hashtagId);  
-  // // if (image) {
-  // //   formData.append("img", image);
-  // // }
-
-  const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
 
     try {
       const response = await instance.post(

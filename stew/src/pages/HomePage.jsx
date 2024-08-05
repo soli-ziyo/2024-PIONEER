@@ -10,7 +10,6 @@ import HomeNotice from "../components/HomeNotice.jsx";
 import LoadingScreen from "../components/LoadingScreen.jsx";
 import LandingState from "../components/LandingState.jsx";
 
-
 import CodeInputNotice from "../components/FamilyCode/CodeInputNotice.jsx";
 import CodeInviteNotice from "../components/FamilyCode/CodeInviteNotice.jsx";
 import instance from "../api/axios.js";
@@ -33,15 +32,15 @@ const HomePage = () => {
       await fetchProfiles();
       const accessToken = localStorage.getItem("accessToken");
       const response = await instance.get(
-        `${process.env.REACT_APP_SERVER_PORT}/report/family/`,
+        `${process.env.REACT_APP_SERVER_PORT}/report/summary/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
-
-      if (response.data.family.length <= 1) {
+      console.log(response);
+      if (response.data.family_users.length <= 0) {
         console.log("등록된 가족이 없습니다");
         setShowBeforeCodeScreen(true);
       } else {
@@ -91,26 +90,26 @@ const HomePage = () => {
           </>
         )}
       </Content>
-      {(showBeforeCodeScreen ? (
-          <>
-            {!hideInviteNotice && (
-              <CodeInviteNotice
-                setHideElements={setHideElements}
-                setHideInviteNotice={setHideInviteNotice}
-                setHideInputNotice={setHideInputNotice}
-              />
-            )}
-            {!hideInputNotice && (
-              <CodeInputNotice
-                setHideElements={setHideElements}
-                setHideInviteNotice={setHideInviteNotice}
-                setHideInputNotice={setHideInputNotice}
-              />
-            )}
-          </>
-        ) : (
-          <HomeNotice />
-        ))}
+      {showBeforeCodeScreen ? (
+        <>
+          {!hideInviteNotice && (
+            <CodeInviteNotice
+              setHideElements={setHideElements}
+              setHideInviteNotice={setHideInviteNotice}
+              setHideInputNotice={setHideInputNotice}
+            />
+          )}
+          {!hideInputNotice && (
+            <CodeInputNotice
+              setHideElements={setHideElements}
+              setHideInviteNotice={setHideInviteNotice}
+              setHideInputNotice={setHideInputNotice}
+            />
+          )}
+        </>
+      ) : (
+        <HomeNotice />
+      )}
       {menuOpen && !hideElements && <HamburgerMenu toggleMenu={toggleMenu} />}
       {!hideElements && (
         <Footer>

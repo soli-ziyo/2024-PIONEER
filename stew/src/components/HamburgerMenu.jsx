@@ -11,6 +11,7 @@ const HamburgerMenu = ({ toggleMenu }) => {
     report: false,
     settings: false,
   });
+  const userId = parseInt(localStorage.getItem("user_id"));
 
   const toggleSubMenu = (menu) => {
     setSubMenuOpen((prev) => ({ ...prev, [menu]: !prev[menu] }));
@@ -42,7 +43,7 @@ const HamburgerMenu = ({ toggleMenu }) => {
         </MenuLink>
         {subMenuOpen.report && (
           <SubMenu>
-            <SubMenuLink to="/report/summary" onClick={toggleMenu}>
+            <SubMenuLink to={`/report/summary/${userId}`} onClick={toggleMenu}>
               모아보기
             </SubMenuLink>
             <SubMenuLink to="/report/stats" onClick={toggleMenu}>

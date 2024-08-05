@@ -3,16 +3,20 @@ import styled from "styled-components";
 import instance from "../api/axios";
 import basicImg from "../images/Basic.png";
 import { useFamilycodeStore } from "../stores/FamilycodeStore";
+import LoadingScreen from "../components/LoadingScreen";
+
 const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
 const MIN_BAR_HEIGHT = 50; // 최소 막대 높이
 
 const Chart = () => {
   const [chartDate, setChartDate] = useState(new Date());
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { familycode, fetchFamilycode } = useFamilycodeStore();
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         await fetchFamilycode();
         const response = await instance.get(
@@ -36,6 +40,8 @@ const Chart = () => {
         setData(formattedData);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -63,15 +69,12 @@ const Chart = () => {
   const year = chartDate.getFullYear();
   const month = chartDate.getMonth();
 
-  // 데이터 중 최대 포스트 수 찾기
   const maxPosts = Math.max(...data.map((member) => member.posts), 1); // 최소값 1로 설정하여 나누기 0 방지
 
   return (
     <ChartContainer>
       <MonthYear>
-        <Arrow onClick={handlePrevMonth}>{"<"}</Arrow>
         {year}.{String(month + 1).padStart(2, "0")}
-        <Arrow onClick={handleNextMonth}>{">"}</Arrow>
       </MonthYear>
       <BarContainer>
         <Bars>

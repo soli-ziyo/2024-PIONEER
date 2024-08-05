@@ -5,7 +5,6 @@ import { useFamilycodeStore } from "../../stores/FamilycodeStore";
 import Close from "../../images/Close.svg";
 
 const CodeInvite = ({
-  nextStep,
   prevStep,
   setHideElements,
   setHideInviteNotice,

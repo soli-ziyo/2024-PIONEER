@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import Close from "../images/Close.svg";
+import Post from "./Post";
 
 import SelectImoji from "./SelectImoji";
 import ImojiDash from "../images/Imoji_dash.svg";
-import Call from "../images/Call.svg";
-import Message from "../images/Message.svg";
+
 import instance from "../api/axios";
 
-const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
+const MoaDetail = ({ post, isCurrentUserPage, toggleMenu }) => {
+  const navigate = useNavigate();
   const timeSince = (date) => {
     const now = new Date();
     const postDate = new Date(date);
@@ -60,50 +62,72 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage }) => {
   };
 
   return (
-    <PostContainer>
-      {post.img && <PostImage src={post.img} alt={post.description} />}
-      <PostContent>
-        <PostUser>
-          <UserProfile src={post.user.profile} alt={post.user.nickname} />
-          <UserName>{post.user.nickname}</UserName>
-          <PostTime>
-            {timeSince(post.created_at)}
-            {isCurrentUserPage ? (
-              <EmojiButton onClick={handleEmojiClick}>
-                {selectedEmoji ? (
-                  <EmojiDisplay>{selectedEmoji}</EmojiDisplay>
-                ) : (
-                  <EmojiImg src={ImojiDash} alt="Add Emoji" />
-                )}
-              </EmojiButton>
-            ) : (
-              selectedEmoji && <EmojiDisplay>{selectedEmoji}</EmojiDisplay>
-            )}
-          </PostTime>
-        </PostUser>
-        <PostDescription>{post.description}</PostDescription>
-      </PostContent>
-      {showEmojiSelector && (
-        <SelectImoji
-          onClose={() => setShowEmojiSelector(false)}
-          onSelect={handleSelectEmoji}
-        />
-      )}
-      {!isCurrentUserPage && (
-        <ContactButtons>
-          <ContactButton onClick={() => onCall(post.user.phone)}>
-            <img src={Call} alt="Call" />
-          </ContactButton>
-          <ContactButton onClick={() => onMessage(post.user.phone)}>
-            <img src={Message} alt="Message" />
-          </ContactButton>
-        </ContactButtons>
-      )}
-    </PostContainer>
+    <Wrapper>
+      <Header>
+        <CloseButton onClick={toggleMenu}>
+          <img src={Close} alt="Close" />
+        </CloseButton>
+        <Title>해시태그</Title>
+      </Header>
+      <PostContainer>
+        {post.img && <PostImage src={post.img} alt={post.description} />}
+        <PostContent>
+          <PostUser>
+            <UserProfile src={post.user.profile} alt={post.user.nickname} />
+            <UserName>{post.user.nickname}</UserName>
+            <PostTime>
+              {timeSince(post.created_at)}
+              {selectedEmoji && <EmojiDisplay>{selectedEmoji}</EmojiDisplay>}
+            </PostTime>
+          </PostUser>
+          <PostDescription>{post.description}</PostDescription>
+        </PostContent>
+      </PostContainer>
+    </Wrapper>
   );
 };
 
-export default Post;
+export default MoaDetail;
+
+const Wrapper = styled.div`
+  z-index: 20;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 390px;
+  height: 100%;
+  background-color: #f9f9f9;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 0 auto;
+`;
+
+const CloseButton = styled.div`
+  cursor: pointer;
+  img {
+    width: 19px;
+    height: 19px;
+  }
+  margin: 3px 0 57px 3px;
+`;
+
+const Header = styled.div`
+  display: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 40px;
+`;
+
+const Title = styled.h1`
+  color: #000;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+`;
 
 const PostContainer = styled.div`
   margin-bottom: 20px;
@@ -156,21 +180,6 @@ const PostDescription = styled.div`
   line-height: 120%;
   margin-left: 16%;
   margin-bottom: 13px;
-`;
-
-const ContactButtons = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin: 3px 5px;
-  gap: 3px;
-`;
-
-const ContactButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 67px;
-  height: 48px;
 `;
 
 const EmojiButton = styled.button`
