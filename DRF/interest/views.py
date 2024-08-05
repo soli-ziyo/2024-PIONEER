@@ -128,7 +128,7 @@ class ReportView(views.APIView):
 
         user_serializer = UserProfileSerializer(family_users, many=True)
         
-        user_hashtags = WeekHashTag.objects.filter(tag_interests__user=user).distinct()
+        user_hashtags = WeekHashTag.objects.filter(user=user).distinct()
         hashtag_serializer = ReportHashTagSerializer(user_hashtags, many=True)
         
         response_data = {
