@@ -238,6 +238,7 @@ const SubmitButton = styled.button`
   background: #fff;
 
   font-family: Pretendard;
+  color: #000;
   font-size: 18px;
   font-weight: 500;
 

@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Info from "../images/Info.svg";
 import { CurrentWeek } from "./CurrentWeek";
+
 const HomeNotice = () => {
-  const [showNotice, setShowNotice] = useState(true);
   const [hoursLeft, setHoursLeft] = useState(0);
   const { week, weekOfMonth } = CurrentWeek();
 
@@ -18,21 +18,11 @@ const HomeNotice = () => {
     const now = new Date();
     const dayOfWeek = now.getDay();
 
-    // 첫째 주 또는 셋째 주 일요일인지 확인
-    const isFirstSunday = week === 1 && dayOfWeek === 0;
-    const isThirdSunday = week === 3 && dayOfWeek === 0;
-
-    // setShowNotice(isFirstSunday || isThirdSunday);
     checkHoursLeft();
-
-    const interval = setInterval(checkHoursLeft, 1000 * 60 * 60); // 매시간마다 체크
+    const interval = setInterval(checkHoursLeft, 1000 * 60 * 60); 
 
     return () => clearInterval(interval);
   }, [week]);
-
-  if (!showNotice) {
-    return null;
-  }
 
   return (
     <NoticeContainer>
@@ -48,7 +38,7 @@ const HomeNotice = () => {
 export default HomeNotice;
 
 const NoticeContainer = styled.div`
-  margin: 10px 0 38px;
+  margin-bottom: 5%;
   background-color: white;
   border-radius: 21px;
   padding: 18px;

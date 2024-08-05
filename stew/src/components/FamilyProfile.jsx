@@ -60,7 +60,11 @@ const ProfileWrapper = styled.div`
   margin-top: -50px;
 
   &:first-child {
-    margin-top: 30px;
+    margin-top: 15px;
+  }
+
+  &:last-child {
+    margin-bottom: 50px;
   }
 `;
 

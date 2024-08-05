@@ -47,11 +47,13 @@ const SelectImoji = ({ onClose, onSelect }) => {
 export default SelectImoji;
 
 const Overlay = styled.div`
+  width: 100%;
+  height: 100%;
   position: fixed;
-  top: 0;
+  top: auto; /* Remove the top setting */
+  bottom: 0; /* Align to the bottom */
   left: 0;
   right: 0;
-  bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -67,11 +69,11 @@ const EmojiContainer = styled.div`
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 390px;
-  height: 91vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+  height: 80%;
 `;
 
 const SelectedEmojiContainer = styled.div`
