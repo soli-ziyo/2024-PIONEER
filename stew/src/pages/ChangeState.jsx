@@ -5,17 +5,17 @@ import SelectStateImoji from "../components/SelectStateImoji";
 import axios from "axios";
 import Close from "../images/Close.svg";
 import instance from "../api/axios";
-
-// const baseurl = 'https://minsol.pythonanywhere.com';
+import ImojiDash from "../images/Imoji_dash.svg";
+import ImageBasic from "../images/Basic.png";
 
 const ChangeState = () => {
   const location = useLocation();
   const profile = location.state?.profile;
 
-  const [content, setContent] = useState(profile?.content || "");
-  const [profileImage, setProfileImage] = useState(profile?.profile || "");
+  const [content, setContent] = useState(profile?.content || "나의 한 마디");
+  const [profileImage, setProfileImage] = useState(profile?.profile || ImageBasic);
   const [imageFile, setImageFile] = useState(null);
-  const [emoji, setEmoji] = useState(profile?.emoji || "");
+  const [emoji, setEmoji] = useState(profile?.emoji || ImojiDash);
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
   const navigate = useNavigate();
   const inputRef = useRef(null);
