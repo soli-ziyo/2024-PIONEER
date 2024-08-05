@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import DeleteModal from "./Delete"; 
+import DeleteModal from "./Delete";
 
 import SelectImoji from "./SelectImoji";
 import ImojiDash from "../images/Imoji_dash.svg";
@@ -9,7 +9,14 @@ import Message from "../images/Message.svg";
 import instance from "../api/axios";
 import Trash from "../images/Trash.svg";
 
-const Post = ({ post, onCall, onMessage, isCurrentUserPage, currentUser, onDelete}) => {
+const Post = ({
+  post,
+  onCall,
+  onMessage,
+  isCurrentUserPage,
+  currentUser,
+  onDelete,
+}) => {
   const timeSince = (date) => {
     const now = new Date();
     const postDate = new Date(date);
@@ -33,7 +40,7 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage, currentUser, onDelet
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
   const [selectedEmoji, setSelectedEmoji] = useState(post.emoji);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  
+
   const handleEmojiClick = () => {
     setShowEmojiSelector(true);
   };
@@ -65,11 +72,14 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage, currentUser, onDelet
 
   const handleDeletePost = async () => {
     try {
-      const response = await instance.delete(`${process.env.REACT_APP_SERVER_PORT}/interest/list/${post.id}/delete/`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      });
+      const response = await instance.delete(
+        `${process.env.REACT_APP_SERVER_PORT}/interest/list/${post.id}/delete/`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
       if (response.status === 200) {
         console.log("Post deleted successfully");
         closeDeleteModal();
@@ -105,15 +115,15 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage, currentUser, onDelet
         <PostDescription>{post.description}</PostDescription>
       </PostContent>
       {currentUser && currentUser.user_id === post.user.id && (
-          <DeleteBtn onClick={openDeleteModal}>
-            <img src={Trash} alt="Delete" />
-          </DeleteBtn>
-        )}
-        <DeleteModal
-          isOpen={showDeleteModal}
-          onClose={closeDeleteModal}
-          onConfirm={handleDeletePost}
-        />
+        <DeleteBtn onClick={openDeleteModal}>
+          <img src={Trash} alt="Delete" />
+        </DeleteBtn>
+      )}
+      <DeleteModal
+        isOpen={showDeleteModal}
+        onClose={closeDeleteModal}
+        onConfirm={handleDeletePost}
+      />
       {showEmojiSelector && (
         <SelectImoji
           onClose={() => setShowEmojiSelector(false)}
@@ -198,15 +208,15 @@ const DeleteBtn = styled.div`
   height: 48px;
   margin: 3px 5px;
   border-radius: 21px;
-  border: 0.5px #E2E2E2;
-  background: #FFF;
+  border: 0.5px #e2e2e2;
+  background: #fff;
   cursor: pointer;
 
-  img{
+  img {
     width: 22px;
     height: 18px;
   }
-`
+`;
 
 const ContactButtons = styled.div`
   display: flex;

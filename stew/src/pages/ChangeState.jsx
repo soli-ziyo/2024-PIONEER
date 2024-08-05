@@ -115,8 +115,8 @@ const ChangeState = () => {
           />
         </ProfileImageWrapper>
         <EmojiWrapper onClick={handleEmojiClick}>
-  {emoji ? emoji : <img src={ImojiDash} alt='Default Emoji' />}
-</EmojiWrapper>
+          {emoji ? emoji : <img src={ImojiDash} alt="Default Emoji" />}
+        </EmojiWrapper>
         <SubmitButton type="submit">완료</SubmitButton>
       </Form>
       {showEmojiSelector && (
@@ -148,6 +148,7 @@ const Header = styled.div`
 
 const CloseButton = styled.div`
   cursor: pointer;
+  width: 19px;
   img {
     width: 19px;
     height: 19px;

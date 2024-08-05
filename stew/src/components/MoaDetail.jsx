@@ -1,88 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Close from "../images/Close.svg";
-import Post from "./Post";
-
-import SelectImoji from "./SelectImoji";
-import ImojiDash from "../images/Imoji_dash.svg";
+import Post from "../components/Post";
 
 import instance from "../api/axios";
 
-const MoaDetail = ({ post, isCurrentUserPage, toggleMenu }) => {
+const MoaDetail = ({ toggleMenu }) => {
+  const { tag_id } = useParams();
+  const [tagposts, setTagPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const timeSince = (date) => {
-    const now = new Date();
-    const postDate = new Date(date);
-    const difference = now - postDate;
 
-    const seconds = Math.floor(difference / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(months / 12);
-
-    if (years > 0) return `${years}년 전`;
-    if (months > 0) return `${months}달 전`;
-    if (days > 0) return `${days}일 전`;
-    if (hours > 0) return `${hours}시간 전`;
-    if (minutes > 0) return `${minutes}분 전`;
-    return `${seconds}초 전`;
-  };
-
-  const [showEmojiSelector, setShowEmojiSelector] = useState(false);
-  const [selectedEmoji, setSelectedEmoji] = useState(post.emoji);
-
-  const handleEmojiClick = () => {
-    setShowEmojiSelector(true);
-  };
-
-  const handleSelectEmoji = async (emoji) => {
-    const accessToken = localStorage.getItem("accessToken");
-    console.log(post.id);
+  const tagPost = async () => {
     try {
-      const response = await instance.put(
-        `${process.env.REACT_APP_SERVER_PORT}/interest/list/${post.id}/emoji/`,
-
-        { emoji },
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await instance.get(
+        `${process.env.REACT_APP_SERVER_PORT}/report/${tag_id}/`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
+      console.log("API 응답 데이터:", response.data.data);
       if (response.status === 200) {
-        setSelectedEmoji(emoji);
+        const postsData = response.data.data;
+        setTagPosts(
+          postsData
+            .map((tag, index) => ({
+              key: `${tag.tag.id}-${index}`,
+              description: tag.description,
+              tagName: tag.tag.hashtag[0].hashtag,
+              img: tag.img
+                ? `${process.env.REACT_APP_SERVER_PORT}${tag.img}`
+                : null,
+              created_at: tag.created_at,
+              user: {
+                id: tag.user.user_id,
+                nickname: tag.user.nickname,
+                phonenum: tag.user.phonenum,
+                profile: tag.user.profile
+                  ? `${process.env.REACT_APP_SERVER_PORT}${tag.user.profile}`
+                  : require("../images/Basic.png"),
+              },
+              emoji: tag.emoji,
+            }))
+            .reverse()
+        );
       }
     } catch (error) {
-      console.error("Failed to update emoji:", error);
+      console.error("API 오류:", error);
+    } finally {
+      setLoading(false);
     }
-    setShowEmojiSelector(false);
   };
+
+  const user_id = localStorage.getItem("user_id");
+
+  useEffect(() => {
+    tagPost();
+  }, [tag_id]);
 
   return (
     <Wrapper>
       <Header>
-        <CloseButton onClick={toggleMenu}>
-          <img src={Close} alt="Close" />
+        <CloseButton>
+          <img
+            src={Close}
+            alt="Close"
+            onClick={() => navigate(`/report/summary/${user_id}`)}
+          />
         </CloseButton>
-        <Title>해시태그</Title>
+        <Title>{tagposts.length > 0 ? tagposts[0].tagName : ""}</Title>
       </Header>
-      <PostContainer>
-        {post.img && <PostImage src={post.img} alt={post.description} />}
-        <PostContent>
-          <PostUser>
-            <UserProfile src={post.user.profile} alt={post.user.nickname} />
-            <UserName>{post.user.nickname}</UserName>
-            <PostTime>
-              {timeSince(post.created_at)}
-              {selectedEmoji && <EmojiDisplay>{selectedEmoji}</EmojiDisplay>}
-            </PostTime>
-          </PostUser>
-          <PostDescription>{post.description}</PostDescription>
-        </PostContent>
-      </PostContainer>
+      <PostsContainer>
+        {tagposts.map((tagpost) => (
+          <Post key={tagpost.key} post={tagpost} isCurrentUserPage={false} />
+        ))}
+      </PostsContainer>
     </Wrapper>
   );
 };
@@ -96,21 +92,27 @@ const Wrapper = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  width: 390px;
-  height: 100%;
+  width: 100%;
+  height: 100vh;
   background-color: #f9f9f9;
   padding: 20px;
   box-sizing: border-box;
   margin: 0 auto;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `;
 
 const CloseButton = styled.div`
   cursor: pointer;
+  width: 19px;
   img {
     width: 19px;
     height: 19px;
   }
-  margin: 3px 0 57px 3px;
+  margin: 3px 0 0px 3px;
 `;
 
 const Header = styled.div`
@@ -118,7 +120,7 @@ const Header = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 `;
 
 const Title = styled.h1`
@@ -129,87 +131,11 @@ const Title = styled.h1`
   letter-spacing: -0.5px;
 `;
 
-const PostContainer = styled.div`
-  margin-bottom: 20px;
-  overflow: hidden;
-`;
-
-const PostImage = styled.img`
-  width: 100%;
-  border-radius: 21px;
-`;
-
-const PostContent = styled.div`
-  padding: 11px;
-  border-radius: 21px;
-  border: 0.5px solid #e2e2e2;
-`;
-
-const PostUser = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const UserProfile = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 14px;
-`;
-
-const UserName = styled.div`
-  font-size: 16px;
-  font-weight: 500;
-  margin-right: auto;
-`;
-
-const PostTime = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #8c8c8c;
-  margin-right: 5px;
-  gap: 8px;
-  font-size: 12px;
-  font-weight: 400;
-`;
-
-const PostDescription = styled.div`
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 120%;
-  margin-left: 16%;
-  margin-bottom: 13px;
-`;
-
-const EmojiButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-
-  img {
-    width: 24px;
-    height: 24px;
-    margin-bottom: 7px;
+const PostsContainer = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    display: none;
   }
-`;
-
-const EmojiDisplay = styled.div`
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  margin-bottom: 11px;
-`;
-
-const EmojiImg = styled.img`
-  width: 24px;
-  height: 24px;
+  margin: 0px auto;
 `;

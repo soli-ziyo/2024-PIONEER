@@ -13,7 +13,9 @@ import InterestPage from "./pages/InterestPage.jsx";
 import PostPage from "./pages/PostPage.jsx";
 import ReportPage from "./pages/ReportPage.jsx";
 import MoaPage from "./pages/MoaPage.jsx";
-import LandingState from "./components/LandingState.jsx"
+import MoaDetail from "./components/MoaDetail.jsx";
+
+import LandingState from "./components/LandingState.jsx";
 import ChangeState from "./pages/ChangeState.jsx";
 
 import { createGlobalStyle } from "styled-components";
@@ -34,6 +36,7 @@ function App() {
           <Route path="/interest/new" element={<PostPage />} />
           <Route path="/report/stats" element={<ReportPage />} />
           <Route path="/report/summary/:user_id" element={<MoaPage />} />
+          <Route path="/report/:tag_id" element={<MoaDetail />} />
         </Routes>
       </Router>
     </>

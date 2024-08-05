@@ -129,6 +129,7 @@ const Header = styled.div`
 
 const CloseButton = styled.div`
   cursor: pointer;
+  width: 19px;
   img {
     width: 19px;
     height: 19px;
