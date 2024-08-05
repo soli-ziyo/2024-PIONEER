@@ -44,7 +44,7 @@ const HomeNoticeNS = ({ currentUserId }) => {
 export default HomeNoticeNS;
 
 const NoticeContainer = styled.div`
-  margin-bottom: 5%;
+  margin-bottom: 3%;
   background-color: white;
   border-radius: 21px;
   padding: 20px;

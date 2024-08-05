@@ -56,7 +56,7 @@ const LoadingContainer = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   margin-left: 17px;
   margin-bottom: 85px;
 `;
