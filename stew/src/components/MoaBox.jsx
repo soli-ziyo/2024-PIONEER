@@ -1,6 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
+import styled, { css } from "styled-components";
 
 import MoaDetail from "./MoaDetail";
 
@@ -53,29 +53,32 @@ const BoxContainer = styled.div`
   height: 155px;
   border-radius: 21px;
   overflow: hidden;
-  background: #e2e2e2;
-  /* box-shadow: 0 4px 0px rgba(0, 0, 0, 0.1); */
-  background-image: ${(props) => `url(${props.thumbnail})`};
+  background-color: ${(props) => (props.thumbnail ? "#ffffff" : "#ff5a00")};
+  background-image: ${(props) =>
+    props.thumbnail ? `url(${props.thumbnail})` : "none"};
   background-size: cover;
   background-position: center;
   margin-right: 6.5px;
   margin-bottom: 10px;
 
-  /* 그라데이션 추가 */
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 90%; /* 그라데이션의 높이를 조절합니다 */
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.8) 100%
-    );
-    z-index: 1;
-  }
+  ${(props) =>
+    props.thumbnail &&
+    css`
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 90%;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 0.8) 100%
+        );
+        z-index: 1;
+      }
+    `}
 `;
 
 const TextContainer = styled.div`
