@@ -262,7 +262,7 @@ const EmojiDisplay = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
 `;
 
 const EmojiImg = styled.img`
