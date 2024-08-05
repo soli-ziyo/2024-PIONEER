@@ -113,6 +113,7 @@ const PostContainer = styled.div`
 const PostImage = styled.img`
   width: 100%;
   border-radius: 21px;
+  background-color: white;
 `;
 
 const PostContent = styled.div`
