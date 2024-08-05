@@ -10,7 +10,7 @@ class Interest(models.Model):
     tag = models.ForeignKey(WeekHashTag, on_delete=models.CASCADE, related_name='tag_interests')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_interests')
     created_at = models.DateTimeField('date published', auto_now_add=True)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     img = models.ImageField(upload_to='%Y%m%d/', blank=True, null=True)
     emoji = models.TextField(max_length=10, blank=True, null=True)
 
