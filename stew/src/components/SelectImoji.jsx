@@ -62,6 +62,7 @@ const Overlay = styled.div`
 `;
 
 const EmojiContainer = styled.div`
+  margin: 15px  0;
   background: #f9f9f9;
   padding: 30px 20px;
   border-top-left-radius: 20px;
@@ -105,8 +106,8 @@ const EmojiGrid = styled.div`
   justify-content: center;
   grid-template-columns: repeat(3, 1fr);
   aspect-ratio: 1;
-  gap: 0px;
   width: 80%;
+  height: 80%;
   max-width: 390px;
 `;
 
