@@ -63,7 +63,7 @@ const Overlay = styled.div`
 
 const EmojiContainer = styled.div`
   background: #f9f9f9;
-  padding: 20px;
+  padding: 30px 20px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
@@ -72,7 +72,7 @@ const EmojiContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   box-sizing: border-box;
   height: 90%;
 `;
@@ -106,9 +106,8 @@ const EmojiGrid = styled.div`
   grid-template-columns: repeat(3, 1fr);
   aspect-ratio: 1;
   gap: 0px;
-  width: 90%;
+  width: 80%;
   max-width: 390px;
-
 `;
 
 const EmojiButton = styled.button`
