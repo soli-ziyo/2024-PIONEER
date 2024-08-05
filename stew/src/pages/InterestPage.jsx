@@ -107,7 +107,7 @@ const InterestPage = () => {
   const handleCall = (phone) => {
     window.location.href = `tel:${phone}`;
   };
-
+  
   const handleMessage = (phone) => {
     window.location.href = `sms:${phone}`;
   };
@@ -181,14 +181,18 @@ const InterestPage = () => {
         ) : (
           posts.map((post) => (
             <Post
-              key={post.key}
-              post={post}
-              currentUser={currentUser}
-              onCall={handleCall}
-              onMessage={handleMessage}
-              isCurrentUserPage={parseInt(user_id) === currentUserId}
-              onDelete={handleDeletePost}
-            />
+  key={post.key}
+  post={post}
+  currentUser={currentUser}
+  onCall={(phonenum) => {
+    handleCall(phonenum);
+  }}
+  onMessage={(phonenum) => {
+    handleMessage(phonenum);
+  }}
+  isCurrentUserPage={parseInt(user_id) === currentUserId}
+  onDelete={() => handleDeletePost(post.id)}
+/>
           ))
         )}
       </PostsContainer>

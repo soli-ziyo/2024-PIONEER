@@ -122,13 +122,17 @@ const Post = ({ post, onCall, onMessage, isCurrentUserPage, currentUser, onDelet
       )}
       {isCurrentUserPage && (
         <ContactButtons>
-          <ContactButton onClick={() => onCall(post.user.phone)}>
-            <img src={Call} alt="Call" />
-          </ContactButton>
-          <ContactButton onClick={() => onMessage(post.user.phone)}>
-            <img src={Message} alt="Message" />
-          </ContactButton>
-        </ContactButtons>
+        <ContactButton onClick={() => {
+          onCall(post.user.phonenum);
+        }}>
+          <img src={Call} alt="Call" />
+        </ContactButton>
+        <ContactButton onClick={() => {
+          onMessage(post.user.phonenum);
+        }}>
+          <img src={Message} alt="Message" />
+        </ContactButton>
+      </ContactButtons>
       )}
     </PostContainer>
   );
