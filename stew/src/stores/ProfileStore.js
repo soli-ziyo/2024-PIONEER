@@ -2,8 +2,6 @@ import { create } from "zustand";
 import axios from "axios";
 import instance from "../api/axios";
 
-// const baseurl = "https://minsol.pythonanywhere.com";
-
 export const useProfilesStore = create((set) => ({
   profiles: [],
   fetchProfiles: async () => {

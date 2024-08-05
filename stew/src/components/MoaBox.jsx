@@ -21,21 +21,19 @@ const getWeekOfMonth = (date) => {
   return Math.ceil((day + firstDay) / 7);
 };
 
-const MoaBox = ({ post, isCurrentUserPage, toggleMenu }) => {
+const MoaBox = ({ post, toggleMenu }) => {
   const dateString = post.created_at;
   const date = parseDate(dateString);
   const lastDayOfMonth = getLastDayOfMonth(date);
   const weekOfMonth = getWeekOfMonth(date);
   const navigate = useNavigate();
 
-  // const MoveDetail = (toggleMenu) => {
-  //   const tag_id = post.weekhashtagId;
-  //   navigate(`/report/${tag_id}/`);
-  //   post = { post };
-  // };
+  const MoveDetail = (userId) => {
+    navigate(`/report/${post.weekhashtagId}/`);
+  };
 
   return (
-    <BoxContainer thumbnail={post.thumbnail}>
+    <BoxContainer thumbnail={post.thumbnail} onClick={MoveDetail}>
       <TextContainer>
         <Week>
           {date.getMonth() + 1}월 {weekOfMonth}째 주

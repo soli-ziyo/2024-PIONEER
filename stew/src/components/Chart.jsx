@@ -199,6 +199,7 @@ const ProfileImage = styled.img`
   position: absolute;
   bottom: 0px; // 이미지 위치 조정
   border: 1px solid #e2e2e2;
+  background-color: white;
 `;
 
 const PostCount = styled.div`
