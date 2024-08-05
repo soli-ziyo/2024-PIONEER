@@ -22,10 +22,10 @@ const HomeNoticeNS = ({ currentUserId }) => {
 
   useEffect(() => {
     calculateTimeLeft();
-    const interval = setInterval(calculateTimeLeft, 1000 * 60 * 60); // 1시간마다 업데이트
+    const interval = setInterval(calculateTimeLeft, 1000 * 60 * 60); 
 
     return () => clearInterval(interval);
-  });
+  }, []);
 
   return (
       <NoticeContainer>

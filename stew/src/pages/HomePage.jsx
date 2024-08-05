@@ -63,7 +63,7 @@ const HomePage = () => {
 
   useEffect(() => {
     checkFamilyCode();
-  }, [fetchProfiles]);
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
