@@ -104,13 +104,12 @@ const EmojiGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   max-width: 300px;
+  min-height: 230px;
   box-sizing: border-box; 
   justify-items: center;
 `;  
 
 const EmojiButton = styled.button`
-  width: 60px; /* 그리드 항목의 너비 고정 */
-  height: 60px; /* 그리드 항목의 높이 고정 */
   background: none;
   border: none;
   cursor: pointer;
