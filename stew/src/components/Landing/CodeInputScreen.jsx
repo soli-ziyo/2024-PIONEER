@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
-import axios from "axios";
 
 const CodeInputScreen = ({ nextStep, prevStep }) => {
   const [code, setCode] = useState("");
@@ -24,11 +23,11 @@ const CodeInputScreen = ({ nextStep, prevStep }) => {
           "code": code,
         },
         {
-          withCredentials: true,  // 이 옵션을 추가
+          withCredentials: true,  
         }
       );
       console.log("리스폰스:", response);
-      // console.log(code);
+      
 
       if (response.status === 200) {
         console.log("sms 인증에 성공하였습니다.", response.data);
