@@ -1,4 +1,4 @@
-# {\textsf{\color{orange}Stew : 우리 가족, 멀리 있어도 마음은 가까이}}
+# Stew : 우리 가족, 멀리 있어도 마음은 가까이
 </br></br>
 
 ## 서비스 소개
@@ -7,12 +7,6 @@
     
 [![image](https://github.com/user-attachments/assets/64e5b147-736c-40a8-9e02-fa2d4a87d416)](https://stew-s-uxuns-projects.vercel.app/)
 </p>
-
-<p align="center">
-    
-<img src="https://github.com/user-attachments/assets/e3ac4e98-bc37-4dfd-8847-148086c55806" width="50%">
-</p>
-
 
 💡 **주제: IT 기술을 활용하여 현대인의 건강 (wellness) 문제를 해결할 수 있는 서비스를 개발하시오.**
 
