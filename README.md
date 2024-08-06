@@ -8,7 +8,7 @@
 
 💡 **주제: IT 기술을 활용하여 현대인의 건강 (wellness) 문제를 해결할 수 있는 서비스를 개발하시오.**
 
-우리 가족, 멀리 있어도 마음은 가까이 ${\textsf{\color{orange}stay together, stew}}$
+우리 가족, 멀리 있어도 마음은 가까이 **${\textsf{\color{orange}stay together, stew}}$**
 
 ##### 현대인의 사회적 웰니스를 위해 가족 관계 증진을 돕는 모바일 웹
 
@@ -127,13 +127,13 @@
 
 ## 장표
 
-<img src="https://github.com/user-attachments/assets/4b40ac68-697b-4799-b67b-a75f6b8cd648" width="50%">
-<img src="https://github.com/user-attachments/assets/3ab26b02-cedf-4c3c-bd33-aa96dd7173f5" width="50%">
-<img src="https://github.com/user-attachments/assets/0ea12bc0-df5f-43d7-9f1e-f0e6d97ff08d" width="50%">
-<img src="https://github.com/user-attachments/assets/f1b49e6b-9d2c-4b91-964a-139a4272b481" width="50%">
-<img src="https://github.com/user-attachments/assets/c44bf62b-85e6-478b-aa09-d445e39c5d35" width="50%">
-<img src="https://github.com/user-attachments/assets/71b8edc4-c2f9-42c5-9fed-1b064530d6b0" width="50%">
-<img src="https://github.com/user-attachments/assets/4747e14a-1384-4e81-9790-101e52aee15b" width="50%">
-<img src="https://github.com/user-attachments/assets/8e4431e5-5a52-47e6-b57b-a4c855e5bcf2" width="50%">
+<img src="https://github.com/user-attachments/assets/4b40ac68-697b-4799-b67b-a75f6b8cd648" width="70%">
+<img src="https://github.com/user-attachments/assets/3ab26b02-cedf-4c3c-bd33-aa96dd7173f5" width="70%">
+<img src="https://github.com/user-attachments/assets/0ea12bc0-df5f-43d7-9f1e-f0e6d97ff08d" width="70%">
+<img src="https://github.com/user-attachments/assets/f1b49e6b-9d2c-4b91-964a-139a4272b481" width="70%">
+<img src="https://github.com/user-attachments/assets/c44bf62b-85e6-478b-aa09-d445e39c5d35" width="70%">
+<img src="https://github.com/user-attachments/assets/71b8edc4-c2f9-42c5-9fed-1b064530d6b0" width="70%">
+<img src="https://github.com/user-attachments/assets/4747e14a-1384-4e81-9790-101e52aee15b" width="70%">
+<img src="https://github.com/user-attachments/assets/8e4431e5-5a52-47e6-b57b-a4c855e5bcf2" width="70%">
 
   <hr/>
