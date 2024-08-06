@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-//images
 import Back from "../../images/Back.svg";
 
 const SignupScreen = ({ nextStep, prevStep }) => {

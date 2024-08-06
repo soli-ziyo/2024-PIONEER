@@ -29,11 +29,11 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 10;
 `;
 
 const ModalContainer = styled.div`
-  width: 65%;
+  width: 250px;
   height: 20%;
   border-radius: 8px;
   border: 0.5px #E2E2E2;
