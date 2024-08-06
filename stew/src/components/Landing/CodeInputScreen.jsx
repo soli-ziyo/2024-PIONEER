@@ -30,9 +30,11 @@ const CodeInputScreen = ({ nextStep, prevStep, code }) => {
 
     if (codeStr === code) {
       console.log("sms 인증에 성공하였습니다.");
+      setCodeCheck(true);
       nextStep();
     } else {
       setError("인증에 실패하였습니다. 인증번호를 확인해주세요.");
+      setCodeCheck(false);
     }
     setLoading(false);
   };

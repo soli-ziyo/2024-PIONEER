@@ -46,6 +46,7 @@ const SignupPage = () => {
           password={password}
           phonenum={phonenum}
           prevStep={prevStep}
+          nextStep={nextStep}
         />
       );
     default:

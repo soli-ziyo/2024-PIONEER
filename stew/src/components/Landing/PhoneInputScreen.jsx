@@ -21,7 +21,7 @@ const PhoneInputScreen = ({ setPhonenum, setCode, nextStep }) => {
         console.log("본인확인 sms 전송 성공", response.data.message);
         const CorrectCode = response.data.verification_code;
         setCode(CorrectCode);
-        nextStep();
+        nextStep(CorrectCode);
       }
     } catch (error) {
       if (error.response) {
