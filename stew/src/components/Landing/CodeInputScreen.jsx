@@ -5,33 +5,37 @@ import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
 
 const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
-  const [code, setCode] = useState(["", "", "", ""]);
+  const [code, setCode] = useState([""]);
   const [loading, setLoading] = useState(false);
+  const [buttonReady, setButtonReady] = useState(false);
+
   const [error, setError] = useState(null);
 
-  const handleChange = (e, index) => {
-    const newCode = [...code];
-    newCode[index] = e.target.value;
-    setCode(newCode);
+  // const handleChange = (e, index) => {
+  //   const newCode = [...code];
+  //   newCode[index] = e.target.value;
+  //   setCode(newCode);
 
-    if (e.target.value && index < 3) {
-      document.getElementById(`code-input-${index + 1}`).focus();
-    }
-  };
+  //   if (e.target.value && index < 3) {
+  //     document.getElementById(`code-input-${index + 1}`).focus();
+  //   }
+  // };
 
-  const handleNext = async () => {
+  const codeVery = async () => {
     setLoading(true);
     setError(null);
     try {
-      const codeStr = code.join("");
-      console.log("Submitting code:", codeStr);
+      // const codeStr = code.join("");
+      console.log("Submitting code:", code);
       const response = await instance.post(
         `${process.env.REACT_APP_SERVER_PORT}/accounts/phonenum/getCode/`,
-        { code: codeStr }
+        {
+          code: code,
+        }
       );
-      console.log(code);
+      console.log("Response:", response);
       if (response.status === 200) {
-        console.log("sms 인증에 성공하였습니다.", response.data.message);
+        console.log("sms 인증에 성공하였습니다.", response.data);
         nextStep();
       }
     } catch (err) {
@@ -61,6 +65,20 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
     }
   };
 
+  const handleChange = (text) => {
+    setCode(text);
+    if (text.length === 4) {
+      setButtonReady(true);
+    } else {
+      setButtonReady(false);
+    }
+  };
+
+  const handleNext = () => {
+    setCode(code);
+    codeVery().then(() => nextStep());
+  };
+
   return (
     <Wrapper>
       <Container>
@@ -68,8 +86,13 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
           <img src={Back} alt="Back" onClick={prevStep} />
           <Comment>인증 코드를 발송했어요.</Comment>
         </ContainerBase>
-        <CodeInputs>
-          {code.map((digit, index) => (
+        <InputWrapper
+          placeholder="인증코드를 입력해주세요"
+          onChange={(e) => handleChange(e.target.value)}
+          value={code}
+        ></InputWrapper>
+        {/* <CodeInputs> */}
+        {/* {code.map((digit, index) => (
             <CodeInput
               key={index}
               id={`code-input-${index}`}
@@ -78,17 +101,21 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
               value={digit}
               onChange={(e) => handleChange(e, index)}
             />
-          ))}
-          {loading && (
-            <LoadingMessage>인증번호를 확인 중입니다...</LoadingMessage>
-          )}
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-        </CodeInputs>
+          ))} */}
+        {loading && (
+          <LoadingMessage>인증번호를 확인 중입니다...</LoadingMessage>
+        )}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {/* </CodeInputs> */}
 
         <Button
-          // onClick={handleNext}
-          onClick={nextStep}
-          disabled={code.some((digit) => digit === "")}
+          style={{
+            backgroundColor: buttonReady ? "white" : "#F1F1F1",
+            color: buttonReady ? "black" : "#8C8C8C",
+          }}
+          onClick={handleNext}
+          // onClick={nextStep}
+          disabled={!buttonReady}
         >
           다음
         </Button>
@@ -120,6 +147,23 @@ const ContainerBase = styled.div`
     margin-bottom: 58px;
     cursor: pointer;
   }
+`;
+
+const InputWrapper = styled.input`
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  position: relative;
+
+  border-style: none;
+  border-radius: 4px;
+  top: 52px;
+  padding: 14px 16px;
+  border: 1px solid #e2e2e2;
+  align-items: center;
+  background: #f9f9f9;
+  border-radius: 10px;
+  font-family: "Pretendard";
 `;
 
 const Container = styled.div`
@@ -179,7 +223,7 @@ const ErrorMessage = styled.div`
   font-size: 14px;
   z-index: 10;
   position: absolute;
-  top: 90px;
+  top: 300px;
 `;
 
 const LoadingMessage = styled.div`
@@ -188,5 +232,5 @@ const LoadingMessage = styled.div`
   font-size: 14px;
   z-index: 10;
   position: absolute;
-  top: 90px;
+  top: 300px;
 `;
