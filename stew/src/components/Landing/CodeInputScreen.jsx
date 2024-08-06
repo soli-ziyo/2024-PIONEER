@@ -1,70 +1,40 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
 
-const CodeInputScreen = ({ nextStep, prevStep }) => {
-  const [code, setCode] = useState([""]);
+const CodeInputScreen = ({ nextStep, prevStep, code }) => {
+  const [Usercode, setUserCode] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
-  const [buttonReady, setButtonReady] = useState(false);
-
   const [error, setError] = useState(null);
+  const [codecheck, setCodeCheck] = useState(false);
 
-  const codeVery = async () => {
+  const handleChange = (e, index) => {
+    const newCode = [...Usercode];
+    newCode[index] = e.target.value;
+    setUserCode(newCode);
+
+    if (e.target.value && index < 3) {
+      document.getElementById(`code-input-${index + 1}`).focus();
+    }
+  };
+
+  // const handleNext = async () => {
+  const handleNext = () => {
     setLoading(true);
     setError(null);
-    try {
-      console.log("Submitting code:", code);
-      const response = await instance.post(
-        `${process.env.REACT_APP_SERVER_PORT}/accounts/phonenum/getCode/`,
-        {
-          code: code,
-        }
-      );
-      console.log("Response:", response);
-      if (response.status === 200) {
-        console.log("sms 인증에 성공하였습니다.", response.data);
-        nextStep();
-      }
-    } catch (err) {
-      if (err.response) {
-        const { status, data } = err.response;
-        if (status === 400) {
-          if (data.error === "인증 코드 오류") {
-            setError("인증에 실패하였습니다. 인증번호를 확인해주세요.");
-            console.log(error);
-          } else if (data.error === "인증코드가 입력되지 않았습니다.") {
-            setError(
-              "인증코드가 입력되지 않았습니다. 인증코드를 입력해주세요."
-            );
-            console.log(error);
-          } else {
-            setError("잘못된 요청입니다.");
-          }
-        } else if (status === 500) {
-          setError("서버 오류입니다. 잠시 후 다시 시도해주세요.");
-        }
-      } else {
-        setError("알 수 없는 오류가 발생했습니다.");
-      }
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const handleChange = (text) => {
-    setCode(text);
-    if (text.length === 4) {
-      setButtonReady(true);
+    const codeStr = Usercode.join("");
+    setCodeCheck(codeStr === code);
+
+    if (codeStr === code) {
+      console.log("sms 인증에 성공하였습니다.");
+      nextStep();
     } else {
-      setButtonReady(false);
+      setError("인증에 실패하였습니다. 인증번호를 확인해주세요.");
     }
-  };
-
-  const handleNext = () => {
-    setCode(code);
-    codeVery();
+    setLoading(false);
   };
 
   return (
@@ -74,24 +44,27 @@ const CodeInputScreen = ({ nextStep, prevStep }) => {
           <img src={Back} alt="Back" onClick={prevStep} />
           <Comment>인증 코드를 발송했어요.</Comment>
         </ContainerBase>
-        <InputWrapper
-          placeholder="인증코드를 입력해주세요"
-          onChange={(e) => handleChange(e.target.value)}
-          value={code}
-        ></InputWrapper>
-
-        {loading && (
-          <LoadingMessage>인증번호를 확인 중입니다...</LoadingMessage>
-        )}
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+        <CodeInputs>
+          {Usercode.map((digit, index) => (
+            <CodeInput
+              key={index}
+              id={`code-input-${index}`}
+              type="text"
+              maxLength="1"
+              value={digit}
+              onChange={(e) => handleChange(e, index)}
+            />
+          ))}
+          {loading && (
+            <LoadingMessage>인증번호를 확인 중입니다...</LoadingMessage>
+          )}
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+        </CodeInputs>
 
         <Button
-          style={{
-            backgroundColor: buttonReady ? "white" : "#F1F1F1",
-            color: buttonReady ? "black" : "#8C8C8C",
-          }}
           onClick={handleNext}
-          disabled={!buttonReady}
+          // onClick={nextStep}
+          disabled={Usercode.some((digit) => digit === "")}
         >
           다음
         </Button>
@@ -123,23 +96,6 @@ const ContainerBase = styled.div`
     margin-bottom: 58px;
     cursor: pointer;
   }
-`;
-
-const InputWrapper = styled.input`
-  display: flex;
-  flex-direction: column;
-  width: 90%;
-  position: relative;
-
-  border-style: none;
-  border-radius: 4px;
-  top: 52px;
-  padding: 14px 16px;
-  border: 1px solid #e2e2e2;
-  align-items: center;
-  background: #f9f9f9;
-  border-radius: 10px;
-  font-family: "Pretendard";
 `;
 
 const Container = styled.div`
@@ -199,7 +155,7 @@ const ErrorMessage = styled.div`
   font-size: 14px;
   z-index: 10;
   position: absolute;
-  top: 230px;
+  top: 90px;
 `;
 
 const LoadingMessage = styled.div`
@@ -208,5 +164,5 @@ const LoadingMessage = styled.div`
   font-size: 14px;
   z-index: 10;
   position: absolute;
-  top: 230px;
+  top: 90px;
 `;
