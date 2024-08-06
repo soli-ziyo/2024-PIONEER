@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import StateInterest from "../components/StateInterest";
-
 import Close from "../images/Close.svg";
 import Plus from "../images/Plus_og.svg";
 import instance from "../api/axios";
-
-// const baseurl = "https://minsol.pythonanywhere.com";
 
 const PostPage = () => {
   const [description, setDescription] = useState("");
@@ -33,18 +29,6 @@ const PostPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // const formData = new FormData();
-    // formData.append("description", description);
-    // // formData.append("image", image);
-    // formData.append("tag", hashtag);
-
-    //   const formData = new FormData();
-    // formData.append("description", description);
-    // formData.append("tag", hashtagId);
-    // // if (image) {
-    // //   formData.append("img", image);
-    // // }
 
     const accessToken = localStorage.getItem("accessToken");
 

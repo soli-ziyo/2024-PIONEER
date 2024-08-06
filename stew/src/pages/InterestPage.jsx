@@ -77,7 +77,7 @@ const InterestPage = () => {
       if (withDelay) {
         const delay = setTimeout(() => {
           setDelayComplete(true);
-        }, 700); // 1초 딜레이
+        }, 700); 
         return () => clearTimeout(delay);
       } else {
         setDelayComplete(true);

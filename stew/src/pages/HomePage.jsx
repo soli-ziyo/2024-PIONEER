@@ -18,7 +18,6 @@ import instance from "../api/axios.js";
 const currentUserId = parseInt(localStorage.getItem("user_id"));
 
 const HomePage = () => {
-  const { user_id } = useParams();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showBeforeCodeScreen, setShowBeforeCodeScreen] = useState(false);
   const [hideElements, setHideElements] = useState(false);

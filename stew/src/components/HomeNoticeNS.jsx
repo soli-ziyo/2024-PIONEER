@@ -9,8 +9,8 @@ const HomeNoticeNS = ({ currentUserId }) => {
   const calculateTimeLeft = () => {
     const now = new Date();
     const endOfWeek = new Date(now);
-    endOfWeek.setDate(now.getDate() + (7 - now.getDay())); // 이번 주의 마지막 날 (일요일)
-    endOfWeek.setHours(23, 59, 59, 999); // 일요일의 마지막 시간
+    endOfWeek.setDate(now.getDate() + (7 - now.getDay())); 
+    endOfWeek.setHours(23, 59, 59, 999);
 
     const difference = endOfWeek - now;
 
