@@ -56,8 +56,7 @@ const Wrapper = styled.div`
   align-items: center;
   background-color: #fff;
   border-radius: 21px;
-  padding: 13px;
-  padding-top: 20px;
+  padding: 18px 15px;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
 `;
 

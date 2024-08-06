@@ -69,7 +69,7 @@ const MoaDetail = ({ toggleMenu }) => {
           <img
             src={Close}
             alt="Close"
-            onClick={() => navigate(`/report/summary/${user_id}`)}
+            onClick={() => navigate(-1)}
           />
         </CloseButton>
         <Title>{tagposts.length > 0 ? tagposts[0].tagName : ""}</Title>

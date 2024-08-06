@@ -58,6 +58,7 @@ const BoxContainer = styled.div`
   background-position: center;
   margin-right: 6.5px;
   margin-bottom: 10px;
+  cursor: pointer;
 
   ${(props) =>
     props.thumbnail &&
