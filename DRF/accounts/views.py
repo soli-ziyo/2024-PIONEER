@@ -25,9 +25,9 @@ class SignupView(views.APIView):
 '''
 class SignupView(views.APIView):
     def post(self, request):
-        phonenum = request.session.get('phonenum')        
+        #phonenum = request.data.get('phonenum')        
         data = request.data.copy()
-        data['phonenum'] = phonenum
+        #data['phonenum'] = phonenum
         
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
@@ -163,15 +163,15 @@ class sendCodeView(APIView):
             return Response({'error': '휴대폰 번호가 필요합니다.'}, status=400)
         
         verification_code = generate_verification_code()
-        request.session['verification_code'] = verification_code
-        request.session['phonenum'] = phonenum
+        #request.session['verification_code'] = verification_code
+        #request.session['phonenum'] = phonenum
         
         data = {
             'messages': [
                 {
                     'to': phonenum,
                     'from': '01062487123',
-                    'text': f'[stew] 회원가입 인증 코드입니다. ({verification_code})'
+                    'text': f'{verification_code}'
                 }
             ]
         }
@@ -179,24 +179,21 @@ class sendCodeView(APIView):
         response = send_many(data)
         
         if response.status_code == 200:
-            return Response({'message': '인증 코드를 발송하는 데에 성공하였습니다.'})
+            return Response({'message': '인증 코드를 발송하는 데에 성공하였습니다.', 'phonenum':phonenum, 'verification_code':verification_code})
         else:
             return Response({'error': '인증 코드를 발송하는 데에 실패하였습니다.'}, status=500)
 
 class getCodeView(APIView):
     def post(self, request):
         input_code = request.data.get('code')
-        session_code = request.session.get('verification_code')
-        phonenum = request.session.get('phonenum')
         
         if not input_code:
             return Response({'error': '인증코드가 입력되지 않았습니다.'}, status=400)
         
-        if input_code == session_code:
-            del request.session['verification_code']
+        if input_code == "True":
             return Response({'message': '사용자 인증 완료'})
         else:
-            return Response({'error': '인증 코드 오류', 'code': session_code}, status=400)
+            return Response({'error': '인증 코드 오류'}, status=400)
         
 class phoneExView(APIView):
     def post(self, request, format=None):
