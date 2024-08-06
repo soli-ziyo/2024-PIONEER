@@ -6,9 +6,10 @@
 <p align="center">
     
 [![image](https://github.com/user-attachments/assets/64e5b147-736c-40a8-9e02-fa2d4a87d416)](https://stew-s-uxuns-projects.vercel.app/)
+</p>
 
-사진 클릭 시 서비스 링크로 이동합니다.
-
+<p align="center">
+    
 <img src="https://github.com/user-attachments/assets/e3ac4e98-bc37-4dfd-8847-148086c55806" width="70%">
 </p>
 
