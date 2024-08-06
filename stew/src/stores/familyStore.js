@@ -1,12 +1,11 @@
-import create from "zustand";
-import axios from "axios";
+import { create } from "zustand";
 import instance from "../api/axios";
 
 const useFamilyStore = create((set) => ({
   familycode: "",
   setFamilycode: (code) => set({ familycode: code }),
   submitFamilycode: async (familycode) => {
-    // const baseurl = "https://minsol.pythonanywhere.com/";
+
     try {
       const response = await instance.post(
         `${process.env.REACT_APP_SERVER_PORT}family/create/`,

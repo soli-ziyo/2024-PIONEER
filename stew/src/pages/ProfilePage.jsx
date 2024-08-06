@@ -1,12 +1,9 @@
-//설정-프로필 수정 페이지
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
-import LoadingScreen from "../components/LoadingScreen";
-import instance from "../api/axios.js";
 
 import MyProfile from "../components/MyProfile.jsx";
 import { useProfilesStore } from "../stores/ProfileStore.js";
@@ -15,7 +12,6 @@ const currentUserId = parseInt(localStorage.getItem("user_id"));
 
 const ProfilePage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
   const { user_id } = useParams();
   const navigate = useNavigate();
 

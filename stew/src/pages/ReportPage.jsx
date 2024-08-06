@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
 import { DateStore } from "../stores/DateStore";
 import HamburgerMenu from "../components/HamburgerMenu";
 import Header from "../components/Header";
 import CalendarComponent from "../components/CalendarComponent";
 import Chart from "../components/Chart";
 import LoadingScreen from "../components/LoadingScreen";
-
 import Close from "../images/Close.svg";
 import { useFamilycodeStore } from "../stores/FamilycodeStore";
 
@@ -15,7 +13,7 @@ const ReportPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [noticeVisible, setNoticeVisible] = useState(false);
   const { familycode, fetchFamilycode } = useFamilycodeStore();
-  const { totalPosts, temperature, status, fetchData } = DateStore();
+  const { temperature, status, fetchData } = DateStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

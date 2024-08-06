@@ -1,8 +1,6 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
-
-import MoaDetail from "./MoaDetail";
 
 const parseDate = (dateString) => {
   const [year, month, day] = dateString.split("-").map(Number);
@@ -11,8 +9,8 @@ const parseDate = (dateString) => {
 
 const getLastDayOfMonth = (date) => {
   const year = date.getFullYear();
-  const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
-  return new Date(year, month, 0).getDate(); // 다음 달의 0일을 구하면 해당 월의 마지막 일을 얻을 수 있음
+  const month = date.getMonth() + 1; 
+  return new Date(year, month, 0).getDate();
 };
 
 const getWeekOfMonth = (date) => {
@@ -21,7 +19,7 @@ const getWeekOfMonth = (date) => {
   return Math.ceil((day + firstDay) / 7);
 };
 
-const MoaBox = ({ post, toggleMenu }) => {
+const MoaBox = ({ post }) => {
   const dateString = post.created_at;
   const date = parseDate(dateString);
   const lastDayOfMonth = getLastDayOfMonth(date);

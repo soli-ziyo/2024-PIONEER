@@ -1,19 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import Close from "../images/Close.svg";
 import instance from "../api/axios";
 
-const currentUserId = parseInt(localStorage.getItem("user_id"));
-
 const EditProfilePage = () => {
   const location = useLocation();
   const { myProfile } = location.state || {};
 
-  // const [phonenum, setPhonenum] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
-  const [originalProfile, setOriginalProfile] = useState(myProfile);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -71,12 +67,6 @@ const EditProfilePage = () => {
           <ProfileImage src={myProfile} alt="Profile" />
         </ProfileImageWrapper>
         <InputWrapper>
-          {/* <Div>전화번호</Div>
-          <input
-            placeholder="전화번호를 입력해주세요"
-            onChange={(e) => setPhonenum(e.target.value)}
-            value={phonenum}
-          ></input> */}
           <Div>비밀번호</Div>
           <input
             type="password"
