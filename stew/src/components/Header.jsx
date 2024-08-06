@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import Hamburger from "../images/Hamburger.svg";
-import Bell_none from "../images/Bell_none.svg";
 
 const Header = ({ toggleMenu }) => {
   return (
@@ -9,9 +8,6 @@ const Header = ({ toggleMenu }) => {
       <MenuIcon onClick={toggleMenu}>
         <img src={Hamburger} alt="Hamburger Menu" />
       </MenuIcon>
-      <NotificationIcon>
-        <img src={Bell_none} alt="Notification" />
-      </NotificationIcon>
     </HeaderWrapper>
   );
 };
@@ -27,6 +23,7 @@ const HeaderWrapper = styled.header`
 `;
 
 const MenuIcon = styled.div`
+  margin-top: 3px;
   cursor: pointer;
   width: 25px;
   height: 13px;
