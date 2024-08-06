@@ -165,7 +165,7 @@ const MonthYear = styled.div`
 `;
 
 const Arrow = styled.div`
-  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
+  cursor: pointer;
   margin: 0 40px;
   border: 2px solid #e2e2e2;
   border-radius: 50%;

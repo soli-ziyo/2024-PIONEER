@@ -101,6 +101,7 @@ const ContentWrapper = styled.div`
 const ProfileSection = styled.section`
   margin: 20px 0;
   margin-bottom: 30px;
+  cursor: pointer;
 `;
 
 const ProfileContainer = styled.div`
