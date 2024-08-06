@@ -73,8 +73,11 @@ const HomePage = () => {
     return <LoadingScreen />;
   }
 
-  const today = new Date().getDay();
+  // 원래 코드
+  // const today = new Date().getDay(); 
 
+  // 임시로 오늘을 일요일로 설정
+  const today = 0;
 
 
   return (
