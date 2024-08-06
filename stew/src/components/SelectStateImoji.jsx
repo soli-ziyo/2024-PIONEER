@@ -107,7 +107,7 @@ const EmojiGrid = styled.div`
   box-sizing: border-box; 
   justify-items: center;
 `;  
-s
+
 const EmojiButton = styled.button`
   background: none;
   border: none;
