@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
 
-const PhoneInputScreen = ({ setPhone, nextStep }) => {
+const PhoneInputScreen = ({ setPhonenum, setCode, nextStep }) => {
   const [phoneNB, setPhoneNB] = useState("");
   const [buttonReady, setButtonReady] = useState(false);
   const navigate = useNavigate();
@@ -19,7 +19,9 @@ const PhoneInputScreen = ({ setPhone, nextStep }) => {
       );
       if (response.status === 200) {
         console.log("본인확인 sms 전송 성공", response.data.message);
-        nextStep();
+        const CorrectCode = response.data.verification_code;
+        setCode(CorrectCode);
+        nextStep(CorrectCode);
       }
     } catch (error) {
       if (error.response) {
@@ -48,8 +50,8 @@ const PhoneInputScreen = ({ setPhone, nextStep }) => {
   };
 
   const handleNext = () => {
-    setPhone(phoneNB);
-    phonenum().then(() => nextStep());
+    setPhonenum(phoneNB);
+    phonenum();
   };
 
   return (
@@ -70,8 +72,8 @@ const PhoneInputScreen = ({ setPhone, nextStep }) => {
           backgroundColor: buttonReady ? "white" : "#F1F1F1",
           color: buttonReady ? "black" : "#8C8C8C",
         }}
-        // onClick={handleNext}
-        onClick={nextStep}
+        
+        onClick={handleNext}
         disabled={!buttonReady}
       >
         다음
