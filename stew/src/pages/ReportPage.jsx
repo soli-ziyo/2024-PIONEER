@@ -195,6 +195,7 @@ const Notice = styled.div`
   height: 25px;
   align-content: center;
   position: relative;
+  cursor: pointer;
   
 `;
 
