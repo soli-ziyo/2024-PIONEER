@@ -5,18 +5,25 @@ import Info from "../images/Info.svg";
 import { CurrentWeek } from "./CurrentWeek";
 
 const HomeNotice = () => {
-  const [hoursLeft, setHoursLeft] = useState(0);
+  const [timeLeft, setTimeLeft] = useState("");
   const { week, weekOfMonth } = CurrentWeek();
 
-  const checkHoursLeft = () => {
+  const checkTimeLeft = () => {
     const now = new Date();
     const hoursLeftToday = 23 - now.getHours();
-    setHoursLeft(hoursLeftToday);
+    const minutesLeftToday = 59 - now.getMinutes();
+    
+    //남은 시간 계산 수정
+    if (hoursLeftToday < 1) {
+      setTimeLeft(`${minutesLeftToday}분 남음`); 
+    } else {
+      setTimeLeft(`${hoursLeftToday}시간 남음`);
+    }
   };
 
   useEffect(() => {
-    checkHoursLeft();
-    const interval = setInterval(checkHoursLeft, 1000 * 60 * 60);
+    checkTimeLeft();
+    const interval = setInterval(checkTimeLeft, 1000 * 60); 
 
     return () => clearInterval(interval);
   }, [week]);
@@ -26,7 +33,7 @@ const HomeNotice = () => {
       <Title>우리 가족과 관심사를 공유해요!</Title>
       <Content>{weekOfMonth}의 관심사는 무엇인가요?</Content>
       <Information>관심사는 24시간 동안 변경할 수 있어요.</Information>
-      <TimeLeft>{hoursLeft}시간 남음</TimeLeft>
+      <TimeLeft>{timeLeft}</TimeLeft>
       <Button to="hashtag">변경하기</Button>
     </NoticeContainer>
   );
