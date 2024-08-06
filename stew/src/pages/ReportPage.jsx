@@ -62,7 +62,7 @@ const ReportPage = () => {
             <CommentWrapper>
               <Status>{status}</Status>
               <NoticeWrapper2>
-                <Notice onClick={toggleNotice}>?</Notice>
+                <Notice onClick={toggleNotice}>?
                 {noticeVisible && (
                   <NoticeExplain>
                     <NoticeWrapper>
@@ -77,6 +77,7 @@ const ReportPage = () => {
                     </NoticeContent>
                   </NoticeExplain>
                 )}
+                </Notice>
               </NoticeWrapper2>
             </CommentWrapper>
           </Comment>
@@ -131,8 +132,7 @@ const Header2 = styled.div`
 const CommentWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: bottom;
-  margin-top: 10px;
+  align-items: center;
 `;
 
 const Title = styled.h1`
@@ -149,7 +149,6 @@ const Status = styled.span`
   font-size: 20px;
   font-weight: bold;
   color: #ff5a00;
-  margin-top: 10px;
 `;
 
 const CalendarSection = styled.section`
@@ -173,6 +172,7 @@ const NoticeWrapper = styled.div`
   margin-bottom: 10px;
   justify-content: space-between;
   width: 95%;
+  
 
   img {
     width: 10px;
@@ -196,6 +196,8 @@ const Notice = styled.div`
   width: 25px;
   height: 25px;
   align-content: center;
+  position: relative;
+  
 `;
 
 const NoticeExplain = styled.div`
@@ -204,10 +206,10 @@ const NoticeExplain = styled.div`
   border-radius: 10px;
   border: 1px solid #e2e2e2;
   width: 138px;
-  margin-left: 10px;
+  top: 30px;
+  z-index: 30;
   position: absolute;
-  top: 175px;
-  z-index: 1000;
+  
 `;
 
 const NoticeTitle = styled.div`

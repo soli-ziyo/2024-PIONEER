@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 //images
 import Back from "../../images/Back.svg";
@@ -9,7 +8,6 @@ import Back from "../../images/Back.svg";
 const SignupScreen = ({ nextStep, prevStep }) => {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   const navigate = useNavigate();
 
@@ -52,7 +50,6 @@ const SignupScreen = ({ nextStep, prevStep }) => {
       </Container>
       <Button
         onClick={handleSubmit}
-        // onClick={nextStep}
         style={{
           backgroundColor: id && password.length >= 8 ? "white" : "#F1F1F1",
           color: id && password.length >= 8 ? "black" : "#8C8C8C",

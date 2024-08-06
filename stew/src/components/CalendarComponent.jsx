@@ -5,7 +5,7 @@ import instance from "../api/axios";
 import { useFamilycodeStore } from "../stores/FamilycodeStore";
 
 const CalendarComponent = () => {
-  const { activityData, currentDate, setCurrentDate, fetchData } = DateStore();
+  const { currentDate, setCurrentDate, fetchData } = DateStore();
   const { familycode, fetchFamilycode } = useFamilycodeStore();
   const [calendarData, setCalendarData] = useState([]);
 
@@ -41,15 +41,17 @@ const CalendarComponent = () => {
   }, [familycode, fetchData]);
 
   const getColorForDay = (day) => {
-    const data = calendarData.find(
-      (item) => {
-        const itemDate = new Date(item.date);
-        return itemDate.getFullYear() === year && itemDate.getMonth() === month && itemDate.getDate() === day;
-      }
-    );
+    const data = calendarData.find((item) => {
+      const itemDate = new Date(item.date);
+      return (
+        itemDate.getFullYear() === year &&
+        itemDate.getMonth() === month &&
+        itemDate.getDate() === day
+      );
+    });
     const percentage = data ? data.percentage : 0;
-    const opacity = Math.min(percentage / 100, 1); // 퍼센티지 기반 투명도 설정
-    return `rgba(255, 91, 2, ${opacity})`; // 색상 조정
+    const opacity = Math.min(percentage / 100, 1);
+    return `rgba(255, 91, 2, ${opacity})`;
   };
 
   const getDaysInMonth = (year, month) => {
@@ -90,12 +92,14 @@ const CalendarComponent = () => {
 
   for (let i = 1; i <= daysInMonth; i++) {
     const backgroundColor = getColorForDay(i);
-    const data = calendarData.find(
-      (item) => {
-        const itemDate = new Date(item.date);
-        return itemDate.getFullYear() === year && itemDate.getMonth() === month && itemDate.getDate() === i;
-      }
-    );
+    const data = calendarData.find((item) => {
+      const itemDate = new Date(item.date);
+      return (
+        itemDate.getFullYear() === year &&
+        itemDate.getMonth() === month &&
+        itemDate.getDate() === i
+      );
+    });
     const percentage = data ? data.percentage : 0;
     days.push(
       <Day key={i} color={backgroundColor}>
@@ -104,7 +108,6 @@ const CalendarComponent = () => {
       </Day>
     );
   }
-  
 
   return (
     <CalendarWrapper>
@@ -206,7 +209,7 @@ const Day = styled.div`
   background-color: ${(props) => props.color};
   color: black;
   font-weight: 400;
-  position: relative; /* 상대적 위치 설정 */
+  position: relative;
 `;
 
 const EmptyDay = styled.div`
@@ -226,10 +229,10 @@ const WeekDay = styled.div`
 `;
 
 const Heart = styled.div`
-  position: absolute; /* 절대 위치 지정 */
-  left: 50%; /* 가운데 정렬 */
-  top: 50%; /* 가운데 정렬 */
-  transform: translate(10%, 10%); /* 오른쪽 아래로 이동 */
-  font-size: 20px; /* 하트 크기 조정 */
-  margin-top: 0px; /* 추가적인 아래 위치 조정 */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(10%, 10%);
+  font-size: 20px;
+  margin-top: 0px;
 `;

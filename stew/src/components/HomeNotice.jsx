@@ -15,11 +15,8 @@ const HomeNotice = () => {
   };
 
   useEffect(() => {
-    const now = new Date();
-    const dayOfWeek = now.getDay();
-
     checkHoursLeft();
-    const interval = setInterval(checkHoursLeft, 1000 * 60 * 60); 
+    const interval = setInterval(checkHoursLeft, 1000 * 60 * 60);
 
     return () => clearInterval(interval);
   }, [week]);
@@ -38,7 +35,7 @@ const HomeNotice = () => {
 export default HomeNotice;
 
 const NoticeContainer = styled.div`
-  margin-bottom: 5%;
+  margin-bottom: 3%;
   background-color: white;
   border-radius: 21px;
   padding: 18px;

@@ -13,13 +13,13 @@ const CodeInputNotice = ({
   const handleParticipateClick = () => {
     setStep(step + 1);
     if (step === 1) {
-      setHideElements(true); // Header, Footer 및 기타 요소 숨기기
+      setHideElements(true);
       setHideInviteNotice(false);
     }
   };
 
   if (step === 2) {
-    setHideElements(true); // Header, Footer 및 기타 요소 숨기기
+    setHideElements(true);
     setHideInviteNotice(true);
     return (
       <CodeInputFamily

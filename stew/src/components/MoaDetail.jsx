@@ -6,10 +6,9 @@ import Post from "../components/Post";
 
 import instance from "../api/axios";
 
-const MoaDetail = ({ toggleMenu }) => {
+const MoaDetail = () => {
   const { tag_id } = useParams();
   const [tagposts, setTagPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const tagPost = async () => {
@@ -51,12 +50,8 @@ const MoaDetail = ({ toggleMenu }) => {
       }
     } catch (error) {
       console.error("API 오류:", error);
-    } finally {
-      setLoading(false);
     }
   };
-
-  const user_id = localStorage.getItem("user_id");
 
   useEffect(() => {
     tagPost();
@@ -66,11 +61,7 @@ const MoaDetail = ({ toggleMenu }) => {
     <Wrapper>
       <Header>
         <CloseButton>
-          <img
-            src={Close}
-            alt="Close"
-            onClick={() => navigate(`/report/summary/${user_id}`)}
-          />
+          <img src={Close} alt="Close" onClick={() => navigate(-1)} />
         </CloseButton>
         <Title>{tagposts.length > 0 ? tagposts[0].tagName : ""}</Title>
       </Header>

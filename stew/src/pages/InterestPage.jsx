@@ -294,7 +294,7 @@ const PostsContainer = styled.div`
 const FloatingButton = styled(Link)`
   position: absolute;
   right: 0px;
-  bottom: 15px;
+  bottom: 38px;
   width: 59px;
   height: 59px;
   z-index: 9;

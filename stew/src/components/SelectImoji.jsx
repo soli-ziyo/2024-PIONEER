@@ -50,8 +50,8 @@ const Overlay = styled.div`
   width: 100%;
   height: 100%;
   position: fixed;
-  top: auto; /* Remove the top setting */
-  bottom: 0; /* Align to the bottom */
+  top: auto; 
+  bottom: 0; 
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.5);
@@ -63,7 +63,7 @@ const Overlay = styled.div`
 
 const EmojiContainer = styled.div`
   background: #f9f9f9;
-  padding: 20px;
+  padding: 30px 20px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
@@ -72,24 +72,24 @@ const EmojiContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-evenly;
   box-sizing: border-box;
-  height: 80%;
+  height: 90%;
 `;
 
 const SelectedEmojiContainer = styled.div`
+  margin-top: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const EmojiImage = styled.img`
-  margin-top: 40px;
   width: 58px;
   height: 58px;
 `;
 
 const EmojiDisplay = styled.div`
-  margin-top: 40px;
   font-size: 58px;
 `;
 
@@ -101,12 +101,14 @@ const EmojiText = styled.div`
 `;
 
 const EmojiGrid = styled.div`
+  padding: 0px 30px;
   display: grid;
+  align-items: center;
+  justify-content: center;
   grid-template-columns: repeat(3, 1fr);
   aspect-ratio: 1;
-  gap: auto;
-  width: 95%;
-  margin: 20px;
+  width: 80%;
+  max-width: 390px;
 `;
 
 const EmojiButton = styled.button`

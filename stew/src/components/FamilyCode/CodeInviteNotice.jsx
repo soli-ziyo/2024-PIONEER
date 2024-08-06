@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import CodeInvite from "./CodeInvite.jsx";
 
@@ -14,13 +14,13 @@ const CodeInviteNotice = ({
   const handleInviteClick = () => {
     setStep(step + 1);
     if (step === 1) {
-      setHideElements(false); // Header, Footer 및 기타 요소 숨기기
+      setHideElements(false);
       setHideInputNotice(false);
     }
   };
 
   if (step === 2) {
-    setHideElements(true); // Header, Footer 및 기타 요소 숨기기
+    setHideElements(true);
     setHideInputNotice(true);
     return (
       <CodeInvite

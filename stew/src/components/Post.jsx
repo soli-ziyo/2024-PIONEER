@@ -132,17 +132,21 @@ const Post = ({
       )}
       {isCurrentUserPage && (
         <ContactButtons>
-        <ContactButton onClick={() => {
-          onCall(post.user.phonenum);
-        }}>
-          <img src={Call} alt="Call" />
-        </ContactButton>
-        <ContactButton onClick={() => {
-          onMessage(post.user.phonenum);
-        }}>
-          <img src={Message} alt="Message" />
-        </ContactButton>
-      </ContactButtons>
+          <ContactButton
+            onClick={() => {
+              onCall(post.user.phonenum);
+            }}
+          >
+            <img src={Call} alt="Call" />
+          </ContactButton>
+          <ContactButton
+            onClick={() => {
+              onMessage(post.user.phonenum);
+            }}
+          >
+            <img src={Message} alt="Message" />
+          </ContactButton>
+        </ContactButtons>
       )}
     </PostContainer>
   );
@@ -251,7 +255,6 @@ const EmojiButton = styled.button`
   img {
     width: 24px;
     height: 24px;
-    margin-bottom: 7px;
   }
 `;
 
@@ -262,7 +265,7 @@ const EmojiDisplay = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  margin-bottom: 11px;
+  margin-bottom: 3px;
 `;
 
 const EmojiImg = styled.img`

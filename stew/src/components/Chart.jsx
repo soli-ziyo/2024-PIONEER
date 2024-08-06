@@ -3,20 +3,17 @@ import styled from "styled-components";
 import instance from "../api/axios";
 import basicImg from "../images/Basic.png";
 import { useFamilycodeStore } from "../stores/FamilycodeStore";
-import LoadingScreen from "../components/LoadingScreen";
 
-const MAX_BAR_HEIGHT = 230; // 최대 막대 높이
-const MIN_BAR_HEIGHT = 50; // 최소 막대 높이
+const MAX_BAR_HEIGHT = 230;
+const MIN_BAR_HEIGHT = 50;
 
 const Chart = () => {
   const [chartDate, setChartDate] = useState(new Date());
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { familycode, fetchFamilycode } = useFamilycodeStore();
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       try {
         await fetchFamilycode();
         const response = await instance.get(
@@ -40,36 +37,16 @@ const Chart = () => {
         setData(formattedData);
       } catch (err) {
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchData();
   }, [fetchFamilycode, familycode]);
 
-  const handlePrevMonth = () => {
-    const newDate = new Date(
-      chartDate.getFullYear(),
-      chartDate.getMonth() - 1,
-      1
-    );
-    setChartDate(newDate);
-  };
-
-  const handleNextMonth = () => {
-    const newDate = new Date(
-      chartDate.getFullYear(),
-      chartDate.getMonth() + 1,
-      1
-    );
-    setChartDate(newDate);
-  };
-
   const year = chartDate.getFullYear();
   const month = chartDate.getMonth();
 
-  const maxPosts = Math.max(...data.map((member) => member.posts), 1); // 최소값 1로 설정하여 나누기 0 방지
+  const maxPosts = Math.max(...data.map((member) => member.posts), 1);
 
   return (
     <ChartContainer>
@@ -122,8 +99,8 @@ const ChartContainer = styled.div`
   background-color: white;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
 
-  position: relative; // Relative로 설정하여 자식 요소의 절대 위치를 기준으로 함
-  overflow: hidden; // 내부 요소가 컨테이너 밖으로 벗어나지 않도록 설정
+  position: relative;
+  overflow: hidden;
   width: 300px;
   overflow: hidden;
   flex: 1;
@@ -139,6 +116,13 @@ const BarContainer = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100%;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Arrow = styled.div`
@@ -169,8 +153,8 @@ const Bars = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 200px; // 전체 차트 높이
-  position: relative; // Relative로 설정하여 Bar의 절대 위치를 기준으로 함
+  height: 200px;
+  position: relative;
   margin-top: 80px;
 `;
 
@@ -188,7 +172,7 @@ const Bar = styled.div`
 const BarFill = styled.div`
   width: 50%;
   position: absolute;
-  bottom: 10px; // 막대의 하단에서 시작
+  bottom: 10px;
   border-radius: 20px;
 `;
 
@@ -197,7 +181,7 @@ const ProfileImage = styled.img`
   height: 59px;
   border-radius: 50%;
   position: absolute;
-  bottom: 0px; // 이미지 위치 조정
+  bottom: 0px;
   border: 1px solid #e2e2e2;
   background-color: white;
 `;

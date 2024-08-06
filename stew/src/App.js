@@ -71,7 +71,7 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
     align-items: center;
     font-family: "Pretendard";
-    padding: 20px;
+    padding: 20px 20px 0;
     background-color: #F9F9F9;
     box-sizing: border-box;
   }

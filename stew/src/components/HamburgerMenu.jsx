@@ -52,24 +52,9 @@ const HamburgerMenu = ({ toggleMenu }) => {
           </SubMenu>
         )}
       </MenuItem>
-      <MenuItem>
-        <MenuLink
-          onClick={() => toggleSubMenu("settings")}
-          isOpen={subMenuOpen.settings}
-        >
+      <StyledLink to="/settings/profile" onClick={toggleMenu}>
           settings
-        </MenuLink>
-        {subMenuOpen.settings && (
-          <SubMenu>
-            <SubMenuLink to="/settings/profile" onClick={toggleMenu}>
-              프로필
-            </SubMenuLink>
-            <SubMenuLink to="/settings/notifications" onClick={toggleMenu}>
-              알림 설정
-            </SubMenuLink>
-          </SubMenu>
-        )}
-      </MenuItem>
+        </StyledLink>
       <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
     </MenuWrapper>
   );
@@ -119,6 +104,9 @@ const StyledLink = styled(Link)`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  &:hover {
+    color: #ff5a00;
+  }
 `;
 
 const MenuLink = styled.div`

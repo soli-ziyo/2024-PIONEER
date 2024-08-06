@@ -9,8 +9,8 @@ const HomeNoticeNS = ({ currentUserId }) => {
   const calculateTimeLeft = () => {
     const now = new Date();
     const endOfWeek = new Date(now);
-    endOfWeek.setDate(now.getDate() + (7 - now.getDay())); // 이번 주의 마지막 날 (일요일)
-    endOfWeek.setHours(23, 59, 59, 999); // 일요일의 마지막 시간
+    endOfWeek.setDate(now.getDate() + (7 - now.getDay()));
+    endOfWeek.setHours(23, 59, 59, 999);
 
     const difference = endOfWeek - now;
 
@@ -22,21 +22,25 @@ const HomeNoticeNS = ({ currentUserId }) => {
 
   useEffect(() => {
     calculateTimeLeft();
-    const interval = setInterval(calculateTimeLeft, 1000 * 60 * 60); // 1시간마다 업데이트
+    const interval = setInterval(calculateTimeLeft, 1000 * 60 * 60);
 
     return () => clearInterval(interval);
-  });
+  }, []);
 
   return (
     <NoticeContainer>
       <Title>우리 가족이 나를 생각해줬어요!</Title>
       <Content>
-        가족이 올려준 글을 확인하러 가요.<br />글을 확인하고 가족에게 연락해볼까요?
+        가족이 올려준 글을 확인하러 가요.
+        <br />
+        글을 확인하고 가족에게 연락해볼까요?
       </Content>
       <TimeLeft>
         {timeLeft.days}일 {timeLeft.hours}시간 남음
       </TimeLeft>
-      <Button onClick={() => navigate(`/interest/list/${currentUserId}`)}>확인하기</Button>
+      <Button onClick={() => navigate(`/interest/list/${currentUserId}`)}>
+        확인하기
+      </Button>
     </NoticeContainer>
   );
 };
@@ -44,7 +48,7 @@ const HomeNoticeNS = ({ currentUserId }) => {
 export default HomeNoticeNS;
 
 const NoticeContainer = styled.div`
-  margin-bottom: 5%;
+  margin-bottom: 3%;
   background-color: white;
   border-radius: 21px;
   padding: 20px;
