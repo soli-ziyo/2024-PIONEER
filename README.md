@@ -21,7 +21,7 @@
 ## 기술 시연 DB
 
 💻웹페이지 체험을 위한 예시 계정💻</br>
-원활한 기술 시연을 위해, familycode를 9914로 설정해주세요! (미리 저장된 가족 정보를 확인하기 위함)
+원활한 기술 시연을 위해, familycode를 **9914**로 설정해주세요! (미리 저장된 가족 정보를 확인하기 위함)
 | 가족   | ID  | PW  |
 | ------ | -- | --- |
 | 엄마 | mother | m1010 |
@@ -127,6 +127,7 @@
 
 ## 장표
 
+<p align="center">
 <img src="https://github.com/user-attachments/assets/4b40ac68-697b-4799-b67b-a75f6b8cd648" width="70%">
 <img src="https://github.com/user-attachments/assets/3ab26b02-cedf-4c3c-bd33-aa96dd7173f5" width="70%">
 <img src="https://github.com/user-attachments/assets/0ea12bc0-df5f-43d7-9f1e-f0e6d97ff08d" width="70%">
@@ -135,5 +136,6 @@
 <img src="https://github.com/user-attachments/assets/71b8edc4-c2f9-42c5-9fed-1b064530d6b0" width="70%">
 <img src="https://github.com/user-attachments/assets/4747e14a-1384-4e81-9790-101e52aee15b" width="70%">
 <img src="https://github.com/user-attachments/assets/8e4431e5-5a52-47e6-b57b-a4c855e5bcf2" width="70%">
+</p>
 
   <hr/>
