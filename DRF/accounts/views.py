@@ -171,7 +171,7 @@ class sendCodeView(APIView):
                 {
                     'to': phonenum,
                     'from': '01062487123',
-                    'text': f'[stew] 회원가입 인증 코드입니다. {verification_code}'
+                    'text': f'{verification_code}'
                 }
             ]
         }
