@@ -165,7 +165,7 @@ class ReportDetailView(views.APIView):
     def get(self, request, tag_id, format=None):
         # 특정 해시태그를 기준으로 관련된 Interest를 가져옴
         week_hashtag = get_object_or_404(WeekHashTag, id=tag_id)
-        interests = Interest.objects.filter(tag=week_hashtag, user=request.user).select_related('user')
+        interests = Interest.objects.filter(tag=week_hashtag).select_related('user')
         serializer = InterestSerializer(interests, many=True)
         response_data = {
             "message": "관심사 태그에 포함된 사용자의 글 불러오기 성공",
