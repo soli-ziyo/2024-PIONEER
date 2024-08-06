@@ -5,7 +5,6 @@
 
 ## 서비스 소개
 [![image](https://github.com/user-attachments/assets/64e5b147-736c-40a8-9e02-fa2d4a87d416)](https://stew-s-uxuns-projects.vercel.app/)
-(*서비스 이미지 클릭하면 서비스 웹화면으로 연결)
 
 💡 **주제: IT 기술을 활용하여 현대인의 건강 (wellness) 문제를 해결할 수 있는 서비스를 개발하시오.**
 
@@ -125,5 +124,17 @@
 ```
 
 </br>
+
+## 장표
+
+
+![1](https://github.com/user-attachments/assets/4b40ac68-697b-4799-b67b-a75f6b8cd648){: height="70%"}
+![2](https://github.com/user-attachments/assets/3ab26b02-cedf-4c3c-bd33-aa96dd7173f5){: height="70%"}
+![3](https://github.com/user-attachments/assets/0ea12bc0-df5f-43d7-9f1e-f0e6d97ff08d){: height="70%"}
+![4](https://github.com/user-attachments/assets/f1b49e6b-9d2c-4b91-964a-139a4272b481){: height="70%"}
+![5](https://github.com/user-attachments/assets/c44bf62b-85e6-478b-aa09-d445e39c5d35){: height="70%"}
+![6](https://github.com/user-attachments/assets/71b8edc4-c2f9-42c5-9fed-1b064530d6b0){: height="70%"}
+![7](https://github.com/user-attachments/assets/4747e14a-1384-4e81-9790-101e52aee15b){: height="70%"}
+![8](https://github.com/user-attachments/assets/8e4431e5-5a52-47e6-b57b-a4c855e5bcf2){: height="70%"}
 
   <hr/>
