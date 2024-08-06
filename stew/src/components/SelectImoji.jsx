@@ -102,12 +102,10 @@ const EmojiText = styled.div`
 
 const EmojiGrid = styled.div`
   display: grid;
-  align-items: center;
-  justify-content: center;
   grid-template-columns: repeat(3, 1fr);
-  aspect-ratio: 1;
-  height: 50%;
-  max-width: 390px;
+  gap: 20px; /* 이 간격을 통해 아이템들이 서로 떨어지게 합니다 */
+  width: 70%; /* 부모 컨테이너의 너비를 차지하게 설정 */
+  box-sizing: border-box; 
 `;
 
 const EmojiButton = styled.button`
