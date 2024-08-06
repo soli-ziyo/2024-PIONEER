@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Next from "../images/Next.svg";
+import { useNavigate } from "react-router-dom";
+
 import { useProfilesStore } from "../stores/ProfileStore.js";
 
 const currentUserId = parseInt(localStorage.getItem("user_id"));
 
 const MyProfile = ({ sortedProfiles }) => {
+  const navigate = useNavigate();
   if (!sortedProfiles || sortedProfiles.length === 0) {
     return <Wrapper>프로필을 찾을 수 없습니다.</Wrapper>;
   }
@@ -20,12 +23,18 @@ const MyProfile = ({ sortedProfiles }) => {
 
   const addFamily = () => {};
 
+  const myProfile = me.profile;
+
+  const handleClick = () => {
+    navigate("/settings/edit", { state: { myProfile } });
+  };
+
   return (
     <Wrapper>
-      <ProfileContainer>
+      <ProfileContainer onClick={handleClick}>
         <ProfileItem>
           <ProfileImageButton active>
-            <img src={me.profile} alt={me.nickname} />
+            <img src={myProfile} alt={me.nickname} />
           </ProfileImageButton>
           <ProfileTxt>
             <ProfileName>{me.nickname}</ProfileName>

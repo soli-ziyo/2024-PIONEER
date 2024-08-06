@@ -3,6 +3,7 @@ import styled from "styled-components";
 import instance from "../../api/axios";
 import { useFamilycodeStore } from "../../stores/FamilycodeStore";
 import Close from "../../images/Close.svg";
+import { useNavigate } from "react-router-dom";
 
 const CodeInvite = ({
   prevStep,
@@ -13,6 +14,7 @@ const CodeInvite = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { familycode, fetchFamilycode } = useFamilycodeStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCode = async () => {
@@ -40,21 +42,23 @@ const CodeInvite = ({
   };
 
   const closeInvite = () => {
-    prevStep();
+    navigate("/home");
     window.location.reload();
 
-    setHideElements(false);
-    setHideInputNotice(true);
-    setHideInviteNotice(false);
+    // setHideElements(false);
+    // setHideInputNotice(true);
+    // setHideInviteNotice(false);
   };
 
   return (
     <Wrapper>
       <>
-        <ContainerBase>
-          <img src={Close} alt="Close" onClick={closeInvite} />
-          <Comment>가족 초대하기</Comment>
-        </ContainerBase>
+        <Header>
+          <CloseButton>
+            <img src={Close} alt="Close" onClick={closeInvite} />
+          </CloseButton>
+          <Title>가족 초대하기</Title>
+        </Header>
         <InputWrapper>
           <CodeInput
             value={familycode}
@@ -78,7 +82,34 @@ const Wrapper = styled.div`
   flex-direction: column;
   max-width: 390px;
   height: 100%;
+  width: 100%;
   margin: 0 auto;
+`;
+
+const CloseButton = styled.div`
+  cursor: pointer;
+  width: 19px;
+  img {
+    width: 19px;
+    height: 19px;
+  }
+  margin: 3px 0 0px 3px;
+`;
+
+const Title = styled.h1`
+  color: #000;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+`;
+
+const Header = styled.div`
+  display: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0px;
 `;
 
 const ContainerBase = styled.div`

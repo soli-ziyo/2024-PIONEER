@@ -17,7 +17,8 @@ import MoaDetail from "./components/MoaDetail.jsx";
 import ChangeState from "./pages/ChangeState.jsx";
 
 import { createGlobalStyle } from "styled-components";
-import CodeInputFamily from "./components/FamilyCode/CodeInputFamily.jsx";
+import CodeInvite from "./components/FamilyCode/CodeInvite.jsx";
+import EditProfilePage from "./pages/EditProfilePage.jsx";
 
 function App() {
   useEffect(() => {
@@ -50,7 +51,8 @@ function App() {
           <Route path="/report/stats" element={<ReportPage />} />
           <Route path="/report/summary/:user_id" element={<MoaPage />} />
           <Route path="/report/:tag_id" element={<MoaDetail />} />
-          <Route path="/familyCode" element={<CodeInputFamily />} />
+          <Route path="/familyCode" element={<CodeInvite />} />
+          <Route path="/settings/edit" element={<EditProfilePage />} />
         </Routes>
       </Router>
     </>

@@ -85,6 +85,7 @@ const ContainerBase = styled.div`
     width: 8%;
     margin-bottom: 40px;
     margin-top: 40px;
+    cursor: pointer;
   }
 `;
 

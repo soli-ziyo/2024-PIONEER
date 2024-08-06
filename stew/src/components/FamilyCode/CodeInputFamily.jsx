@@ -84,9 +84,9 @@ const CodeInputFamily = ({
 
   const closeInput = () => {
     navigate("/home");
-    // setHideElements(false);
-    // setHideInputNotice(false);
-    // setHideInviteNotice(false);
+    setHideElements(false);
+    setHideInputNotice(false);
+    setHideInviteNotice(false);
   };
 
   return (
@@ -133,6 +133,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   max-width: 390px;
+  width: 100%;
   height: 100%;
 `;
 

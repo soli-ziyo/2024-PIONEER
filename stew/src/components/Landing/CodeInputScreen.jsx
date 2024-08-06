@@ -87,8 +87,8 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
           {error && <ErrorMessage>{error}</ErrorMessage>}
         </InputWrapper>
         <Button
-          onClick={handleNext}
-          // onClick={nextStep}
+          // onClick={handleNext}
+          onClick={nextStep}
           disabled={code.some((digit) => digit === "")}
         >
           다음
@@ -118,6 +118,7 @@ const ContainerBase = styled.div`
     width: 8%;
     margin-bottom: 58px;
     margin-top: 40px;
+    cursor: pointer;
   }
 `;
 

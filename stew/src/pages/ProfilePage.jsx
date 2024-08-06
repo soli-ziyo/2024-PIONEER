@@ -53,7 +53,7 @@ const ProfilePage = () => {
         <Header2></Header2>
         <ProfileSection>
           <ProfileTitle>프로필</ProfileTitle>
-          <MyProfile sortedProfiles={sortedProfiles}></MyProfile>
+          <MyProfile sortedProfiles={sortedProfiles} />
         </ProfileSection>
         <FamilySection>
           <FamilyTitle>우리 가족</FamilyTitle>
@@ -144,6 +144,7 @@ const ProfileImageButton = styled.div`
       props.active ? "1px solid #FF6600" : "1px solid #E2E2E2"};
     box-sizing: border-box;
     object-fit: cover;
+    cursor: pointer;
   }
 `;
 

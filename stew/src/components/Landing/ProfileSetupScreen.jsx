@@ -138,6 +138,7 @@ const ContainerBase = styled.div`
     width: 8%;
     margin-bottom: 58px;
     margin-top: 40px;
+    cursor: pointer;
   }
 `;
 
