@@ -12,7 +12,8 @@ const HomeNotice = () => {
     const now = new Date();
     const hoursLeftToday = 23 - now.getHours();
     const minutesLeftToday = 59 - now.getMinutes();
-
+    
+    //남은 시간 계산 수정
     if (hoursLeftToday < 1) {
       setTimeLeft(`${minutesLeftToday}분 남음`); 
     } else {
