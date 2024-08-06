@@ -27,7 +27,7 @@
 | 가족   | ID  | PW  |
 | ------ | -- | --- |
 | 엄마 | mother | m1010 |
-| 아빠 | mother | m1010 |
+| 아빠 | father | m1010 |
 | 딸 | sister | m1010 |
 | 아들 | brother | m1010 |
 
@@ -132,7 +132,7 @@
 <p align="center">
 <img src="https://github.com/user-attachments/assets/4b40ac68-697b-4799-b67b-a75f6b8cd648" width="70%">
 <img src="https://github.com/user-attachments/assets/3ab26b02-cedf-4c3c-bd33-aa96dd7173f5" width="70%">
-<img src="https://github.com/user-attachments/assets/0ea12bc0-df5f-43d7-9f1e-f0e6d97ff08d" width="70%">
+<img src="https://github.com/user-attachments/assets/5dc7692e-852a-47ab-9bce-f444528a2725" width="70%">
 <img src="https://github.com/user-attachments/assets/f1b49e6b-9d2c-4b91-964a-139a4272b481" width="70%">
 <img src="https://github.com/user-attachments/assets/c44bf62b-85e6-478b-aa09-d445e39c5d35" width="70%">
 <img src="https://github.com/user-attachments/assets/71b8edc4-c2f9-42c5-9fed-1b064530d6b0" width="70%">
