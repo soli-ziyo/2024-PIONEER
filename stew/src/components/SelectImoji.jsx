@@ -102,19 +102,21 @@ const EmojiText = styled.div`
 
 const EmojiGrid = styled.div`
   display: grid;
-  align-items: center;
-  justify-content: center;
   grid-template-columns: repeat(3, 1fr);
-  aspect-ratio: 1;
-  height: 50%;
-  max-width: 390px;
-`;
+  gap: 10px;
+  max-width: 300px;
+  box-sizing: border-box; 
+  justify-items: center;
+`;  
 
 const EmojiButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
   font-size: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ButtonContainer = styled.div`

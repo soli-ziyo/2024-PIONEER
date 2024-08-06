@@ -104,7 +104,6 @@ const EmojiGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   max-width: 300px;
-  padding: 0 10px; 
   box-sizing: border-box; 
   justify-items: center;
 `;  
@@ -119,10 +118,6 @@ const EmojiButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 45px;
 `;
 
 const ButtonContainer = styled.div`
