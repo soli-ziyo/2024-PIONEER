@@ -9,6 +9,7 @@ const HomeNoticeNS = ({ currentUserId }) => {
   const calculateTimeLeft = () => {
     const now = new Date();
     const endOfWeek = new Date(now);
+
     endOfWeek.setDate(now.getDate() + (7 - now.getDay()));
     endOfWeek.setHours(23, 59, 59, 999);
 

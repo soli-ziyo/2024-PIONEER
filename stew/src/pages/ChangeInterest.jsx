@@ -3,11 +3,9 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Close from "../images/Close.svg";
 import { CurrentWeek } from "../components/CurrentWeek";
-import { useProfilesStore } from "../stores/ProfileStore.js";
 import instance from "../api/axios.js";
 
 const ChangeInterest = () => {
-  const { profiles, fetchProfiles } = useProfilesStore();
   const [interest, setInterest] = useState("");
   const [suggestedInterests, setSuggestedInterests] = useState([]);
   const inputRef = useRef(null);

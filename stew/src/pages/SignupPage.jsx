@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import PhoneInputScreen from "../components/Landing/PhoneInputScreen";
 import CodeInputScreen from "../components/Landing/CodeInputScreen";
 import SignupScreen from "../components/Landing/SignupScreen";

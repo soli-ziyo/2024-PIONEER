@@ -23,20 +23,17 @@ export const DateStore = create((set) => ({
 
       const data = response.data;
 
-      // Set total posts
       const totalPosts = data.interests.find(
         (interest) => interest["총 게시물 수"]
       )["총 게시물 수"];
       set({ totalPosts });
 
-      // Set temperature and status
       const temperature = data.interests.find((interest) => interest.stew_temp)[
         "stew_temp"
       ];
       const status = data.interests.find((interest) => interest.stew).stew;
       set({ temperature, status });
 
-      // Set activity data
       const tempActivityData = {};
       data.calendar.forEach((entry) => {
         const date = new Date(entry.date).getDate();

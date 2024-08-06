@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MoaBox from "../components/MoaBox.jsx";
 import HamburgerMenu from "../components/HamburgerMenu";
-
 import instance from "../api/axios.js";
-import LoadingScreen from "../components/LoadingScreen.jsx";
 import { useProfilesStore } from "../stores/ProfileStore.js";
 import Header from "../components/Header";
 
@@ -18,10 +16,6 @@ const MoaPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const [posts, setPosts] = useState([]);
-  const [hashtagData, setHashtagData] = useState([]);
-  // const [familyData, setFamilyData] = useState([]);
-  const [moa, setMoa] = useState("");
-  const [loading, setLoading] = useState(true);
 
   const fetchData = async (userId) => {
     try {
@@ -36,7 +30,6 @@ const MoaPage = () => {
       );
       console.log(response);
       if (response.status === 200) {
-        // const familyUsers = response.data.family_users;
         const hashtagData = response.data.user_hashtags;
         setPosts(
           hashtagData
@@ -60,8 +53,6 @@ const MoaPage = () => {
       }
     } catch (error) {
       console.error("API 오류:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -94,13 +85,6 @@ const MoaPage = () => {
   };
 
   return (
-    // <>
-    //   {!profile ? (
-    //     <>
-    //       <LoadingScreen />
-    //     </>
-    //   ) : (
-    //     <>
     <Wrapper>
       <Header toggleMenu={toggleMenu} />
       {menuOpen && <HamburgerMenu toggleMenu={toggleMenu} />}
@@ -121,12 +105,6 @@ const MoaPage = () => {
         ))}
       </ProfileContainer>
       <PostsContainer>
-        <Container>
-          {/* <Week>{CurrentWeek().weekOfMonth}</Week>
-                <Hashtag isEmpty={hashtag === "이번 주 해시태그가 없습니다."}>
-                  {hashtag}
-                </Hashtag> */}
-        </Container>
         {posts.map((post) => (
           <MoaBox
             key={post.key}
@@ -138,9 +116,6 @@ const MoaPage = () => {
         ))}
       </PostsContainer>
     </Wrapper>
-    //   </>
-    // )}
-    // </>
   );
 };
 

@@ -2,11 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import SelectStateImoji from "../components/SelectStateImoji";
-import axios from "axios";
 import Close from "../images/Close.svg";
 import instance from "../api/axios";
 import ImojiDash from "../images/Imoji_dash.svg";
-import ImageBasic from "../images/Basic.png";
 
 const ChangeState = () => {
   const location = useLocation();
