@@ -12,14 +12,11 @@ const LandingState = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await instance.get(
-        `${baseurl}/home/main`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
+      const response = await instance.get(`${baseurl}/home/main`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
 
       if (response.status === 200) {
         setProfile(response.data[0]);
@@ -39,7 +36,10 @@ const LandingState = () => {
   const handleClick = () => {
     const fullProfile = {
       ...profile,
-              profile: profile.profile ? `${process.env.REACT_APP_SERVER_PORT}${profile.profile}` : require("../images/Basic.png")};
+      profile: profile.profile
+        ? `${process.env.REACT_APP_SERVER_PORT}${profile.profile}`
+        : require("../images/Basic.png"),
+    };
     navigate("/home/edit", { state: { profile: fullProfile } });
   };
 
@@ -53,12 +53,17 @@ const LandingState = () => {
         {profile.content ? profile.content : <span>나의 한 마디</span>}
       </ProfileMent>
       <ProfileInfo>
-        <ProfileImage onClick={handleClick}
-          src={profile.profile ? `${baseurl}${profile.profile}` : require('../images/Basic.png')}
+        <ProfileImage
+          onClick={handleClick}
+          src={
+            profile.profile
+              ? `${baseurl}${profile.profile}`
+              : require("../images/Basic.png")
+          }
           alt={profile.nickname}
         />
         <EmojiWrapper onClick={handleClick}>
-          {profile.emoji ? profile.emoji : <img src={ImojiDash} alt='imoji' />}
+          {profile.emoji ? profile.emoji : <img src={ImojiDash} alt="imoji" />}
         </EmojiWrapper>
         <ProfileName>{profile.nickname}</ProfileName>
       </ProfileInfo>

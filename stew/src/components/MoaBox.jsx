@@ -9,7 +9,7 @@ const parseDate = (dateString) => {
 
 const getLastDayOfMonth = (date) => {
   const year = date.getFullYear();
-  const month = date.getMonth() + 1; 
+  const month = date.getMonth() + 1;
   return new Date(year, month, 0).getDate();
 };
 
@@ -22,11 +22,10 @@ const getWeekOfMonth = (date) => {
 const MoaBox = ({ post }) => {
   const dateString = post.created_at;
   const date = parseDate(dateString);
-  const lastDayOfMonth = getLastDayOfMonth(date);
   const weekOfMonth = getWeekOfMonth(date);
   const navigate = useNavigate();
 
-  const MoveDetail = (userId) => {
+  const MoveDetail = () => {
     navigate(`/report/${post.weekhashtagId}/`);
   };
 
@@ -84,7 +83,7 @@ const TextContainer = styled.div`
   left: 10px;
   color: black;
   margin: 10px;
-  /* border: 1px solid red; */
+
   z-index: 3;
   max-width: 90px;
 `;

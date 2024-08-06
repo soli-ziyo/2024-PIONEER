@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 // images
@@ -11,7 +10,6 @@ const ProfileSetupScreen = ({ id, password, prevStep, nextStep }) => {
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const navigate = useNavigate();
-  // const baseurl = "https://minsol.pythonanywhere.com/";
 
   const handleSubmit = async () => {
     try {

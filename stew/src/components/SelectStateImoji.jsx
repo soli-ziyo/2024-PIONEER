@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ImojiDash from "../images/Imoji_dash2.svg"; // Imoji_dash 이미지를 불러옴
+import ImojiDash from "../images/Imoji_dash2.svg";
 
 const SelectStateImoji = ({ onClose, onSelect }) => {
   const [selectedEmoji, setSelectedEmoji] = useState(null);
@@ -50,8 +50,8 @@ const Overlay = styled.div`
   width: 100%;
   height: 100%;
   position: fixed;
-  top: auto; 
-  bottom: 0; 
+  top: auto;
+  bottom: 0;
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.5);
@@ -78,7 +78,7 @@ const EmojiContainer = styled.div`
 `;
 
 const SelectedEmojiContainer = styled.div`
-  margin: 15px  0;
+  margin: 15px 0;
   display: flex;
   flex-direction: column;
   align-items: center;

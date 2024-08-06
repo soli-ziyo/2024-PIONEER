@@ -32,7 +32,9 @@ const FamilyProfile = ({ profile, index }) => {
         onClick={handleContentClick}
         isCurrentUser={isCurrentUser}
       >
-        {profile.content || <span style={{color: '#cccccc'}}> {profile.nickname} : . . . </span>}
+        {profile.content || (
+          <span style={{ color: "#cccccc" }}> {profile.nickname} : . . . </span>
+        )}
       </ProfileMent>
       <ProfileInfo position={position}>
         <ProfileImage
@@ -41,7 +43,7 @@ const FamilyProfile = ({ profile, index }) => {
           onClick={handleClick}
         />
         <EmojiWrapper onClick={handleEmojiClick} isCurrentUser={isCurrentUser}>
-          {profile.emoji || <img src={ImojiDash} alt='imoji'/>}
+          {profile.emoji || <img src={ImojiDash} alt="imoji" />}
         </EmojiWrapper>
         <ProfileName>{profile.nickname}</ProfileName>
       </ProfileInfo>

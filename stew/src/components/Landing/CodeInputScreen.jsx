@@ -1,31 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
 
-const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
+const CodeInputScreen = ({ nextStep, prevStep }) => {
   const [code, setCode] = useState([""]);
   const [loading, setLoading] = useState(false);
   const [buttonReady, setButtonReady] = useState(false);
 
   const [error, setError] = useState(null);
 
-  // const handleChange = (e, index) => {
-  //   const newCode = [...code];
-  //   newCode[index] = e.target.value;
-  //   setCode(newCode);
-
-  //   if (e.target.value && index < 3) {
-  //     document.getElementById(`code-input-${index + 1}`).focus();
-  //   }
-  // };
-
   const codeVery = async () => {
     setLoading(true);
     setError(null);
     try {
-      // const codeStr = code.join("");
       console.log("Submitting code:", code);
       const response = await instance.post(
         `${process.env.REACT_APP_SERVER_PORT}/accounts/phonenum/getCode/`,
@@ -76,7 +64,7 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
 
   const handleNext = () => {
     setCode(code);
-    codeVery().then(() => nextStep());
+    codeVery().then();
   };
 
   return (
@@ -91,22 +79,11 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
           onChange={(e) => handleChange(e.target.value)}
           value={code}
         ></InputWrapper>
-        {/* <CodeInputs> */}
-        {/* {code.map((digit, index) => (
-            <CodeInput
-              key={index}
-              id={`code-input-${index}`}
-              type="text"
-              maxLength="1"
-              value={digit}
-              onChange={(e) => handleChange(e, index)}
-            />
-          ))} */}
+
         {loading && (
           <LoadingMessage>인증번호를 확인 중입니다...</LoadingMessage>
         )}
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        {/* </CodeInputs> */}
 
         <Button
           style={{
@@ -114,7 +91,6 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
             color: buttonReady ? "black" : "#8C8C8C",
           }}
           onClick={handleNext}
-          // onClick={nextStep}
           disabled={!buttonReady}
         >
           다음
@@ -223,7 +199,7 @@ const ErrorMessage = styled.div`
   font-size: 14px;
   z-index: 10;
   position: absolute;
-  top: 300px;
+  top: 230px;
 `;
 
 const LoadingMessage = styled.div`
@@ -232,5 +208,5 @@ const LoadingMessage = styled.div`
   font-size: 14px;
   z-index: 10;
   position: absolute;
-  top: 300px;
+  top: 230px;
 `;

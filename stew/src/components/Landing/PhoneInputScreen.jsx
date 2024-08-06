@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
 
-const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
+const PhoneInputScreen = ({ setPhone, nextStep }) => {
   const [phoneNB, setPhoneNB] = useState("");
   const [buttonReady, setButtonReady] = useState(false);
   const navigate = useNavigate();
@@ -71,7 +71,6 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
           color: buttonReady ? "black" : "#8C8C8C",
         }}
         onClick={handleNext}
-        // onClick={nextStep}
         disabled={!buttonReady}
       >
         다음

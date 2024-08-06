@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import instance from "../../api/axios";
 import { useFamilycodeStore } from "../../stores/FamilycodeStore";
 import Close from "../../images/Close.svg";
 import { useNavigate } from "react-router-dom";
 
-const CodeInvite = ({
-  prevStep,
-  setHideElements,
-  setHideInviteNotice,
-  setHideInputNotice,
-}) => {
+const CodeInvite = ({}) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { familycode, fetchFamilycode } = useFamilycodeStore();
@@ -44,10 +38,6 @@ const CodeInvite = ({
   const closeInvite = () => {
     navigate("/home");
     window.location.reload();
-
-    // setHideElements(false);
-    // setHideInputNotice(true);
-    // setHideInviteNotice(false);
   };
 
   return (

@@ -32,7 +32,7 @@ const CodeInputFamily = ({
       );
 
       console.log(response.data);
-      prevStep(); ////
+      prevStep();
       setHideElements(false);
       setHideInputNotice(true);
       setHideInviteNotice(true);

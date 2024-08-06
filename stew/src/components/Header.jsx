@@ -28,9 +28,3 @@ const MenuIcon = styled.div`
   width: 25px;
   height: 13px;
 `;
-
-const NotificationIcon = styled.div`
-  cursor: pointer;
-  width: 23px;
-  height: 23px;
-`;
