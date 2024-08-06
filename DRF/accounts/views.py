@@ -195,8 +195,6 @@ class getCodeView(APIView):
         else:
             return Response({'error': '인증 코드 오류'}, status=400)
         
-
-        
 class phoneExView(APIView):
     def post(self, request, format=None):
         phonenum = request.data.get('phonenum')
