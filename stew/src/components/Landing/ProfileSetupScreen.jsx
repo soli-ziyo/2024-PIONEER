@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
 
-const ProfileSetupScreen = ({ id, password, prevStep, nextStep }) => {
+const ProfileSetupScreen = ({ id, password, phonenum, prevStep, nextStep }) => {
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ const ProfileSetupScreen = ({ id, password, prevStep, nextStep }) => {
       formData.append("username", id);
       formData.append("password", password);
       formData.append("nickname", nickname);
+      formData.append("phonenum", phonenum);
 
       if (profileImage) {
         formData.append("profile", profileImage);
