@@ -8,7 +8,7 @@
 
 💡 **주제: IT 기술을 활용하여 현대인의 건강 (wellness) 문제를 해결할 수 있는 서비스를 개발하시오.**
 
-우리 가족, 멀리 있어도 마음은 가까이 <span style="color: orange">stay together, stew</span>
+우리 가족, 멀리 있어도 마음은 가까이 ${\textsf{\color{orange}stay together, stew}}$
 
 ##### 현대인의 사회적 웰니스를 위해 가족 관계 증진을 돕는 모바일 웹
 
