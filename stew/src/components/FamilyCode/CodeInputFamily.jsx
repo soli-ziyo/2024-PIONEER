@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+//가족코드
 
 const CodeInputFamily = ({
   prevStep,
@@ -17,6 +18,7 @@ const CodeInputFamily = ({
 
   const getFamilycode = async () => {
     setLoading(true);
+    setError(null);
     try {
       const response = await instance.get(
         `${process.env.REACT_APP_SERVER_PORT}/family/code/`,
@@ -41,6 +43,7 @@ const CodeInputFamily = ({
   };
 
   const deleteFamilycode = async (existingCode) => {
+    setError(null);
     try {
       await instance.delete(
         `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
@@ -62,6 +65,7 @@ const CodeInputFamily = ({
 
   const postFamilycode = async () => {
     const inputCode = code.join("");
+    setError(null);
     try {
       const response = await instance.post(
         `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
