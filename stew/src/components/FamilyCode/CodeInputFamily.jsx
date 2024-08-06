@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+//가족코드
 
 const CodeInputFamily = ({
   prevStep,
