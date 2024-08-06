@@ -109,6 +109,8 @@ const EmojiGrid = styled.div`
 `;  
 
 const EmojiButton = styled.button`
+  width: 60px; 
+  height: 60px; 
   background: none;
   border: none;
   cursor: pointer;
