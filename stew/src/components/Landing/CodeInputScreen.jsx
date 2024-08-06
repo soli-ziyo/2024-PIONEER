@@ -64,7 +64,7 @@ const CodeInputScreen = ({ nextStep, prevStep }) => {
 
   const handleNext = () => {
     setCode(code);
-    codeVery().then();
+    codeVery();
   };
 
   return (
