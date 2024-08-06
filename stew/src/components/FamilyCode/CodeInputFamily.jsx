@@ -15,9 +15,53 @@ const CodeInputFamily = ({
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const postFamilycode = async (inputCode) => {
+  const getFamilycode = async () => {
     setLoading(true);
+    try {
+      const response = await instance.get(
+        `${process.env.REACT_APP_SERVER_PORT}/family/code/`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      if (response.data.message === "패밀리코드가 이미 존재합니다.") {
+        const existingCode = response.data.familycode;
+        await deleteFamilycode(existingCode);
+      } else {
+        await postFamilycode();
+      }
+    } catch (error) {
+      setError("가족 코드 확인 중 오류가 발생했습니다.");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const deleteFamilycode = async (existingCode) => {
+    try {
+      await instance.delete(
+        `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+          data: {
+            familycode: existingCode,
+          },
+        }
+      );
+      await postFamilycode();
+    } catch (error) {
+      setError("가족 코드 삭제 중 오류가 발생했습니다.");
+      console.log(error);
+    }
+  };
+
+  const postFamilycode = async () => {
+    const inputCode = code.join("");
     try {
       const response = await instance.post(
         `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
@@ -31,19 +75,17 @@ const CodeInputFamily = ({
         }
       );
 
-      console.log(response.data);
-      prevStep();
-      setHideElements(false);
-      setHideInputNotice(true);
-      setHideInviteNotice(true);
-      window.location.reload();
-    } catch ({ response, err }) {
-      if (response.status === 400) {
-        console.log(err);
-      } else {
-        setError("가족 코드 확인 중 오류가 발생했습니다. POST");
-        console.log(error);
+      if (response.status === 200) {
+        console.log(response.data);
+        prevStep();
+        setHideElements(false);
+        setHideInputNotice(true);
+        setHideInviteNotice(true);
+        window.location.reload();
       }
+    } catch (error) {
+      setError("가족 코드 생성 중 오류가 발생했습니다.");
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -59,27 +101,13 @@ const CodeInputFamily = ({
     }
   };
 
-  const handleNext = async () => {
-    setLoading(true);
-    const inputCode = code.join("");
-    try {
-      const response = await instance.delete(
-        `${process.env.REACT_APP_SERVER_PORT}/family/create/`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        }
-      );
-
-      console.log(response.data);
-      postFamilycode(inputCode);
-    } catch ({ err }) {
-      setError("가족 코드 확인 중 오류가 발생했습니다. POST");
-      console.log(error);
-    } finally {
-      setLoading(false);
+  const handleNext = () => {
+    if (code.some((digit) => digit === "")) {
+      setError("모든 칸을 입력해주세요.");
+      return;
     }
+    setError(null);
+    getFamilycode();
   };
 
   const closeInput = () => {
@@ -115,7 +143,7 @@ const CodeInputFamily = ({
           {error && <ErrorMessage>{error}</ErrorMessage>}
           <Button
             onClick={handleNext}
-            disabled={code.some((digit) => digit === "") || loading}
+            disabled={loading}
           >
             다음
           </Button>
