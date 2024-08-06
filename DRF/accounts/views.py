@@ -171,7 +171,7 @@ class sendCodeView(APIView):
                 {
                     'to': phonenum,
                     'from': '01062487123',
-                    'text': f'[stew] 회원가입 인증 코드입니다. {verification_code}'
+                    'text': f'[stew] 회원가입 인증 코드입니다. ({verification_code})'
                 }
             ]
         }
@@ -196,7 +196,7 @@ class getCodeView(APIView):
             del request.session['verification_code']
             return Response({'message': '사용자 인증 완료'})
         else:
-            return Response({'error': '인증 코드 오류'}, status=400)
+            return Response({'error': '인증 코드 오류', 'code': session_code}, status=400)
         
 class phoneExView(APIView):
     def post(self, request, format=None):
