@@ -112,23 +112,11 @@ const Header = styled.div`
   margin-bottom: 0px;
 `;
 
-const ContainerBase = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  margin-top: 20px;
-  img {
-    cursor: pointer;
-    width: 19px;
-  }
-`;
-
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 330px;
-  margin-top: 30px;
+  width: 100%;
+  margin-top: 40px;
 `;
 
 const CodeInput = styled.input`

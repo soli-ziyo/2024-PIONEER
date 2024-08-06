@@ -139,6 +139,12 @@ const BarContainer = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100%;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+
+  &::-webkit-scrollbar {
+    display: none;}
 `;
 
 const Arrow = styled.div`
