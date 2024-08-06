@@ -2,26 +2,34 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
+import axios from "axios";
 
 const CodeInputScreen = ({ nextStep, prevStep }) => {
-  const [code, setCode] = useState([""]);
+  const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [buttonReady, setButtonReady] = useState(false);
-
   const [error, setError] = useState(null);
+
 
   const codeVery = async () => {
     setLoading(true);
     setError(null);
     try {
       console.log("Submitting code:", code);
+      console.log("Request Body:", { "code": code });
+
       const response = await instance.post(
         `${process.env.REACT_APP_SERVER_PORT}/accounts/phonenum/getCode/`,
         {
-          code: code,
+          "code": code,
+        },
+        {
+          withCredentials: true,  // 이 옵션을 추가
         }
       );
-      console.log("Response:", response);
+      console.log("리스폰스:", response);
+      // console.log(code);
+
       if (response.status === 200) {
         console.log("sms 인증에 성공하였습니다.", response.data);
         nextStep();
@@ -29,6 +37,7 @@ const CodeInputScreen = ({ nextStep, prevStep }) => {
     } catch (err) {
       if (err.response) {
         const { status, data } = err.response;
+        console.log("에러 리스폰스:", err.response);
         if (status === 400) {
           if (data.error === "인증 코드 오류") {
             setError("인증에 실패하였습니다. 인증번호를 확인해주세요.");

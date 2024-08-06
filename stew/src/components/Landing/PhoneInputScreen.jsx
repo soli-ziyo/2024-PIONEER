@@ -70,7 +70,8 @@ const PhoneInputScreen = ({ setPhone, nextStep }) => {
           backgroundColor: buttonReady ? "white" : "#F1F1F1",
           color: buttonReady ? "black" : "#8C8C8C",
         }}
-        onClick={handleNext}
+        // onClick={handleNext}
+        onClick={nextStep}
         disabled={!buttonReady}
       >
         다음
