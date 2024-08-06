@@ -30,7 +30,7 @@ const ProfilePage = () => {
   const sortedProfiles = profiles
     .map((profile) => {
       if (profile.user_id === currentUserId) {
-        return { ...profile, nickname: "나" };
+        return { ...profile };
       }
       return profile;
     })
@@ -38,6 +38,11 @@ const ProfilePage = () => {
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+  };
+
+  const handleAddClick = () => {
+    console.log("Add button clicked");
+    navigate("/familyCode");
   };
 
   return (
@@ -48,7 +53,7 @@ const ProfilePage = () => {
         <Header2></Header2>
         <ProfileSection>
           <ProfileTitle>프로필</ProfileTitle>
-          <MyProfile sortedProfiles={sortedProfiles}></MyProfile>
+          <MyProfile sortedProfiles={sortedProfiles} />
         </ProfileSection>
         <FamilySection>
           <FamilyTitle>우리 가족</FamilyTitle>
@@ -58,11 +63,10 @@ const ProfilePage = () => {
                 <ProfileImageButton active={member.user_id === currentUserId}>
                   <img src={member.profile} alt={member.nickname} />
                 </ProfileImageButton>
-                <ProfileName>
-                  {member.user_id === currentUserId ? "나" : member.nickname}
-                </ProfileName>
+                <ProfileName>{member.nickname}</ProfileName>
               </ProfileItem>
             ))}
+            <AddButton onClick={handleAddClick}>+</AddButton>
           </ProfileContainer>
         </FamilySection>
       </ContentWrapper>
@@ -117,7 +121,6 @@ const ProfileItem = styled.div`
   border-radius: 50%;
   margin-right: 5%;
   margin-top: 12px;
-  cursor: pointer;
 `;
 
 const ProfileImageButton = styled.div`
@@ -141,6 +144,7 @@ const ProfileImageButton = styled.div`
       props.active ? "1px solid #FF6600" : "1px solid #E2E2E2"};
     box-sizing: border-box;
     object-fit: cover;
+    cursor: pointer;
   }
 `;
 
@@ -167,4 +171,20 @@ const FamilySection = styled.section`
 const FamilyTitle = styled.h3`
   margin-bottom: 4px;
   font-weight: bold;
+`;
+
+const AddButton = styled.button`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #e2e2e2;
+  background-color: rgba(249, 249, 249, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 200;
+  font-size: 24px;
+  margin-top: 12px;
+  font-weight: 100;
+  cursor: pointer;
 `;

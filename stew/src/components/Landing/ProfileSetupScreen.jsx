@@ -95,24 +95,22 @@ const ProfileSetupScreen = ({ id, password, prevStep, nextStep }) => {
           >
             닉네임은 2글자 이상 10글자 이하여야 합니다.
           </div>
-          <button
-            onClick={handleSubmit}
-            style={{
-              backgroundColor:
-                nickname.length >= 2 && nickname.length <= 10
-                  ? "#FF5A00"
-                  : "lightgray",
-              color:
-                nickname.length >= 2 && nickname.length <= 10
-                  ? "white"
-                  : "#8c8c8c",
-            }}
-            disabled={nickname.length < 2 || nickname.length > 10}
-          >
-            stew 시작하기
-          </button>
         </InputWrapper>
       </Container>
+      <Button
+        onClick={handleSubmit}
+        style={{
+          backgroundColor:
+            nickname.length >= 2 && nickname.length <= 10
+              ? "#FF5A00"
+              : "lightgray",
+          color:
+            nickname.length >= 2 && nickname.length <= 10 ? "white" : "#8c8c8c",
+        }}
+        disabled={nickname.length < 2 || nickname.length > 10}
+      >
+        stew 시작하기
+      </Button>
     </Wrapper>
   );
 };
@@ -127,6 +125,7 @@ const Wrapper = styled.div`
   height: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+  position: relative;
 `;
 
 const ContainerBase = styled.div`
@@ -137,7 +136,7 @@ const ContainerBase = styled.div`
   img {
     width: 8%;
     margin-bottom: 58px;
-    margin-top: 40px;
+    cursor: pointer;
   }
 `;
 
@@ -152,7 +151,6 @@ const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 8px;
 
   input,
   button {
@@ -175,7 +173,6 @@ const InputWrapper = styled.div`
   }
 
   button {
-    margin-bottom: 20%;
     background: #f1f1f1;
     color: #8c8c8c;
     border: 1px solid #e2e2e2;
@@ -185,17 +182,27 @@ const InputWrapper = styled.div`
   }
 `;
 
-const Comment = styled.div`
-  font-size: 28px;
-  margin-bottom: 20px;
+const Button = styled.button`
+  height: 45px;
+  border-style: none;
+  outline: none;
+  border-radius: 10px;
+  background: #f1f1f1;
+  color: #8c8c8c;
+  border: 1px solid #e2e2e2;
+  font-weight: 600;
+  font-size: 14px;
   font-family: "Pretendard";
+  cursor: pointer;
+  position: absolute;
+  width: 100%;
+  bottom: 81px;
 `;
 
 const ImageUploadWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 15px;
 
   .image-upload-label {
     display: flex;

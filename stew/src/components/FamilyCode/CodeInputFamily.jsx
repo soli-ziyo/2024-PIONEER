@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Back from "../../images/Back.svg";
 import instance from "../../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const CodeInputFamily = ({
   prevStep,
@@ -12,6 +13,7 @@ const CodeInputFamily = ({
   const [code, setCode] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const postFamilycode = async (inputCode) => {
     setLoading(true);
@@ -81,7 +83,7 @@ const CodeInputFamily = ({
   };
 
   const closeInput = () => {
-    prevStep();
+    navigate("/home");
     setHideElements(false);
     setHideInputNotice(false);
     setHideInviteNotice(false);
@@ -131,6 +133,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   max-width: 390px;
+  width: 100%;
   height: 100%;
 `;
 
@@ -142,7 +145,7 @@ const ContainerBase = styled.div`
   img {
     width: 8%;
     margin-bottom: 58px;
-    margin-top: 0px;
+
     cursor: pointer;
   }
 `;
