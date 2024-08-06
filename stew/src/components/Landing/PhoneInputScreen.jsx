@@ -59,25 +59,23 @@ const PhoneInputScreen = ({ setPhone, nextStep, prevStep }) => {
           <img src={Back} alt="Back" onClick={() => navigate("/")} />
           <Comment>전화번호를 알려주세요</Comment>
         </ContainerBase>
-        <InputWrapper>
-          <input
-            placeholder="전화번호를 입력해주세요"
-            onChange={(e) => handleChange(e.target.value)}
-            value={phoneNB}
-          ></input>
-          <button
-            style={{
-              backgroundColor: buttonReady ? "white" : "#F1F1F1",
-              color: buttonReady ? "black" : "#8C8C8C",
-            }}
-            // onClick={handleNext}
-            onClick={nextStep}
-            disabled={!buttonReady}
-          >
-            다음
-          </button>
-        </InputWrapper>
+        <InputWrapper
+          placeholder="전화번호를 입력해주세요"
+          onChange={(e) => handleChange(e.target.value)}
+          value={phoneNB}
+        ></InputWrapper>
       </Container>
+      <Button
+        style={{
+          backgroundColor: buttonReady ? "white" : "#F1F1F1",
+          color: buttonReady ? "black" : "#8C8C8C",
+        }}
+        // onClick={handleNext}
+        onClick={nextStep}
+        disabled={!buttonReady}
+      >
+        다음
+      </Button>
     </Wrapper>
   );
 };
@@ -92,6 +90,7 @@ const Wrapper = styled.div`
   height: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+  position: relative;
 `;
 
 const ContainerBase = styled.div`
@@ -102,7 +101,6 @@ const ContainerBase = styled.div`
   img {
     width: 8%;
     margin-bottom: 58px;
-    margin-top: 40px;
     cursor: pointer;
   }
 `;
@@ -115,43 +113,42 @@ const Container = styled.div`
   align-items: left;
 `;
 
-const InputWrapper = styled.div`
+const InputWrapper = styled.input`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  margin-top: 30px;
+  width: 90%;
+  position: relative;
 
-  input,
-  button {
-    height: 45px;
-    border-style: none;
-    outline: none;
-    border-radius: 4px;
-  }
-
-  input {
-    margin-bottom: 80%;
-    padding-left: 7%;
-    border: 1px solid #e2e2e2;
-    background: #f9f9f9;
-    border-radius: 10px;
-    font-family: "Pretendard";
-  }
-
-  button {
-    margin-bottom: 20%;
-    background: #f1f1f1;
-    color: #8c8c8c;
-    border: 1px solid #e2e2e2;
-    font-weight: 600;
-    font-size: 14px;
-    font-family: "Pretendard";
-    cursor: pointer;
-  }
+  border-style: none;
+  border-radius: 4px;
+  top: 52px;
+  padding: 14px 16px;
+  border: 1px solid #e2e2e2;
+  align-items: center;
+  background: #f9f9f9;
+  border-radius: 10px;
+  font-family: "Pretendard";
 `;
 
 const Comment = styled.div`
   font-size: 28px;
-  margin-bottom: 20px;
   font-family: "Pretendard";
+  position: relative;
+`;
+
+const Button = styled.button`
+  height: 45px;
+  border-style: none;
+  outline: none;
+  border-radius: 10px;
+  background: #f1f1f1;
+  color: #8c8c8c;
+  border: 1px solid #e2e2e2;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: "Pretendard";
+  cursor: pointer;
+  position: absolute;
+  width: 100%;
+  bottom: 81px;
 `;

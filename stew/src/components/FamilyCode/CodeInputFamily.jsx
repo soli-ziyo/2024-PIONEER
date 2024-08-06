@@ -145,7 +145,7 @@ const ContainerBase = styled.div`
   img {
     width: 8%;
     margin-bottom: 58px;
-    margin-top: 0px;
+
     cursor: pointer;
   }
 `;

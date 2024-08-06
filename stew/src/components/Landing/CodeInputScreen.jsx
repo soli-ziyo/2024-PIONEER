@@ -68,24 +68,23 @@ const CodeInputScreen = ({ phone, nextStep, prevStep }) => {
           <img src={Back} alt="Back" onClick={prevStep} />
           <Comment>인증 코드를 발송했어요.</Comment>
         </ContainerBase>
-        <InputWrapper>
-          <CodeInputs>
-            {code.map((digit, index) => (
-              <CodeInput
-                key={index}
-                id={`code-input-${index}`}
-                type="text"
-                maxLength="1"
-                value={digit}
-                onChange={(e) => handleChange(e, index)}
-              />
-            ))}
-          </CodeInputs>
+        <CodeInputs>
+          {code.map((digit, index) => (
+            <CodeInput
+              key={index}
+              id={`code-input-${index}`}
+              type="text"
+              maxLength="1"
+              value={digit}
+              onChange={(e) => handleChange(e, index)}
+            />
+          ))}
           {loading && (
             <LoadingMessage>인증번호를 확인 중입니다...</LoadingMessage>
           )}
           {error && <ErrorMessage>{error}</ErrorMessage>}
-        </InputWrapper>
+        </CodeInputs>
+
         <Button
           // onClick={handleNext}
           onClick={nextStep}
@@ -107,6 +106,8 @@ const Wrapper = styled.div`
   max-width: 390px;
   height: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
+  position: relative;
 `;
 
 const ContainerBase = styled.div`
@@ -117,7 +118,6 @@ const ContainerBase = styled.div`
   img {
     width: 8%;
     margin-bottom: 58px;
-    margin-top: 40px;
     cursor: pointer;
   }
 `;
@@ -130,17 +130,12 @@ const Container = styled.div`
   align-items: left;
 `;
 
-const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-top: 30px;
-`;
-
 const CodeInputs = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  position: relative;
+  top: 52px;
+  width: 100%;
 `;
 
 const CodeInput = styled.input`
@@ -152,7 +147,6 @@ const CodeInput = styled.input`
   text-align: center;
   font-size: 18px;
   outline: none;
-  margin-bottom: 68%;
 
   font-family: "Pretendard";
 `;
@@ -169,11 +163,13 @@ const Button = styled.button`
   cursor: pointer;
   border: 1px solid #e2e2e2;
   font-family: "Pretendard";
+  position: absolute;
+  width: 100%;
+  bottom: 81px;
 `;
 
 const Comment = styled.div`
   font-size: 28px;
-  margin-bottom: 20px;
   font-family: "Pretendard";
 `;
 
@@ -181,16 +177,16 @@ const ErrorMessage = styled.div`
   color: red;
   font-family: "Pretendard";
   font-size: 14px;
-  margin-top: -65%;
   z-index: 10;
-  margin-bottom: 61%;
+  position: absolute;
+  top: 90px;
 `;
 
 const LoadingMessage = styled.div`
   color: red;
   font-family: "Pretendard";
   font-size: 14px;
-  margin-top: -65%;
   z-index: 10;
-  margin-bottom: 61%;
+  position: absolute;
+  top: 90px;
 `;

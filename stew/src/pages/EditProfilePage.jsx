@@ -94,10 +94,11 @@ const EditProfilePage = () => {
             type="submit"
             onClick={handleSubmit}
             style={{
-              backgroundColor: password || nickname ? "white" : "#F1F1F1",
-              color: password || nickname ? "black" : "#8C8C8C",
+              backgroundColor:
+                password.length >= 8 || nickname ? "white" : "#F1F1F1",
+              color: password.length >= 8 || nickname ? "black" : "#8C8C8C",
             }}
-            disabled={!password && !nickname}
+            disabled={password.length < 8 && !nickname}
           >
             저장
           </button>
