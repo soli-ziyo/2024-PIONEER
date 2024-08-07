@@ -102,16 +102,14 @@ class HomeListView(views.APIView):
         
         users = []
         for family_user in family_users:
-            # 사용자의 최신 상태가 있는지 확인
             state = next((s for s in states if s.user_id == family_user.id), None)
             if state is not None:
                 users.append(state)
             else:
-                # 최신 상태가 없으면 기본값 사용
                 default_state = StateEdit(
                     user=family_user,
-                    content="빈 content",
-                    emoji="빈 emoji",
+                    content=None,
+                    emoji=None,
                 )
                 users.append(default_state)
 

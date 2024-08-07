@@ -85,6 +85,8 @@ MIDDLEWARE = [
     
 ]
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
 ROOT_URLCONF = 'drfproject.urls'
 
 TEMPLATES = [
